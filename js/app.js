@@ -153,7 +153,7 @@ function renderLessonCards() {
       const imgSrc = (currentLang === 'th' && l.imageTh) ? l.imageTh : l.image;
       return `
     <button type="button" class="lesson-card lesson-card-photo" style="aspect-ratio:${l.imageRatio || 'auto'}" onclick="openLesson('${l.id}')" aria-label="${label}">
-      <img class="lesson-photo-img" src="${imgSrc}" alt="" />
+      <img class="lesson-photo-img" src="${imgSrc}" alt="" loading="lazy" decoding="async" />
     </button>
   `;
     }
