@@ -13,8 +13,11 @@ let currentLang = 'en';
 function setLang(lang) {
   currentLang = lang;
   document.body.setAttribute('data-lang', lang);
-  document.getElementById('lang-en').classList.toggle('active', lang === 'en');
-  document.getElementById('lang-th').classList.toggle('active', lang === 'th');
+  for (const l of ['en', 'th']) {
+    const btn = document.getElementById('lang-' + l);
+    btn.classList.toggle('active', lang === l);
+    btn.setAttribute('aria-pressed', String(lang === l));
+  }
   document.documentElement.setAttribute('lang', lang);
   renderTopics();
   renderLessonCards();
@@ -65,9 +68,15 @@ function setRoute(route, replace = false) {
 function showPage(id, updateUrl = true) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
-  document.querySelectorAll(NAV_PAGE_BUTTONS).forEach(b => b.classList.remove('active'));
+  document.querySelectorAll(NAV_PAGE_BUTTONS).forEach(b => {
+    b.classList.remove('active');
+    b.removeAttribute('aria-current');
+  });
   const btn = document.getElementById('nav-' + id);
-  if (btn) btn.classList.add('active');
+  if (btn) {
+    btn.classList.add('active');
+    btn.setAttribute('aria-current', 'page');
+  }
   window.scrollTo(0, 0);
   if (updateUrl) setRoute(PAGE_ROUTES[id] || '/');
 }
@@ -99,52 +108,72 @@ let currentMode = 'notech';
 function setMode(mode) {
   currentMode = mode;
   localStorage.setItem('mode', mode);
-  document.querySelectorAll('.mode-toggle button').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+  document.querySelectorAll('.mode-toggle button').forEach(b => {
+    b.classList.toggle('active', b.dataset.mode === mode);
+    b.setAttribute('aria-pressed', String(b.dataset.mode === mode));
+  });
   renderLessonCards();
   if (document.getElementById('page-lesson').classList.contains('active') && window.__openLessonId) {
     openLesson(window.__openLessonId, false);
   }
 }
 
+// The cards are <button>s, so their contents become the accessible name. Left
+// alone that reads as one long run-on ("🧠 ⏱ 40–50 min What Is AI? A first
+// look… Lesson 1 Open →"), so each card gets an explicit label instead, and
+// the decorative emoji are hidden from assistive tech.
+function cardLabel(kind, i, title) {
+  const n = i + 1;
+  if (currentLang === 'th') {
+    return kind === 'lesson' ? `เปิดบทที่ ${n}: ${title}` : `ดูบทเรียนทั้งหมด: ${title}`;
+  }
+  return kind === 'lesson' ? `Open Lesson ${n}: ${title}` : `Browse lessons: ${title}`;
+}
+
 function renderTopics() {
   const grid = document.getElementById('topics-grid');
-  grid.innerHTML = lessons.map((l, i) => `
-    <div class="topic-card" onclick="showPage('learn')">
-      <div class="topic-icon" style="background:${colors[i]};">${l.icon}</div>
-      <h3>${l.title[currentLang] || l.title.en}</h3>
-      <p>${l.short[currentLang] || l.short.en}</p>
-    </div>
-  `).join('');
+  grid.innerHTML = lessons.map((l, i) => {
+    const title = l.title[currentLang] || l.title.en;
+    return `
+    <button type="button" class="topic-card" onclick="showPage('learn')" aria-label="${cardLabel('topic', i, title)}">
+      <span class="topic-icon" style="background:${colors[i]};" aria-hidden="true">${l.icon}</span>
+      <span class="card-title">${title}</span>
+      <span class="card-text">${l.short[currentLang] || l.short.en}</span>
+    </button>
+  `;
+  }).join('');
 }
 
 function renderLessonCards() {
   const grid = document.getElementById('lessons-grid');
   grid.innerHTML = lessons.map((l, i) => {
+    const title = l.title[currentLang] || l.title.en;
+    const label = cardLabel('lesson', i, title);
     if (l.image) {
       const imgSrc = (currentLang === 'th' && l.imageTh) ? l.imageTh : l.image;
       return `
-    <div class="lesson-card lesson-card-photo" style="aspect-ratio:${l.imageRatio || 'auto'}" onclick="openLesson('${l.id}')">
-      <img class="lesson-photo-img" src="${imgSrc}" alt="${l.title[currentLang] || l.title.en}" />
-    </div>
+    <button type="button" class="lesson-card lesson-card-photo" style="aspect-ratio:${l.imageRatio || 'auto'}" onclick="openLesson('${l.id}')" aria-label="${label}">
+      <img class="lesson-photo-img" src="${imgSrc}" alt="" />
+    </button>
   `;
     }
     return `
-    <div class="lesson-card" onclick="openLesson('${l.id}')">
-      <div class="lesson-header">
-        <div class="lesson-icon">${l.icon}</div>
+    <button type="button" class="lesson-card" onclick="openLesson('${l.id}')" aria-label="${label}">
+      <span class="lesson-header">
+        <span class="lesson-icon" aria-hidden="true">${l.icon}</span>
         <span class="lesson-duration">⏱ ${l.duration}</span>
-      </div>
-      <h4>${l.title[currentLang] || l.title.en}</h4>
-      <p>${l.short[currentLang] || l.short.en}</p>
-      <div class="lesson-footer">
+      </span>
+      <span class="card-title">${title}</span>
+      <span class="card-text">${l.short[currentLang] || l.short.en}</span>
+      <span class="lesson-footer">
         <span class="badge" style="background:${colors[i]};color:${colorsText[i]};">${currentLang==='th' ? 'บทที่ '+(i+1) : 'Lesson '+(i+1)}</span>
         <span class="lesson-open">${currentLang==='th' ? 'เปิดดู →' : 'Open →'}</span>
-      </div>
-      <div class="lesson-tags">
+      </span>
+      <span class="lesson-tags">
         <span class="mini-tag ${currentMode==='notech' ? 'mini-tag-active' : ''}">📴 ${currentLang==='th' ? 'ไม่ใช้เทคโนโลยี' : 'No Technology'}</span>
         <span class="mini-tag ${currentMode==='tech' ? 'mini-tag-active' : ''}">💻 ${currentLang==='th' ? 'ใช้เทคโนโลยี' : 'Technology'}</span>
-      </div>
-    </div>
+      </span>
+    </button>
   `;
   }).join('');
 }
@@ -185,14 +214,14 @@ function renderContentBlock(b, t) {
 const _slidesExist = new Map();   // absolute url -> boolean
 
 function slidesPlaceholder() {
-  return `<p class="lesson-extra-placeholder"><span class="en-text">Slide deck coming soon.</span><span class="th-text">สไลด์กำลังจะมาเร็ว ๆ นี้</span></p>`;
+  return `<p class="lesson-extra-placeholder"><span class="en-text" lang="en">Slide deck coming soon.</span><span class="th-text" lang="th">สไลด์กำลังจะมาเร็ว ๆ นี้</span></p>`;
 }
 
 function slidesEmbed(url) {
   const viewerUrl = 'https://view.officeapps.live.com/op/embed.aspx?src=' + encodeURIComponent(url);
   return `
       <iframe class="lesson-slides-embed" src="${viewerUrl}" title="Slides">Loading…</iframe>
-      <a class="lesson-download-btn" href="${url}" download>⬇ <span class="en-text">Download Slides (.pptx)</span><span class="th-text">ดาวน์โหลดสไลด์ (.pptx)</span></a>
+      <a class="lesson-download-btn" href="${url}" download>⬇ <span class="en-text" lang="en">Download Slides (.pptx)</span><span class="th-text" lang="th">ดาวน์โหลดสไลด์ (.pptx)</span></a>
     `;
 }
 
@@ -237,9 +266,9 @@ function openLesson(id, updateUrl = true) {
       <span class="modal-tag" style="background:#EDF0FD;color:var(--muted)">⏱ ${l.duration}</span>
     </div>
 
-    <div class="mode-toggle modal-mode-toggle">
-      <button data-mode="notech" class="${currentMode==='notech' ? 'active' : ''}" onclick="setMode('notech')">📴 ${t==='th' ? 'ไม่ใช้เทคโนโลยี' : 'No Technology'}</button>
-      <button data-mode="tech" class="${currentMode==='tech' ? 'active' : ''}" onclick="setMode('tech')">💻 ${t==='th' ? 'ใช้เทคโนโลยี' : 'Technology'}</button>
+    <div class="mode-toggle modal-mode-toggle" role="group" aria-label="${t==='th' ? 'รูปแบบห้องเรียน' : 'Classroom setup'}">
+      <button type="button" data-mode="notech" class="${currentMode==='notech' ? 'active' : ''}" aria-pressed="${currentMode==='notech'}" onclick="setMode('notech')"><span aria-hidden="true">📴</span> ${t==='th' ? 'ไม่ใช้เทคโนโลยี' : 'No Technology'}</button>
+      <button type="button" data-mode="tech" class="${currentMode==='tech' ? 'active' : ''}" aria-pressed="${currentMode==='tech'}" onclick="setMode('tech')"><span aria-hidden="true">💻</span> ${t==='th' ? 'ใช้เทคโนโลยี' : 'Technology'}</button>
     </div>
 
     <div class="modal-body">
@@ -303,9 +332,15 @@ function openLesson(id, updateUrl = true) {
   renderSlides(document.getElementById('lesson-slides-content'), l);
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-lesson').classList.add('active');
-  document.querySelectorAll(NAV_PAGE_BUTTONS).forEach(b => b.classList.remove('active'));
+  document.querySelectorAll(NAV_PAGE_BUTTONS).forEach(b => {
+    b.classList.remove('active');
+    b.removeAttribute('aria-current');
+  });
   const navBtn = document.getElementById('nav-learn');
-  if (navBtn) navBtn.classList.add('active');
+  if (navBtn) {
+    navBtn.classList.add('active');
+    navBtn.setAttribute('aria-current', 'page');
+  }
   document.querySelectorAll('.lesson-toc-link').forEach((a, i) => a.classList.toggle('active', i === 0));
   window.scrollTo(0, 0);
   if (updateUrl) setRoute(LESSON_ROUTE + id);

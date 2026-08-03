@@ -11,23 +11,23 @@
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo" onclick="showPage('home')">
-    <img class="nav-logo-img" src="assets/logo-youth-of-change.png" alt="Youth of Change logo" />
-    <div class="nav-logo-text">
-      <span class="en-text">AI Literacy <span class="spark">Toolkit</span></span>
-      <span class="th-text">คู่มือการเรียนรู้<span class="spark">AI</span></span>
-      <span class="nav-logo-by en-text">by Youth of Change</span>
-      <span class="nav-logo-by th-text">โดย Youth of Change</span>
-    </div>
-  </div>
+  <button type="button" class="nav-logo" onclick="showPage('home')">
+    <img class="nav-logo-img" src="assets/logo-youth-of-change.png" alt="" />
+    <span class="nav-logo-text">
+      <span class="en-text" lang="en">AI Literacy <span class="spark">Toolkit</span></span>
+      <span class="th-text" lang="th">คู่มือการเรียนรู้<span class="spark">AI</span></span>
+      <span class="nav-logo-by en-text" lang="en">by Youth of Change</span>
+      <span class="nav-logo-by th-text" lang="th">โดย Youth of Change</span>
+    </span>
+  </button>
   <ul class="nav-links">
-    <li><button id="nav-home"  onclick="showPage('home')"><span class="en-text">Home</span><span class="th-text">หน้าแรก</span></button></li>
-    <li><button id="nav-learn" onclick="showPage('learn')"><span class="en-text">Lessons</span><span class="th-text">บทเรียน</span></button></li>
-    <li><button id="nav-about" onclick="showPage('about')"><span class="en-text">About</span><span class="th-text">เกี่ยวกับ</span></button></li>
-    <li><button id="nav-contact" onclick="showPage('contact')"><span class="en-text">Contact Us</span><span class="th-text">ติดต่อเรา</span></button></li>
-    <li class="lang-toggle">
-      <button id="lang-en" class="active" onclick="changeLang('en')">EN</button>
-      <button id="lang-th" onclick="changeLang('th')">TH</button>
+    <li><button type="button" id="nav-home"  onclick="showPage('home')"><span class="en-text" lang="en">Home</span><span class="th-text" lang="th">หน้าแรก</span></button></li>
+    <li><button type="button" id="nav-learn" onclick="showPage('learn')"><span class="en-text" lang="en">Lessons</span><span class="th-text" lang="th">บทเรียน</span></button></li>
+    <li><button type="button" id="nav-about" onclick="showPage('about')"><span class="en-text" lang="en">About</span><span class="th-text" lang="th">เกี่ยวกับ</span></button></li>
+    <li><button type="button" id="nav-contact" onclick="showPage('contact')"><span class="en-text" lang="en">Contact Us</span><span class="th-text" lang="th">ติดต่อเรา</span></button></li>
+    <li class="lang-toggle" role="group" aria-label="Language / ภาษา">
+      <button type="button" id="lang-en" class="active" aria-pressed="true" onclick="changeLang('en')" lang="en" aria-label="English">EN</button>
+      <button type="button" id="lang-th" aria-pressed="false" onclick="changeLang('th')" lang="th" aria-label="ภาษาไทย">TH</button>
     </li>
   </ul>
 </nav>
@@ -38,14 +38,14 @@
   <section class="hero-v3" style="background-image:url('assets/hero-background.png')">
     <div class="hero-v3-title">
       <h1 class="hero-v3-heading">
-        <span class="line-1"><span class="en-text">AI LITERACY</span><span class="th-text">คู่มือการเรียนรู้</span></span>
+        <span class="line-1"><span class="en-text" lang="en">AI LITERACY</span><span class="th-text" lang="th">คู่มือการเรียนรู้</span></span>
         <span class="line-2-wrap">
           <svg class="title-burst" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
             <line x1="5" y1="7" x2="16" y2="3" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
             <line x1="3" y1="17" x2="16" y2="17" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
             <line x1="5" y1="27" x2="16" y2="31" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
           </svg>
-          <span class="line-2"><span class="en-text">TOOLKIT</span><span class="th-text">AI</span></span>
+          <span class="line-2"><span class="en-text" lang="en">TOOLKIT</span><span class="th-text" lang="th">AI</span></span>
           <svg class="title-burst title-burst-right" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
             <line x1="5" y1="7" x2="16" y2="3" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
             <line x1="3" y1="17" x2="16" y2="17" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
@@ -55,12 +55,12 @@
       </h1>
       <div class="hero-v3-by">
         <img class="hero-v3-by-logo" src="assets/logo-youth-of-change.png" alt="Youth of Change logo" />
-        <span class="en-text">by Youth of Change</span>
-        <span class="th-text">โดย Youth of Change</span>
+        <span class="en-text" lang="en">by Youth of Change</span>
+        <span class="th-text" lang="th">โดย Youth of Change</span>
       </div>
       <p class="hero-v3-sub">
-        <span class="en-text">Lesson plans for teachers — free, in English &amp; Thai.</span>
-        <span class="th-text">แผนการสอนสำหรับครู ฟรี ทั้งภาษาอังกฤษและภาษาไทย</span>
+        <span class="en-text" lang="en">Lesson plans for teachers — free, in English &amp; Thai.</span>
+        <span class="th-text" lang="th">แผนการสอนสำหรับครู ฟรี ทั้งภาษาอังกฤษและภาษาไทย</span>
       </p>
     </div>
 
@@ -74,11 +74,11 @@
 
       <div class="feature-card card-tl">
         <div class="feature-icon fi-purple"><img src="assets/icon-chip.png" alt="chip icon" /></div>
-        <div class="feature-label"><span class="en-text">Understand AI</span><span class="th-text">เข้าใจ AI</span></div>
+        <div class="feature-label"><span class="en-text" lang="en">Understand AI</span><span class="th-text" lang="th">เข้าใจ AI</span></div>
       </div>
       <div class="feature-card card-bl">
         <div class="feature-icon fi-pink"><img src="assets/icon-magnifier.png" alt="magnifying glass icon" /></div>
-        <div class="feature-label"><span class="en-text">Spot AI Mistakes</span><span class="th-text">จับผิด AI</span></div>
+        <div class="feature-label"><span class="en-text" lang="en">Spot AI Mistakes</span><span class="th-text" lang="th">จับผิด AI</span></div>
       </div>
 
       <div class="hero-mascot-v2">
@@ -87,68 +87,68 @@
 
       <div class="feature-card card-tr">
         <div class="feature-icon fi-green"><img src="assets/icon-lightbulb.png" alt="lightbulb icon" /></div>
-        <div class="feature-label"><span class="en-text">Think Critically</span><span class="th-text">คิดเชิงวิพากษ์</span></div>
+        <div class="feature-label"><span class="en-text" lang="en">Think Critically</span><span class="th-text" lang="th">คิดเชิงวิพากษ์</span></div>
       </div>
       <div class="feature-card card-br">
         <div class="feature-icon fi-yellow"><img src="assets/icon-document.png" alt="document icon" /></div>
-        <div class="feature-label"><span class="en-text">Use AI Responsibly</span><span class="th-text">ใช้ AI อย่างรับผิดชอบ</span></div>
+        <div class="feature-label"><span class="en-text" lang="en">Use AI Responsibly</span><span class="th-text" lang="th">ใช้ AI อย่างรับผิดชอบ</span></div>
       </div>
     </div>
 
     <div class="hero-btns hero-v3-btns">
-      <button class="btn btn-yellow" onclick="showPage('learn')">
-        <span class="en-text">Browse Lessons ✨</span><span class="th-text">ดูบทเรียนทั้งหมด ✨</span>
+      <button type="button" class="btn btn-yellow" onclick="showPage('learn')">
+        <span class="en-text" lang="en">Browse Lessons ✨</span><span class="th-text" lang="th">ดูบทเรียนทั้งหมด ✨</span>
       </button>
-      <button class="btn btn-dark" onclick="document.querySelector('.home-how').scrollIntoView({behavior:'smooth'})">
-        <span class="en-text">See How It Works →</span><span class="th-text">วิธีใช้งาน →</span>
+      <button type="button" class="btn btn-dark" onclick="document.querySelector('.home-how').scrollIntoView({behavior:'smooth'})">
+        <span class="en-text" lang="en">See How It Works →</span><span class="th-text" lang="th">วิธีใช้งาน →</span>
       </button>
     </div>
   </section>
 
   <div class="stats">
-    <div class="stat"><div class="stat-num">5</div><div class="stat-label"><span class="en-text">Lessons</span><span class="th-text">บทเรียน</span></div></div>
-    <div class="stat"><div class="stat-num">2</div><div class="stat-label"><span class="en-text">Languages</span><span class="th-text">ภาษา</span></div></div>
-    <div class="stat"><div class="stat-num">11–14</div><div class="stat-label"><span class="en-text">Ages</span><span class="th-text">อายุ</span></div></div>
-    <div class="stat"><div class="stat-num"><span class="en-text">Free</span><span class="th-text">ฟรี</span></div><div class="stat-label"><span class="en-text">Always</span><span class="th-text">ตลอดไป</span></div></div>
+    <div class="stat"><div class="stat-num">5</div><div class="stat-label"><span class="en-text" lang="en">Lessons</span><span class="th-text" lang="th">บทเรียน</span></div></div>
+    <div class="stat"><div class="stat-num">2</div><div class="stat-label"><span class="en-text" lang="en">Languages</span><span class="th-text" lang="th">ภาษา</span></div></div>
+    <div class="stat"><div class="stat-num">11–14</div><div class="stat-label"><span class="en-text" lang="en">Ages</span><span class="th-text" lang="th">อายุ</span></div></div>
+    <div class="stat"><div class="stat-num"><span class="en-text" lang="en">Free</span><span class="th-text" lang="th">ฟรี</span></div><div class="stat-label"><span class="en-text" lang="en">Always</span><span class="th-text" lang="th">ตลอดไป</span></div></div>
   </div>
 
   <section class="home-how">
-    <div class="eyebrow"><span class="en-text">For Teachers</span><span class="th-text">สำหรับครู</span></div>
-    <h2 class="section-title"><span class="en-text">Designed for every classroom</span><span class="th-text">ออกแบบมาเพื่อทุกห้องเรียน</span></h2>
-    <p class="section-sub"><span class="en-text">No internet? No problem. Every lesson works with printed materials, and works even better with basic digital tools.</span><span class="th-text">ไม่มีอินเทอร์เน็ตก็ใช้ได้ ทุกบทเรียนใช้ได้เพียงแค่มีเอกสารพิมพ์ และจะยิ่งดีขึ้นเมื่อมีอุปกรณ์ดิจิทัลพื้นฐาน</span></p>
+    <div class="eyebrow"><span class="en-text" lang="en">For Teachers</span><span class="th-text" lang="th">สำหรับครู</span></div>
+    <h2 class="section-title"><span class="en-text" lang="en">Designed for every classroom</span><span class="th-text" lang="th">ออกแบบมาเพื่อทุกห้องเรียน</span></h2>
+    <p class="section-sub"><span class="en-text" lang="en">No internet? No problem. Every lesson works with printed materials, and works even better with basic digital tools.</span><span class="th-text" lang="th">ไม่มีอินเทอร์เน็ตก็ใช้ได้ ทุกบทเรียนใช้ได้เพียงแค่มีเอกสารพิมพ์ และจะยิ่งดีขึ้นเมื่อมีอุปกรณ์ดิจิทัลพื้นฐาน</span></p>
     <div class="steps">
       <div class="step">
         <div class="step-num">01</div>
-        <h3><span class="en-text">Pick a lesson</span><span class="th-text">เลือกบทเรียน</span></h3>
-        <p><span class="en-text">Five ready-made lessons, each 45–60 minutes of class time.</span><span class="th-text">5 บทเรียนพร้อมใช้งาน แต่ละบทเรียนใช้เวลา 45–60 นาที</span></p>
+        <h3><span class="en-text" lang="en">Pick a lesson</span><span class="th-text" lang="th">เลือกบทเรียน</span></h3>
+        <p><span class="en-text" lang="en">Five ready-made lessons, each 45–60 minutes of class time.</span><span class="th-text" lang="th">5 บทเรียนพร้อมใช้งาน แต่ละบทเรียนใช้เวลา 45–60 นาที</span></p>
       </div>
       <div class="step">
         <div class="step-num">02</div>
-        <h3><span class="en-text">Teach with what you have</span><span class="th-text">สอนด้วยอุปกรณ์ที่มี</span></h3>
-        <p><span class="en-text">Printed cards and posters for offline classrooms; slides and quizzes for connected ones.</span><span class="th-text">การ์ดและโปสเตอร์พิมพ์สำหรับห้องเรียนที่ไม่มีอินเทอร์เน็ต สไลด์และแบบทดสอบสำหรับห้องเรียนที่มีอุปกรณ์</span></p>
+        <h3><span class="en-text" lang="en">Teach with what you have</span><span class="th-text" lang="th">สอนด้วยอุปกรณ์ที่มี</span></h3>
+        <p><span class="en-text" lang="en">Printed cards and posters for offline classrooms; slides and quizzes for connected ones.</span><span class="th-text" lang="th">การ์ดและโปสเตอร์พิมพ์สำหรับห้องเรียนที่ไม่มีอินเทอร์เน็ต สไลด์และแบบทดสอบสำหรับห้องเรียนที่มีอุปกรณ์</span></p>
       </div>
       <div class="step">
         <div class="step-num">03</div>
-        <h3><span class="en-text">Reflect &amp; assess</span><span class="th-text">สะท้อนคิดและประเมินผล</span></h3>
-        <p><span class="en-text">Built-in discussion questions, exit tickets, and a final group project.</span><span class="th-text">มีคำถามอภิปราย ใบสรุปท้ายชั่วโมง และโครงงานกลุ่มท้ายบทในตัว</span></p>
+        <h3><span class="en-text" lang="en">Reflect &amp; assess</span><span class="th-text" lang="th">สะท้อนคิดและประเมินผล</span></h3>
+        <p><span class="en-text" lang="en">Built-in discussion questions, exit tickets, and a final group project.</span><span class="th-text" lang="th">มีคำถามอภิปราย ใบสรุปท้ายชั่วโมง และโครงงานกลุ่มท้ายบทในตัว</span></p>
       </div>
     </div>
   </section>
 
   <section class="home-topics">
-    <div class="eyebrow"><span class="en-text">What Students Will Explore</span><span class="th-text">สิ่งที่นักเรียนจะได้เรียนรู้</span></div>
-    <h2 class="section-title"><span class="en-text">Five lessons, building block by block</span><span class="th-text">5 บทเรียน ต่อยอดกันทีละขั้น</span></h2>
-    <p class="section-sub"><span class="en-text">From "What even is AI?" to using it responsibly and presenting a final project.</span><span class="th-text">ตั้งแต่ "AI คืออะไร" ไปจนถึงการใช้งานอย่างมีความรับผิดชอบ และการนำเสนอโครงงานสุดท้าย</span></p>
+    <div class="eyebrow"><span class="en-text" lang="en">What Students Will Explore</span><span class="th-text" lang="th">สิ่งที่นักเรียนจะได้เรียนรู้</span></div>
+    <h2 class="section-title"><span class="en-text" lang="en">Five lessons, building block by block</span><span class="th-text" lang="th">5 บทเรียน ต่อยอดกันทีละขั้น</span></h2>
+    <p class="section-sub"><span class="en-text" lang="en">From "What even is AI?" to using it responsibly and presenting a final project.</span><span class="th-text" lang="th">ตั้งแต่ "AI คืออะไร" ไปจนถึงการใช้งานอย่างมีความรับผิดชอบ และการนำเสนอโครงงานสุดท้าย</span></p>
     <div class="topics-grid" id="topics-grid"></div>
   </section>
 
   <footer>
-    <span class="en-text">Made for teachers everywhere — <span>AI Literacy Toolkit</span> is always free to use.</span>
-    <span class="th-text">สร้างขึ้นเพื่อครูทุกคน — <span>คู่มือการเรียนรู้ AI</span> ใช้งานฟรีเสมอ</span>
+    <span class="en-text" lang="en">Made for teachers everywhere — <span>AI Literacy Toolkit</span> is always free to use.</span>
+    <span class="th-text" lang="th">สร้างขึ้นเพื่อครูทุกคน — <span>คู่มือการเรียนรู้ AI</span> ใช้งานฟรีเสมอ</span>
     <div class="footer-brand">
       <img src="assets/logo-youth-of-change-footer.png" alt="Youth of Change logo" />
-      <span class="en-text">Made by Youth of Change</span>
-      <span class="th-text">สร้างสรรค์โดย Youth of Change</span>
+      <span class="en-text" lang="en">Made by Youth of Change</span>
+      <span class="th-text" lang="th">สร้างสรรค์โดย Youth of Change</span>
     </div>
   </footer>
 </div>
@@ -156,30 +156,30 @@
 <!-- LEARN PAGE -->
 <div id="page-learn" class="page">
   <div class="page-hero">
-    <div class="eyebrow"><span class="en-text">Lesson Library</span><span class="th-text">คลังบทเรียน</span></div>
-    <h2 class="section-title"><span class="en-text">All 5 Lessons</span><span class="th-text">บทเรียนทั้ง 5 บท</span></h2>
-    <p class="section-sub"><span class="en-text">Click any lesson for the full plan — objective, materials, activity, and reflection questions.</span><span class="th-text">คลิกที่บทเรียนเพื่อดูแผนการสอนแบบเต็ม — จุดประสงค์ อุปกรณ์ กิจกรรม และคำถามสะท้อนคิด</span></p>
+    <div class="eyebrow"><span class="en-text" lang="en">Lesson Library</span><span class="th-text" lang="th">คลังบทเรียน</span></div>
+    <h2 class="section-title"><span class="en-text" lang="en">All 5 Lessons</span><span class="th-text" lang="th">บทเรียนทั้ง 5 บท</span></h2>
+    <p class="section-sub"><span class="en-text" lang="en">Click any lesson for the full plan — objective, materials, activity, and reflection questions.</span><span class="th-text" lang="th">คลิกที่บทเรียนเพื่อดูแผนการสอนแบบเต็ม — จุดประสงค์ อุปกรณ์ กิจกรรม และคำถามสะท้อนคิด</span></p>
   </div>
 
   <div class="learn-body">
     <div class="mode-toggle-banner">
-      <div class="mode-toggle-label"><span class="en-text">Choose your classroom setup</span><span class="th-text">เลือกรูปแบบห้องเรียนของคุณ</span></div>
-      <div class="mode-toggle mode-toggle-big" id="mode-toggle-big">
-        <button data-mode="notech" class="active" onclick="setMode('notech')">📴 <span class="en-text">No Technology</span><span class="th-text">ไม่ใช้เทคโนโลยี</span></button>
-        <button data-mode="tech" onclick="setMode('tech')">💻 <span class="en-text">Technology</span><span class="th-text">ใช้เทคโนโลยี</span></button>
+      <div class="mode-toggle-label" id="mode-toggle-label"><span class="en-text" lang="en">Choose your classroom setup</span><span class="th-text" lang="th">เลือกรูปแบบห้องเรียนของคุณ</span></div>
+      <div class="mode-toggle mode-toggle-big" id="mode-toggle-big" role="group" aria-labelledby="mode-toggle-label">
+        <button type="button" data-mode="notech" class="active" aria-pressed="true" onclick="setMode('notech')"><span aria-hidden="true">📴</span> <span class="en-text" lang="en">No Technology</span><span class="th-text" lang="th">ไม่ใช้เทคโนโลยี</span></button>
+        <button type="button" data-mode="tech" aria-pressed="false" onclick="setMode('tech')"><span aria-hidden="true">💻</span> <span class="en-text" lang="en">Technology</span><span class="th-text" lang="th">ใช้เทคโนโลยี</span></button>
       </div>
     </div>
-    <div class="level-label">📘 <span class="en-text">Unit 1: AI Explorers</span><span class="th-text">หน่วยที่ 1: นักสำรวจ AI</span></div>
+    <div class="level-label">📘 <span class="en-text" lang="en">Unit 1: AI Explorers</span><span class="th-text" lang="th">หน่วยที่ 1: นักสำรวจ AI</span></div>
     <div class="lessons-grid" id="lessons-grid"></div>
   </div>
 
   <footer>
-    <span class="en-text">Made for teachers everywhere — <span>AI Literacy Toolkit</span> is always free to use.</span>
-    <span class="th-text">สร้างขึ้นเพื่อครูทุกคน — <span>คู่มือการเรียนรู้ AI</span> ใช้งานฟรีเสมอ</span>
+    <span class="en-text" lang="en">Made for teachers everywhere — <span>AI Literacy Toolkit</span> is always free to use.</span>
+    <span class="th-text" lang="th">สร้างขึ้นเพื่อครูทุกคน — <span>คู่มือการเรียนรู้ AI</span> ใช้งานฟรีเสมอ</span>
     <div class="footer-brand">
       <img src="assets/logo-youth-of-change-footer.png" alt="Youth of Change logo" />
-      <span class="en-text">Made by Youth of Change</span>
-      <span class="th-text">สร้างสรรค์โดย Youth of Change</span>
+      <span class="en-text" lang="en">Made by Youth of Change</span>
+      <span class="th-text" lang="th">สร้างสรรค์โดย Youth of Change</span>
     </div>
   </footer>
 </div>
@@ -187,11 +187,11 @@
 <!-- ABOUT PAGE -->
 <div id="page-about" class="page">
   <div class="page-hero">
-    <div class="eyebrow"><span class="en-text">About</span><span class="th-text">เกี่ยวกับเรา</span></div>
-    <h2 class="section-title"><span class="en-text">Why we built this toolkit</span><span class="th-text">ทำไมเราจึงสร้างคู่มือการเรียนรู้นี้</span></h2>
+    <div class="eyebrow"><span class="en-text" lang="en">About</span><span class="th-text" lang="th">เกี่ยวกับเรา</span></div>
+    <h2 class="section-title"><span class="en-text" lang="en">Why we built this toolkit</span><span class="th-text" lang="th">ทำไมเราจึงสร้างคู่มือการเรียนรู้นี้</span></h2>
     <p class="section-sub">
-      <span class="en-text">A modular AI literacy program for middle school classrooms, built to work anywhere.</span>
-      <span class="th-text">โปรแกรมความรู้เท่าทัน AI แบบโมดูลาร์สำหรับห้องเรียนมัธยมต้น ออกแบบให้ใช้ได้ทุกที่</span>
+      <span class="en-text" lang="en">A modular AI literacy program for middle school classrooms, built to work anywhere.</span>
+      <span class="th-text" lang="th">โปรแกรมความรู้เท่าทัน AI แบบโมดูลาร์สำหรับห้องเรียนมัธยมต้น ออกแบบให้ใช้ได้ทุกที่</span>
     </p>
   </div>
   <div class="simple-page">
@@ -199,12 +199,12 @@
   </div>
 
   <footer>
-    <span class="en-text">Made for teachers everywhere — <span>AI Literacy Toolkit</span> is always free to use.</span>
-    <span class="th-text">สร้างขึ้นเพื่อครูทุกคน — <span>คู่มือการเรียนรู้ AI</span> ใช้งานฟรีเสมอ</span>
+    <span class="en-text" lang="en">Made for teachers everywhere — <span>AI Literacy Toolkit</span> is always free to use.</span>
+    <span class="th-text" lang="th">สร้างขึ้นเพื่อครูทุกคน — <span>คู่มือการเรียนรู้ AI</span> ใช้งานฟรีเสมอ</span>
     <div class="footer-brand">
       <img src="assets/logo-youth-of-change-footer.png" alt="Youth of Change logo" />
-      <span class="en-text">Made by Youth of Change</span>
-      <span class="th-text">สร้างสรรค์โดย Youth of Change</span>
+      <span class="en-text" lang="en">Made by Youth of Change</span>
+      <span class="th-text" lang="th">สร้างสรรค์โดย Youth of Change</span>
     </div>
   </footer>
 </div>
@@ -212,11 +212,11 @@
 <!-- CONTACT PAGE -->
 <div id="page-contact" class="page">
   <div class="page-hero">
-    <div class="eyebrow"><span class="en-text">Get In Touch</span><span class="th-text">ติดต่อเรา</span></div>
-    <h2 class="section-title"><span class="en-text">Contact Us</span><span class="th-text">ติดต่อเรา</span></h2>
+    <div class="eyebrow"><span class="en-text" lang="en">Get In Touch</span><span class="th-text" lang="th">ติดต่อเรา</span></div>
+    <h2 class="section-title"><span class="en-text" lang="en">Contact Us</span><span class="th-text" lang="th">ติดต่อเรา</span></h2>
     <p class="section-sub">
-      <span class="en-text">Questions, feedback, or want to run a pilot workshop at your school? We'd love to hear from you.</span>
-      <span class="th-text">มีคำถาม ข้อเสนอแนะ หรืออยากจัดเวิร์กช็อปนำร่องที่โรงเรียนของคุณ? เรายินดีรับฟัง</span>
+      <span class="en-text" lang="en">Questions, feedback, or want to run a pilot workshop at your school? We'd love to hear from you.</span>
+      <span class="th-text" lang="th">มีคำถาม ข้อเสนอแนะ หรืออยากจัดเวิร์กช็อปนำร่องที่โรงเรียนของคุณ? เรายินดีรับฟัง</span>
     </p>
   </div>
   <div class="simple-page contact-layout">
@@ -224,39 +224,39 @@
       <div class="contact-card">
       <div class="contact-row">
         <span class="contact-icon">✉️</span>
-        <span><span class="en-text">Email: </span><span class="th-text">อีเมล: </span><a href="mailto:youthofchange8@gmail.com">youthofchange8@gmail.com</a></span>
+        <span><span class="en-text" lang="en">Email: </span><span class="th-text" lang="th">อีเมล: </span><a href="mailto:youthofchange8@gmail.com">youthofchange8@gmail.com</a></span>
       </div>
       <div class="contact-row">
         <span class="contact-icon">📷</span>
-        <span><span class="en-text">Instagram: </span><span class="th-text">อินสตาแกรม: </span><a href="https://instagram.com/youthofchange_th" target="_blank" rel="noopener">@youthofchange_th</a></span>
+        <span><span class="en-text" lang="en">Instagram: </span><span class="th-text" lang="th">อินสตาแกรม: </span><a href="https://instagram.com/youthofchange_th" target="_blank" rel="noopener">@youthofchange_th</a></span>
       </div>
       <div class="contact-row">
         <span class="contact-icon">🏫</span>
-        <span class="en-text">Want to pilot a lesson at your school? Email us and we'll help you get started.</span>
-        <span class="th-text">อยากนำบทเรียนไปทดลองสอนที่โรงเรียนของคุณ? ส่งอีเมลมาหาเรา แล้วเราจะช่วยให้คุณเริ่มต้นได้</span>
+        <span class="en-text" lang="en">Want to pilot a lesson at your school? Email us and we'll help you get started.</span>
+        <span class="th-text" lang="th">อยากนำบทเรียนไปทดลองสอนที่โรงเรียนของคุณ? ส่งอีเมลมาหาเรา แล้วเราจะช่วยให้คุณเริ่มต้นได้</span>
       </div>
       <div class="contact-row">
         <span class="contact-icon">💬</span>
-        <span class="en-text">Feedback from pilot workshops directly shapes future versions of this toolkit.</span>
-        <span class="th-text">ความคิดเห็นจากเวิร์กช็อปนำร่องจะถูกนำไปพัฒนาคู่มือการเรียนรู้นี้ในเวอร์ชันต่อ ๆ ไป</span>
+        <span class="en-text" lang="en">Feedback from pilot workshops directly shapes future versions of this toolkit.</span>
+        <span class="th-text" lang="th">ความคิดเห็นจากเวิร์กช็อปนำร่องจะถูกนำไปพัฒนาคู่มือการเรียนรู้นี้ในเวอร์ชันต่อ ๆ ไป</span>
       </div>
     </div>
     </div>
     <div class="contact-col-right">
       <div class="contact-form-wrap">
-        <h3><span class="en-text">Have any feedback for us? Send us a message!</span><span class="th-text">มีข้อเสนอแนะถึงเราไหม? ส่งข้อความหาเราได้เลย!</span></h3>
+        <h3><span class="en-text" lang="en">Have any feedback for us? Send us a message!</span><span class="th-text" lang="th">มีข้อเสนอแนะถึงเราไหม? ส่งข้อความหาเราได้เลย!</span></h3>
         <iframe class="contact-form-embed" src="https://docs.google.com/forms/d/e/1FAIpQLSesEJTAyB0HQsGwmhgrT0paQLnWjk7jJuX8EAMWOanGKbAZxw/viewform?embedded=true" title="Contact form">Loading…</iframe>
       </div>
     </div>
   </div>
 
   <footer>
-    <span class="en-text">Made for teachers everywhere — <span>AI Literacy Toolkit</span> is always free to use.</span>
-    <span class="th-text">สร้างขึ้นเพื่อครูทุกคน — <span>คู่มือการเรียนรู้ AI</span> ใช้งานฟรีเสมอ</span>
+    <span class="en-text" lang="en">Made for teachers everywhere — <span>AI Literacy Toolkit</span> is always free to use.</span>
+    <span class="th-text" lang="th">สร้างขึ้นเพื่อครูทุกคน — <span>คู่มือการเรียนรู้ AI</span> ใช้งานฟรีเสมอ</span>
     <div class="footer-brand">
       <img src="assets/logo-youth-of-change-footer.png" alt="Youth of Change logo" />
-      <span class="en-text">Made by Youth of Change</span>
-      <span class="th-text">สร้างสรรค์โดย Youth of Change</span>
+      <span class="en-text" lang="en">Made by Youth of Change</span>
+      <span class="th-text" lang="th">สร้างสรรค์โดย Youth of Change</span>
     </div>
   </footer>
 </div>
@@ -264,27 +264,27 @@
 <!-- LESSON DETAIL PAGE -->
 <div id="page-lesson" class="page">
   <div class="lesson-page-wrap">
-    <button class="lesson-back" onclick="showPage('learn')">← <span class="en-text">Back to all lessons</span><span class="th-text">กลับไปที่บทเรียนทั้งหมด</span></button>
+    <button type="button" class="lesson-back" onclick="showPage('learn')">← <span class="en-text" lang="en">Back to all lessons</span><span class="th-text" lang="th">กลับไปที่บทเรียนทั้งหมด</span></button>
     <div class="lesson-layout">
       <nav class="lesson-toc">
-        <a href="#lesson-page-content" class="lesson-toc-link active" onclick="return goToTocSection(event, this)"><span class="en-text">Lesson Details</span><span class="th-text">รายละเอียดบทเรียน</span></a>
-        <a href="#lesson-section-slides" class="lesson-toc-link" onclick="return goToTocSection(event, this)"><span class="en-text">Slides</span><span class="th-text">สไลด์</span></a>
-        <a href="#lesson-section-worksheet" class="lesson-toc-link" onclick="return goToTocSection(event, this)"><span class="en-text">Worksheet</span><span class="th-text">ใบงาน</span></a>
-        <a href="#lesson-section-quiz" class="lesson-toc-link" onclick="return goToTocSection(event, this)"><span class="en-text">Quiz</span><span class="th-text">แบบทดสอบ</span></a>
+        <a href="#lesson-page-content" class="lesson-toc-link active" onclick="return goToTocSection(event, this)"><span class="en-text" lang="en">Lesson Details</span><span class="th-text" lang="th">รายละเอียดบทเรียน</span></a>
+        <a href="#lesson-section-slides" class="lesson-toc-link" onclick="return goToTocSection(event, this)"><span class="en-text" lang="en">Slides</span><span class="th-text" lang="th">สไลด์</span></a>
+        <a href="#lesson-section-worksheet" class="lesson-toc-link" onclick="return goToTocSection(event, this)"><span class="en-text" lang="en">Worksheet</span><span class="th-text" lang="th">ใบงาน</span></a>
+        <a href="#lesson-section-quiz" class="lesson-toc-link" onclick="return goToTocSection(event, this)"><span class="en-text" lang="en">Quiz</span><span class="th-text" lang="th">แบบทดสอบ</span></a>
       </nav>
       <div class="lesson-main">
         <div class="modal" id="lesson-page-content"></div>
         <div id="lesson-section-slides" class="lesson-extra-section">
-          <h3><span class="en-text">Slides</span><span class="th-text">สไลด์</span></h3>
+          <h3><span class="en-text" lang="en">Slides</span><span class="th-text" lang="th">สไลด์</span></h3>
           <div id="lesson-slides-content"></div>
         </div>
         <div id="lesson-section-worksheet" class="lesson-extra-section">
-          <h3><span class="en-text">Worksheet</span><span class="th-text">ใบงาน</span></h3>
-          <p class="lesson-extra-placeholder"><span class="en-text">Printable worksheet coming soon.</span><span class="th-text">ใบงานพิมพ์ได้กำลังจะมาเร็ว ๆ นี้</span></p>
+          <h3><span class="en-text" lang="en">Worksheet</span><span class="th-text" lang="th">ใบงาน</span></h3>
+          <p class="lesson-extra-placeholder"><span class="en-text" lang="en">Printable worksheet coming soon.</span><span class="th-text" lang="th">ใบงานพิมพ์ได้กำลังจะมาเร็ว ๆ นี้</span></p>
         </div>
         <div id="lesson-section-quiz" class="lesson-extra-section">
-          <h3><span class="en-text">Quiz</span><span class="th-text">แบบทดสอบ</span></h3>
-          <p class="lesson-extra-placeholder"><span class="en-text">Quiz coming soon.</span><span class="th-text">แบบทดสอบกำลังจะมาเร็ว ๆ นี้</span></p>
+          <h3><span class="en-text" lang="en">Quiz</span><span class="th-text" lang="th">แบบทดสอบ</span></h3>
+          <p class="lesson-extra-placeholder"><span class="en-text" lang="en">Quiz coming soon.</span><span class="th-text" lang="th">แบบทดสอบกำลังจะมาเร็ว ๆ นี้</span></p>
         </div>
       </div>
     </div>

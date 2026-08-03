@@ -22,6 +22,27 @@ body[data-lang="th"] .nav-links button { font-family: 'Noto Sans Thai', 'Fredoka
 body[data-lang="th"] .hero-v3-heading { font-family: 'Fredoka', 'Noto Sans Thai', sans-serif; }
 body[data-lang="th"] .hero-v3-heading .th-text { font-family: 'Mali', 'Noto Sans Thai', sans-serif; }
 
+/* The cards and the logo are real <button>s so they can be reached by keyboard.
+   Strip the browser's button styling here, before the rules that style them as
+   cards, so those rules apply exactly as they did when these were <div>s. */
+.nav-logo, .topic-card, .lesson-card {
+  appearance: none; -webkit-appearance: none;
+  font: inherit; color: inherit; text-align: left;
+  background: none; border: 0;
+}
+
+/* Visible keyboard focus. :focus-visible keeps it off mouse clicks. */
+:focus-visible {
+  outline: 3px solid var(--coral);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+/* --coral disappears against the indigo hero and footer. */
+.page-hero :focus-visible,
+.hero-v3 :focus-visible,
+footer :focus-visible,
+nav .lang-toggle button:focus-visible { outline-color: var(--yellow); }
+
 .page { display: none; }
 .page.active { display: block; }
 
@@ -302,8 +323,8 @@ body[data-lang="th"] .nav-logo-by.th-text { margin-top: 0.15rem; }
   font-size: 1.7rem; width: 3rem; height: 3rem; display: flex; align-items: center; justify-content: center;
   border-radius: 50%; border: 1.5px dashed rgba(27,35,97,0.25); transition: transform 0.25s;
 }
-.topic-card h3 { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1rem; color: var(--indigo); }
-.topic-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+.topic-card .card-title { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1rem; color: var(--indigo); }
+.topic-card .card-text { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
 .badge { display: inline-block; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.07em; padding: 0.2rem 0.6rem; border-radius: 50px; }
 
 .home-how { background: var(--indigo); padding: 5rem; }
@@ -342,8 +363,8 @@ body[data-lang="th"] .nav-logo-by.th-text { margin-top: 0.15rem; }
 .lesson-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.5rem; }
 .lesson-icon { font-size: 1.8rem; }
 .lesson-duration { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 0.72rem; color: var(--muted); background: #EDF0FD; padding: 0.2rem 0.6rem; border-radius: 50px; white-space: nowrap; }
-.lesson-card h4 { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 0.98rem; color: var(--indigo); }
-.lesson-card p { font-size: 0.83rem; color: var(--muted); line-height: 1.6; }
+.lesson-card .card-title { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 0.98rem; color: var(--indigo); }
+.lesson-card .card-text { font-size: 0.83rem; color: var(--muted); line-height: 1.6; }
 .lesson-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 0.3rem; flex-wrap: wrap; gap: 0.4rem; }
 .lesson-open { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 0.8rem; color: var(--indigo); }
 .lesson-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
