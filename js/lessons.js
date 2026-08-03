@@ -56,8 +56,8 @@ const lessons = [
       challenge: { en: 'After the reveal, ask students to explain the clue in their own words rather than just naming it ("the shadow falls the wrong way because...").', th: 'หลังเฉลยแล้ว ให้นักเรียนอธิบายเบาะแสด้วยคำพูดของตัวเอง แทนที่จะบอกแค่ชื่อเบาะแส (เช่น "เงาตกผิดทิศทางเพราะ...")' }
     },
     assessmentMaterials: {
-      en: ['Slide deck: What Is AI? (17 slides)', 'Worksheet: What Is AI? — Worksheet (1 page, Parts A–D)', 'Printable real-vs-AI photo pairs (3 rounds — teacher to source/print)'],
-      th: ['สไลด์นำเสนอ: AI คืออะไร? (17 สไลด์)', 'ใบงาน: AI คืออะไร? (1 หน้า ส่วน A–D)', 'ภาพคู่จริง-เทียบ AI สำหรับพิมพ์ (3 รอบ — ครูเตรียม/พิมพ์เอง)']
+      en: ['Slide deck: What Is AI? (14 slides)', 'Worksheet: What Is AI? — Worksheet (1 page, Parts A–D)', 'Printable real-vs-AI photo pairs (3 rounds — teacher to source/print)'],
+      th: ['สไลด์นำเสนอ: AI คืออะไร? (14 สไลด์)', 'ใบงาน: AI คืออะไร? (1 หน้า ส่วน A–D)', 'ภาพคู่จริง-เทียบ AI สำหรับพิมพ์ (3 รอบ — ครูเตรียม/พิมพ์เอง)']
     }
   },
   {
@@ -284,8 +284,8 @@ const lessons = [
       challenge: { en: 'Have students write their own "good or bad" AI scenario for classmates to sort.', th: 'ให้นักเรียนเขียนสถานการณ์ "ดีหรือไม่ดี" ของ AI ของตัวเองให้เพื่อนร่วมชั้นจัดหมวดหมู่' }
     },
     assessmentMaterials: {
-      en: ['Slide deck: Using AI Responsibly (10 slides)', '"Good or Bad" scenario cards (5 scenarios; answer key: Bad, Bad, Good, Bad, Good)'],
-      th: ['สไลด์นำเสนอ: การใช้ AI อย่างมีความรับผิดชอบ (10 สไลด์)', 'การ์ดสถานการณ์ "ดีหรือไม่ดี" (5 สถานการณ์ เฉลย: ไม่ดี, ไม่ดี, ดี, ไม่ดี, ดี)']
+      en: ['Slide deck: Using AI Responsibly (9 slides)', '"Good or Bad" scenario cards (5 scenarios; answer key: Bad, Bad, Good, Bad, Good)'],
+      th: ['สไลด์นำเสนอ: การใช้ AI อย่างมีความรับผิดชอบ (9 สไลด์)', 'การ์ดสถานการณ์ "ดีหรือไม่ดี" (5 สถานการณ์ เฉลย: ไม่ดี, ไม่ดี, ดี, ไม่ดี, ดี)']
     }
   },
   {
