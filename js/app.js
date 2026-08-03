@@ -65,7 +65,19 @@ function setRoute(route, replace = false) {
   else history.pushState(null, '', url);
 }
 
+// The feedback form is a Google iframe. loading="lazy" does not defer an
+// iframe inside a display:none page, so the URL is parked in data-src and only
+// becomes src when someone actually opens Contact. Without this every visitor
+// hits Google on page load, which the privacy policy says does not happen.
+function mountContactForm() {
+  const f = document.querySelector('.contact-form-embed[data-src]');
+  if (!f) return;
+  f.src = f.dataset.src;
+  f.removeAttribute('data-src');
+}
+
 function showPage(id, updateUrl = true) {
+  if (id === 'contact') mountContactForm();
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
   document.querySelectorAll(NAV_PAGE_BUTTONS).forEach(b => {
@@ -94,14 +106,28 @@ function routeToCurrentHash() {
   showPage(ROUTE_PAGES[currentRoute()] || 'home', false);
 }
 
+// The skip link cannot be an <a href="#main">: the router owns the hash, and
+// setting it would navigate. Move focus instead.
+function skipToContent() {
+  const page = document.querySelector('.page.active');
+  if (!page) return;
+  page.setAttribute('tabindex', '-1');
+  page.focus({ preventScroll: true });
+  page.scrollIntoView({ block: 'start' });
+}
+
 // Back/forward across our own pushState entries fires popstate; an edited or
 // pasted hash fires hashchange. Both funnel through the same handler, which
 // no-ops when the route is already on screen.
 window.addEventListener('popstate', () => routeToCurrentHash());
 window.addEventListener('hashchange', () => routeToCurrentHash());
 
+// Indexed by lesson position, so they are read modulo their length: a sixth
+// lesson reuses the first swatch rather than rendering "background:undefined".
 const colors = ['#E1E6FD','#DCE3FB','#E6E9FE','#ECE5FD','#EFE8FE'];
 const colorsText = ['#2E43E6','#1B2361','#3B4FE0','#6C3CE0','#7B2FE0'];
+const swatch = i => colors[i % colors.length];
+const swatchText = i => colorsText[i % colorsText.length];
 
 
 let currentMode = 'notech';
@@ -136,7 +162,7 @@ function renderTopics() {
     const title = l.title[currentLang] || l.title.en;
     return `
     <button type="button" class="topic-card" onclick="showPage('learn')" aria-label="${cardLabel('topic', i, title)}">
-      <span class="topic-icon" style="background:${colors[i]};" aria-hidden="true">${l.icon}</span>
+      <span class="topic-icon" style="background:${swatch(i)};" aria-hidden="true">${l.icon}</span>
       <span class="card-title">${title}</span>
       <span class="card-text">${l.short[currentLang] || l.short.en}</span>
     </button>
@@ -166,7 +192,7 @@ function renderLessonCards() {
       <span class="card-title">${title}</span>
       <span class="card-text">${l.short[currentLang] || l.short.en}</span>
       <span class="lesson-footer">
-        <span class="badge" style="background:${colors[i]};color:${colorsText[i]};">${currentLang==='th' ? 'บทที่ '+(i+1) : 'Lesson '+(i+1)}</span>
+        <span class="badge" style="background:${swatch(i)};color:${swatchText(i)};">${currentLang==='th' ? 'บทที่ '+(i+1) : 'Lesson '+(i+1)}</span>
         <span class="lesson-open">${currentLang==='th' ? 'เปิดดู →' : 'Open →'}</span>
       </span>
       <span class="lesson-tags">
@@ -265,7 +291,7 @@ function openLesson(id, updateUrl = true) {
     <div class="modal-icon">${l.icon}</div>
     <h2>${l.title[t] || l.title.en}</h2>
     <div class="modal-meta">
-      <span class="modal-tag" style="background:${colors[i]};color:${colorsText[i]}">${t==='th' ? 'บทที่ '+(i+1) : 'Lesson '+(i+1)}</span>
+      <span class="modal-tag" style="background:${swatch(i)};color:${swatchText(i)}">${t==='th' ? 'บทที่ '+(i+1) : 'Lesson '+(i+1)}</span>
       <span class="modal-tag" style="background:#EDF0FD;color:var(--muted)">⏱ ${l.duration}</span>
     </div>
 

@@ -19,7 +19,7 @@ body[data-lang="en"] .th-text { display: none; }
 body[data-lang="th"] .en-text { display: none; }
 body[data-lang="th"] { font-family: 'Noto Sans Thai', 'Inter', sans-serif; }
 body[data-lang="th"] h1, body[data-lang="th"] h2, body[data-lang="th"] h3, body[data-lang="th"] h4,
-body[data-lang="th"] .hero-badge, body[data-lang="th"] .eyebrow, body[data-lang="th"] .nav-logo,
+body[data-lang="th"] .eyebrow, body[data-lang="th"] .nav-logo,
 body[data-lang="th"] .btn, body[data-lang="th"] .step-num, body[data-lang="th"] .stat-num,
 body[data-lang="th"] .nav-links button { font-family: 'Noto Sans Thai', 'Fredoka', sans-serif; }
 body[data-lang="th"] .hero-v3-heading { font-family: 'Fredoka', 'Noto Sans Thai', sans-serif; }
@@ -45,6 +45,14 @@ body[data-lang="th"] .hero-v3-heading .th-text { font-family: 'Mali', 'Noto Sans
 .hero-v3 :focus-visible,
 footer :focus-visible,
 body > nav .lang-toggle button:focus-visible { outline-color: var(--yellow); }
+
+.skip-link {
+  position: absolute; left: -9999px; top: 0; z-index: 200;
+  appearance: none; -webkit-appearance: none; border: 0; cursor: pointer;
+  font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 0.85rem;
+  background: var(--indigo); color: var(--white); padding: 0.7rem 1.1rem; border-radius: 0 0 10px 0;
+}
+.skip-link:focus { left: 0; }
 
 .page { display: none; }
 .page.active { display: block; }
@@ -79,12 +87,6 @@ body[data-lang="th"] .nav-logo-by.th-text { margin-top: 0.15rem; }
 }
 .nav-links button:hover { opacity: 1; border-color: var(--border); }
 .nav-links button.active { opacity: 1; border-color: var(--indigo); border-style: dashed; }
-.nav-cta {
-  font-family: 'Fredoka', sans-serif !important; text-transform: none !important; letter-spacing: 0 !important;
-  background: var(--coral) !important; color: var(--white) !important; border: none !important;
-  opacity: 1 !important; border-radius: 10px !important; padding: 0.55rem 1.2rem !important;
-  margin-left: 0.6rem;
-}
 .lang-toggle {
   display: flex; border: 1.5px solid var(--indigo); border-radius: 10px; overflow: hidden; margin-left: 0.6rem;
 }
@@ -104,7 +106,6 @@ body[data-lang="th"] .nav-logo-by.th-text { margin-top: 0.15rem; }
   cursor: pointer; opacity: 0.6; transition: opacity 0.2s, background 0.2s;
 }
 .mode-toggle button.active { opacity: 1; background: var(--indigo); color: var(--white); }
-.page-mode-toggle { margin-top: 1.4rem; }
 .page-hero .mode-toggle { border-color: rgba(255,255,255,0.4); }
 .page-hero .mode-toggle button { color: var(--white); }
 .page-hero .mode-toggle button.active { background: var(--yellow); color: var(--indigo); }
@@ -147,7 +148,6 @@ body[data-lang="th"] .nav-logo-by.th-text { margin-top: 0.15rem; }
 }
 .footer-link:hover { color: var(--yellow); }
 a.footer-link { display: inline-block; }
-.footer-link span { color: inherit; font-weight: inherit; }
 
 /* Centred, and wide enough that the padding does not squeeze the text: with
    border-box the 5rem sides come out of max-width, so 920px leaves a ~760px
@@ -174,22 +174,6 @@ a.footer-link { display: inline-block; }
   text-decoration: underline; text-underline-offset: 2px;
 }
 .inline-link:hover { color: var(--indigo); }
-.team-section { max-width: 900px; margin: 1.5rem 0 1rem; }
-.team-member { display: grid; grid-template-columns: 260px 1fr; gap: 3rem; align-items: center; margin-bottom: 3.5rem; }
-.team-photo-wrap { position: relative; }
-.team-blob { position: absolute; top: 50%; left: 50%; width: 150%; height: 150%; transform: translate(-50%, -50%); z-index: 0; }
-.team-photo { position: relative; z-index: 1; width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 8px; display: block; }
-.team-info h3.team-name { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1.5rem; color: var(--indigo); margin-bottom: 0.6rem; }
-.team-subtitle { font-size: 0.9rem; font-weight: 700; color: var(--coral); margin-bottom: 0.8rem !important; }
-.team-bio-text { font-size: 0.92rem; color: var(--body-text); line-height: 1.7; margin-bottom: 1.2rem !important; }
-.team-stats { display: flex; gap: 2.2rem; margin-bottom: 1.2rem; }
-.team-stat-num { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 1.3rem; color: var(--indigo); }
-.team-stat-label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
-.team-social { display: flex; align-items: center; gap: 0.6rem; }
-.team-social-icon { width: 32px; height: 32px; border-radius: 50%; background: var(--indigo); color: var(--white); display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 700; text-decoration: none; }
-.team-social-icon:hover { background: var(--coral); }
-.team-contact { font-size: 0.8rem; color: var(--muted); margin-left: 0.3rem; }
-@media (max-width: 700px) { .team-member { grid-template-columns: 1fr; gap: 1.5rem; } .team-photo-wrap { max-width: 260px; } }
 .contact-card {
   background: #EDF0FD; border-radius: 16px; padding: 1.6rem; margin-top: 1.5rem;
   display: flex; flex-direction: column; gap: 0.9rem;
@@ -216,8 +200,6 @@ a.footer-link { display: inline-block; }
 .btn:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--indigo); }
 .btn-yellow { background: var(--yellow); color: var(--indigo); }
 .btn-dark { background: var(--indigo); color: var(--white); }
-.btn-ghost { background: transparent; color: var(--white); border: 2px dashed rgba(255,255,255,0.4); box-shadow: none; }
-.btn-ghost:hover { border-color: rgba(255,255,255,0.8); transform: translateY(-2px); box-shadow: none; }
 
 .eyebrow {
   font-family: 'Space Mono', monospace; font-weight: 700; font-size: 0.72rem;
@@ -240,14 +222,6 @@ a.footer-link { display: inline-block; }
   background: radial-gradient(circle, rgba(141,154,247,0.16) 0%, transparent 70%);
   top: -100px; right: -80px; pointer-events: none;
 }
-.hero-text { position: relative; z-index: 1; }
-.hero-badge {
-  display: inline-block; font-family: 'Space Mono', monospace; font-weight: 700;
-  font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--yellow); background: rgba(141,154,247,0.12);
-  border: 1px dashed rgba(141,154,247,0.5);
-  padding: 0.3rem 0.9rem; border-radius: 50px; margin-bottom: 1.4rem;
-}
 .hero h1 {
   font-family: 'Fredoka', sans-serif; font-weight: 700;
   font-size: clamp(2rem, 4vw, 3.1rem); color: var(--white); line-height: 1.15; margin-bottom: 1rem;
@@ -256,19 +230,8 @@ a.footer-link { display: inline-block; }
 .hero p { font-size: 1.05rem; color: rgba(251,246,234,0.72); line-height: 1.7; max-width: 440px; margin-bottom: 2rem; }
 .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
 .hero-mascot { display: flex; justify-content: center; align-items: center; position: relative; z-index: 1; }
-.mascot-ring {
-  width: 310px; height: 310px; background: rgba(255,255,255,0.04);
-  border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  border: 2px dashed rgba(141,154,247,0.35); position: relative;
-}
-.mascot-ring::after {
-  content: ''; position: absolute; width: 355px; height: 355px;
-  border-radius: 50%; border: 1px dashed rgba(141,154,247,0.25);
-  animation: spin 18s linear infinite;
-}
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
-.logo-mascot { width: 260px; height: 260px; border-radius: 50%; object-fit: contain; animation: float 3.5s ease-in-out infinite; }
 
 /* ── HERO v3 (real background photo + rebuilt content) ── */
 .hero-v3 {
@@ -412,12 +375,6 @@ a.footer-link { display: inline-block; }
 .lesson-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
 .mini-tag { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--muted); background: #EDF0FD; padding: 0.15rem 0.5rem; border-radius: 50px; white-space: nowrap; }
 
-.modal-overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(27,35,97,0.55); z-index: 200;
-  align-items: center; justify-content: center; padding: 2rem;
-}
-.modal-overlay.open { display: flex; }
 .modal {
   background: var(--white); border-radius: 24px; max-width: 720px; width: 100%;
   max-height: 88vh; overflow-y: auto; padding: 2.5rem; position: relative;
@@ -430,7 +387,6 @@ a.footer-link { display: inline-block; }
 }
 .lesson-back:hover { background: var(--border); }
 .lesson-page-wrap .modal { max-width: none; max-height: none; overflow-y: visible; padding: 0; scroll-margin-top: calc(var(--nav-h) + 1.5rem); }
-html { scroll-behavior: smooth; }
 .lesson-layout { display: grid; grid-template-columns: 220px 1fr; gap: 2.5rem; align-items: start; }
 /* Sticks below the header rather than over it. The background, shadow and
    padding used to come from the unscoped nav rule; they are declared here now
@@ -470,12 +426,6 @@ html { scroll-behavior: smooth; }
   .lesson-layout { grid-template-columns: 1fr; }
   .lesson-toc { position: static; flex-direction: row; flex-wrap: wrap; border-left: none; border-bottom: 2px solid var(--border); padding-left: 0; padding-bottom: 1rem; }
 }
-.modal-close {
-  position: absolute; top: 1.2rem; right: 1.2rem;
-  background: #EDF0FD; border: none; border-radius: 50%; width: 2.2rem; height: 2.2rem;
-  font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--indigo);
-}
-.modal-close:hover { background: var(--border); }
 .modal-icon { font-size: 2.8rem; margin-bottom: 1rem; }
 .modal h2 { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 1.6rem; color: var(--indigo); margin-bottom: 0.5rem; }
 .modal-meta { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
@@ -488,7 +438,6 @@ html { scroll-behavior: smooth; }
 .modal-activity { background: #EEF1FE; border: 2px solid var(--yellow); border-radius: 14px; padding: 1.2rem; margin-top: 1.5rem; }
 .modal-activity h4 { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--indigo); margin-bottom: 0.5rem; }
 .modal-activity p { font-size: 0.85rem; color: var(--body-text); line-height: 1.6; }
-.modal-checklist { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.6rem; }
 .modal-tip {
   display: flex; align-items: flex-start; gap: 0.5rem; background: #FFF7E0;
   border: 1.5px dashed #E0B23C; border-radius: 12px; padding: 0.8rem 1rem;
@@ -497,28 +446,34 @@ html { scroll-behavior: smooth; }
 .modal-exit-ticket { font-size: 0.85rem; color: var(--muted); font-style: italic; margin-top: 0.6rem !important; }
 .modal-link { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.88rem; font-weight: 600; color: var(--coral); text-decoration: none; }
 .modal-link:hover { text-decoration: underline; }
-.modal-checklist span { font-family: 'Space Mono', monospace; font-size: 0.7rem; background: #E7EBFD; color: #2E43E6; border: 1px dashed #8D9AF7; padding: 0.3rem 0.7rem; border-radius: 50px; }
 
 footer { background: var(--indigo); color: rgba(255,255,255,0.5); text-align: center; padding: 2rem; font-size: 0.85rem; font-family: 'Fredoka', sans-serif; }
-footer span { color: var(--yellow); font-weight: 700; }
+.footer-tagline, .footer-tagline span, .footer-brand span { color: var(--yellow); font-weight: 700; }
 
 @media (max-width: 860px) {
   .hero { grid-template-columns: 1fr; padding: 3rem 2rem; text-align: center; }
   .hero p { max-width: 100%; }
   .hero-btns { justify-content: center; }
   .hero-mascot { order: -1; }
-  .mascot-ring { width: 230px; height: 230px; }
-  .logo-mascot { width: 180px; height: 180px; }
   .home-topics, .home-how, .page-hero, .learn-body { padding: 3rem 1.5rem; }
   .stats { padding: 1.2rem 1.5rem; }
   body > nav { padding: 1rem 1.2rem; }
 }
 
+/* The previous version named two elements that no longer exist, so it did
+   nothing while the mascot bobbed and every navigation scrolled smoothly.
+   Cover what actually moves. */
 @media (prefers-reduced-motion: reduce) {
-  .logo-mascot, .mascot-ring::after { animation: none; }
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 @media print {
-  nav, .modal-close, footer, .hero-mascot { display: none !important; }
+  body > nav, .lesson-toc, .skip-link, footer { display: none !important; }
   body { background: white; }
 }
