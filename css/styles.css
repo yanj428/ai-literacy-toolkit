@@ -340,6 +340,7 @@ a.footer-link { display: inline-block; }
    Contact centres a 1100px box (940px), and Lessons runs full width, so its
    hero is left alone. */
 #page-about .page-hero > *,
+#page-faq .page-hero > *,
 #page-privacy .page-hero > * { max-width: 760px; margin-inline: auto; }
 #page-contact .page-hero > * { max-width: 940px; margin-inline: auto; }
 .page-hero .eyebrow { color: var(--mint); }

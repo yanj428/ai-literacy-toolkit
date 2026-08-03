@@ -21,6 +21,7 @@ function setLang(lang) {
   document.documentElement.setAttribute('lang', lang);
   renderTopics();
   renderLessonCards();
+  syncNavHeight();
   if (document.getElementById('page-lesson').classList.contains('active') && window.__openLessonId) {
     openLesson(window.__openLessonId, false);
   }
@@ -39,8 +40,8 @@ function changeLang(lang) {
 // to the wrong place and 404 on reload, since there is no server-side rewrite
 // to index.html. Hashes need no server config and work from any base path,
 // including file://.
-const PAGE_ROUTES = { home: '/', learn: '/lessons', about: '/about', contact: '/contact', privacy: '/privacy' };
-const ROUTE_PAGES = { '/': 'home', '/lessons': 'learn', '/about': 'about', '/contact': 'contact', '/privacy': 'privacy' };
+const PAGE_ROUTES = { home: '/', learn: '/lessons', about: '/about', contact: '/contact', faq: '/faq', privacy: '/privacy' };
+const ROUTE_PAGES = { '/': 'home', '/lessons': 'learn', '/about': 'about', '/contact': 'contact', '/faq': 'faq', '/privacy': 'privacy' };
 const LESSON_ROUTE = '/lessons/';
 
 // Page-navigation buttons only. The EN/TH toggle also lives in .nav-links,
@@ -105,6 +106,18 @@ function routeToCurrentHash() {
   }
   showPage(ROUTE_PAGES[currentRoute()] || 'home', false);
 }
+
+// --nav-h drives everything that has to clear the sticky header. Measure it
+// instead of trusting the 80px guessed in the stylesheet: it shifts with the
+// viewport, with the language, and with any nav item added later. A stale
+// value here is what let the lesson table of contents sit on the header.
+function syncNavHeight() {
+  const nav = document.querySelector('body > nav');
+  if (!nav) return;
+  const h = Math.round(nav.getBoundingClientRect().height);
+  if (h) document.documentElement.style.setProperty('--nav-h', h + 'px');
+}
+window.addEventListener('resize', syncNavHeight);
 
 // The skip link cannot be an <a href="#main">: the router owns the hash, and
 // setting it would navigate. Move focus instead.
@@ -396,4 +409,5 @@ function openLesson(id, updateUrl = true) {
 // restoring the saved preferences is all the bootstrapping the UI needs.
 setLang(PREFS.lang());
 setMode(PREFS.mode());
+syncNavHeight();
 routeToCurrentHash();

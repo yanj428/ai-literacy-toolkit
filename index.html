@@ -50,6 +50,7 @@
   <ul class="nav-links">
     <li><button type="button" id="nav-home"  onclick="showPage('home')"><span class="en-text" lang="en">Home</span><span class="th-text" lang="th">หน้าแรก</span></button></li>
     <li><button type="button" id="nav-learn" onclick="showPage('learn')"><span class="en-text" lang="en">Lessons</span><span class="th-text" lang="th">บทเรียน</span></button></li>
+    <li><button type="button" id="nav-faq" onclick="showPage('faq')"><span class="en-text" lang="en">FAQ</span><span class="th-text" lang="th">คำถามที่พบบ่อย</span></button></li>
     <li><button type="button" id="nav-about" onclick="showPage('about')"><span class="en-text" lang="en">About</span><span class="th-text" lang="th">เกี่ยวกับ</span></button></li>
     <li><button type="button" id="nav-contact" onclick="showPage('contact')"><span class="en-text" lang="en">Contact Us</span><span class="th-text" lang="th">ติดต่อเรา</span></button></li>
     <li class="lang-toggle" role="group" aria-label="Language / ภาษา">
@@ -325,6 +326,81 @@
         <iframe class="contact-form-embed" loading="lazy" data-src="https://docs.google.com/forms/d/e/1FAIpQLSesEJTAyB0HQsGwmhgrT0paQLnWjk7jJuX8EAMWOanGKbAZxw/viewform?embedded=true" title="Contact form">Loading…</iframe>
       </div>
     </div>
+  </div>
+
+  <footer>
+    <span class="footer-tagline en-text" lang="en">Made for teachers everywhere. <span>AI Literacy Toolkit</span> is always free to use.</span>
+    <span class="footer-tagline th-text" lang="th">สร้างขึ้นเพื่อครูทุกคน <span>คู่มือการเรียนรู้ AI</span> ใช้งานฟรีเสมอ</span>
+    <div class="footer-brand">
+      <img src="assets/logo-youth-of-change-footer.png" alt="Youth of Change logo" loading="lazy" decoding="async" />
+      <span class="en-text" lang="en">Made by Youth of Change</span>
+      <span class="th-text" lang="th">สร้างสรรค์โดย Youth of Change</span>
+    </div>
+    <div class="footer-links">
+      <button type="button" class="footer-link" onclick="showPage('privacy')"><span class="en-text" lang="en">Privacy Policy</span><span class="th-text" lang="th">นโยบายความเป็นส่วนตัว</span></button>
+      <a class="footer-link" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener"><span class="en-text" lang="en">Lessons licensed CC BY-NC 4.0</span><span class="th-text" lang="th">บทเรียนเผยแพร่ภายใต้สัญญาอนุญาต CC BY-NC 4.0</span></a>
+    </div>
+  </footer>
+</div>
+
+<!-- FAQ PAGE -->
+<div id="page-faq" class="page">
+  <div class="page-hero">
+    <div class="eyebrow"><span class="en-text" lang="en">For Teachers</span><span class="th-text" lang="th">สำหรับครู</span></div>
+    <h1 class="section-title"><span class="en-text" lang="en">Questions teachers ask</span><span class="th-text" lang="th">คำถามที่ครูถามบ่อย</span></h1>
+    <p class="section-sub">
+      <span class="en-text" lang="en">Everything you need to know before teaching your first lesson.</span>
+      <span class="th-text" lang="th">สิ่งที่ควรรู้ก่อนเริ่มสอนบทเรียนแรก</span>
+    </p>
+  </div>
+  <div class="simple-page">
+
+    <h3><span class="en-text" lang="en">Do I need to know anything about AI to teach this?</span><span class="th-text" lang="th">ต้องมีความรู้เรื่อง AI มาก่อนไหมถึงจะสอนได้?</span></h3>
+    <p class="en-text" lang="en">No. Every lesson gives you the explanation to use, the questions to ask, and notes on the misconceptions students usually bring. If you can run a class discussion, you can teach this. The lessons also flag where not to over-explain, so you are never expected to answer more than the material covers.</p>
+    <p class="th-text" lang="th">ไม่จำเป็น ทุกบทเรียนมีคำอธิบายที่ใช้สอนได้เลย คำถามที่ควรถาม และหมายเหตุเกี่ยวกับความเข้าใจผิดที่นักเรียนมักมี หากคุณจัดการอภิปรายในชั้นเรียนได้ คุณก็สอนบทเรียนนี้ได้ นอกจากนี้บทเรียนยังระบุจุดที่ไม่ควรอธิบายมากเกินไป คุณจึงไม่ต้องตอบเกินกว่าที่เนื้อหาครอบคลุม</p>
+
+    <h3><span class="en-text" lang="en">How long does each lesson take?</span><span class="th-text" lang="th">แต่ละบทเรียนใช้เวลานานเท่าไร?</span></h3>
+    <p class="en-text" lang="en">Between 40 and 60 minutes, so one lesson fits a normal class period. The exact length is shown on each lesson card.</p>
+    <p class="th-text" lang="th">ประมาณ 40 ถึง 60 นาที หนึ่งบทเรียนจึงพอดีกับหนึ่งคาบเรียนปกติ เวลาที่ใช้จริงแสดงอยู่บนการ์ดของแต่ละบทเรียน</p>
+
+    <h3><span class="en-text" lang="en">What age group is this for?</span><span class="th-text" lang="th">เหมาะกับนักเรียนอายุเท่าไร?</span></h3>
+    <p class="en-text" lang="en">Written for students aged 11 to 14. Each lesson includes a support note for students who need more scaffolding and a challenge note for those who finish early, so the same plan stretches either way.</p>
+    <p class="th-text" lang="th">ออกแบบสำหรับนักเรียนอายุ 11 ถึง 14 ปี แต่ละบทเรียนมีข้อแนะนำสำหรับนักเรียนที่ต้องการความช่วยเหลือเพิ่ม และข้อแนะนำสำหรับนักเรียนที่ทำเสร็จเร็ว แผนเดียวกันจึงปรับได้ทั้งสองทาง</p>
+
+    <h3><span class="en-text" lang="en">Do I need computers or internet in the classroom?</span><span class="th-text" lang="th">ต้องมีคอมพิวเตอร์หรืออินเทอร์เน็ตในห้องเรียนไหม?</span></h3>
+    <p class="en-text" lang="en">No. Every lesson has a <strong>No Technology</strong> version that runs on printed materials alone, and a <strong>Technology</strong> version that uses slides and digital tools. Switch between them with the toggle at the top of the lesson list, and the materials and activity change to match.</p>
+    <p class="th-text" lang="th">ไม่ต้อง ทุกบทเรียนมีเวอร์ชัน <strong>ไม่ใช้เทคโนโลยี</strong> ที่ใช้เพียงเอกสารพิมพ์ และเวอร์ชัน <strong>ใช้เทคโนโลยี</strong> ที่ใช้สไลด์และอุปกรณ์ดิจิทัล สลับได้จากปุ่มด้านบนของรายการบทเรียน อุปกรณ์และกิจกรรมจะเปลี่ยนตามโดยอัตโนมัติ</p>
+    <p class="en-text" lang="en">One activity does assume devices: the AI for Oceans game in Lesson 2. If you do not have them, that lesson notes how to run it as a discussion instead.</p>
+    <p class="th-text" lang="th">มีกิจกรรมหนึ่งที่ต้องใช้อุปกรณ์ คือเกม AI for Oceans ในบทเรียนที่ 2 หากไม่มีอุปกรณ์ บทเรียนนั้นได้ระบุวิธีปรับให้เป็นการอภิปรายแทนไว้แล้ว</p>
+
+    <h3><span class="en-text" lang="en">Do students need accounts or devices of their own?</span><span class="th-text" lang="th">นักเรียนต้องมีบัญชีผู้ใช้หรืออุปกรณ์ส่วนตัวไหม?</span></h3>
+    <p class="en-text" lang="en">No. Nothing on this site asks a student to sign in or submit anything. The website is a resource for you, not something students need to open.</p>
+    <p class="th-text" lang="th">ไม่ต้อง ไม่มีส่วนใดของเว็บไซต์นี้ที่ให้นักเรียนเข้าสู่ระบบหรือส่งข้อมูล เว็บไซต์นี้เป็นสื่อสำหรับครู ไม่ใช่สิ่งที่นักเรียนต้องเปิดใช้</p>
+
+    <h3><span class="en-text" lang="en">Do I have to teach all five, and in order?</span><span class="th-text" lang="th">ต้องสอนครบทั้งห้าบทและเรียงตามลำดับไหม?</span></h3>
+    <p class="en-text" lang="en">The order is recommended, because later lessons build on earlier ones: Lesson 3 revisits an idea deliberately left open in Lesson 1, and Lesson 5 asks students to pull the whole unit together in a project. That said, Lessons 1 and 3 stand on their own well if you only have one period.</p>
+    <p class="th-text" lang="th">แนะนำให้สอนตามลำดับ เพราะบทเรียนหลัง ๆ ต่อยอดจากบทก่อนหน้า บทเรียนที่ 3 กลับมาพูดถึงแนวคิดที่บทเรียนที่ 1 ตั้งใจเปิดค้างไว้ และบทเรียนที่ 5 ให้นักเรียนนำทั้งหน่วยมาสรุปเป็นโครงงาน อย่างไรก็ตาม บทเรียนที่ 1 และ 3 สามารถสอนเดี่ยว ๆ ได้ดีหากคุณมีเวลาเพียงคาบเดียว</p>
+
+    <h3><span class="en-text" lang="en">What do I need to prepare beforehand?</span><span class="th-text" lang="th">ต้องเตรียมอะไรล่วงหน้าบ้าง?</span></h3>
+    <p class="en-text" lang="en">Each lesson opens with a <strong>Before You Begin</strong> note listing exactly what to print or set up, and most of it is picture cards or photo pairs. Prepare that one thing and the rest of the lesson runs from the page.</p>
+    <p class="th-text" lang="th">แต่ละบทเรียนเริ่มด้วยหัวข้อ <strong>ก่อนเริ่มบทเรียน</strong> ซึ่งระบุสิ่งที่ต้องพิมพ์หรือเตรียมไว้อย่างชัดเจน ส่วนใหญ่เป็นการ์ดรูปภาพหรือภาพคู่เปรียบเทียบ เตรียมสิ่งนั้นอย่างเดียว ส่วนที่เหลือใช้จากหน้าเว็บได้เลย</p>
+
+    <h3><span class="en-text" lang="en">Where are the worksheets and quizzes?</span><span class="th-text" lang="th">ใบงานและแบบทดสอบอยู่ที่ไหน?</span></h3>
+    <p class="en-text" lang="en">Still being written. The slide decks are ready for every lesson, in PDF and PowerPoint, and the worksheet and quiz sections will fill in as they are finished.</p>
+    <p class="th-text" lang="th">ยังอยู่ระหว่างจัดทำ สไลด์พร้อมใช้งานแล้วทุกบทเรียน ทั้งแบบ PDF และ PowerPoint ส่วนใบงานและแบบทดสอบจะทยอยเพิ่มเข้ามาเมื่อจัดทำเสร็จ</p>
+
+    <h3><span class="en-text" lang="en">Can I print, translate or adapt the lessons?</span><span class="th-text" lang="th">พิมพ์ แปล หรือปรับบทเรียนได้ไหม?</span></h3>
+    <p class="en-text" lang="en">Yes. Print them, translate them into another language, change them to suit your class, and share your version with other teachers, as long as you credit Youth of Change and do not sell them. See the <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">licence</a> for the exact terms. If you want to use the toolkit commercially, email us and ask.</p>
+    <p class="th-text" lang="th">ได้ คุณสามารถพิมพ์ แปลเป็นภาษาอื่น ปรับให้เข้ากับชั้นเรียนของคุณ และแบ่งปันเวอร์ชันของคุณกับครูท่านอื่นได้ ตราบใดที่ให้เครดิต Youth of Change และไม่นำไปจำหน่าย ดูเงื่อนไขฉบับเต็มได้ที่<a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">สัญญาอนุญาต</a> หากต้องการใช้ในเชิงพาณิชย์ กรุณาส่งอีเมลมาสอบถามเรา</p>
+
+    <h3><span class="en-text" lang="en">Is it really free?</span><span class="th-text" lang="th">ใช้งานฟรีจริงหรือ?</span></h3>
+    <p class="en-text" lang="en">Yes, and it will stay that way. There is nothing to buy, no account to make, and no advertising on the site.</p>
+    <p class="th-text" lang="th">ใช่ และจะเป็นเช่นนี้ต่อไป ไม่มีอะไรต้องซื้อ ไม่ต้องสมัครบัญชี และไม่มีโฆษณาบนเว็บไซต์</p>
+
+    <h3><span class="en-text" lang="en">I taught a lesson. How do I tell you how it went?</span><span class="th-text" lang="th">สอนบทเรียนแล้ว จะบอกผลให้ทราบได้อย่างไร?</span></h3>
+    <p class="en-text" lang="en">Please do. Feedback from real classrooms is what shapes the next version. Use the form on the <button type="button" class="inline-link" onclick="showPage('contact')">contact page</button>, or email us directly.</p>
+    <p class="th-text" lang="th">ยินดีอย่างยิ่ง ความคิดเห็นจากห้องเรียนจริงคือสิ่งที่กำหนดทิศทางของเวอร์ชันถัดไป ใช้แบบฟอร์มใน<button type="button" class="inline-link" onclick="showPage('contact')">หน้าติดต่อเรา</button> หรือส่งอีเมลถึงเราโดยตรง</p>
+
   </div>
 
   <footer>
