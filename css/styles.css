@@ -133,6 +133,14 @@ body[data-lang="th"] .nav-logo-by.th-text { margin-top: 0.15rem; }
 }
 .footer-brand img { width: 24px; height: 24px; flex-shrink: 0; object-fit: contain; }
 .footer-brand span { color: var(--yellow); font-weight: 700; }
+.footer-links { margin-top: 0.9rem; }
+.footer-link {
+  appearance: none; -webkit-appearance: none; background: none; border: 0;
+  font: inherit; font-size: 0.8rem; color: rgba(255,255,255,0.55);
+  cursor: pointer; text-decoration: underline; text-underline-offset: 3px;
+}
+.footer-link:hover { color: var(--yellow); }
+.footer-link span { color: inherit; font-weight: inherit; }
 
 .simple-page { padding: 4rem 5rem; max-width: 760px; }
 .simple-page h3 { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1.05rem; color: var(--indigo); margin: 1.8rem 0 0.5rem; }

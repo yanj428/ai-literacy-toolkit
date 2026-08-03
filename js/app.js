@@ -39,8 +39,8 @@ function changeLang(lang) {
 // to the wrong place and 404 on reload, since there is no server-side rewrite
 // to index.html. Hashes need no server config and work from any base path,
 // including file://.
-const PAGE_ROUTES = { home: '/', learn: '/lessons', about: '/about', contact: '/contact' };
-const ROUTE_PAGES = { '/': 'home', '/lessons': 'learn', '/about': 'about', '/contact': 'contact' };
+const PAGE_ROUTES = { home: '/', learn: '/lessons', about: '/about', contact: '/contact', privacy: '/privacy' };
+const ROUTE_PAGES = { '/': 'home', '/lessons': 'learn', '/about': 'about', '/contact': 'contact', '/privacy': 'privacy' };
 const LESSON_ROUTE = '/lessons/';
 
 // Page-navigation buttons only — the EN/TH toggle also lives in .nav-links,
