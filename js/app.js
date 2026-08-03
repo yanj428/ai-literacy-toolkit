@@ -1,6 +1,14 @@
 // Routing, language/mode switching, and rendering.
 // Depends on `lessons` from js/lessons.js, which must load first.
 
+// Both preferences are remembered. Keep them in one place so neither can be
+// silently dropped: switching language used to reload the page, which reset
+// the classroom mode back to No Technology mid-lesson.
+const PREFS = {
+  lang: () => (localStorage.getItem('lang') === 'th' ? 'th' : 'en'),
+  mode: () => (localStorage.getItem('mode') === 'tech' ? 'tech' : 'notech'),
+};
+
 let currentLang = 'en';
 function setLang(lang) {
   currentLang = lang;
@@ -8,13 +16,18 @@ function setLang(lang) {
   document.getElementById('lang-en').classList.toggle('active', lang === 'en');
   document.getElementById('lang-th').classList.toggle('active', lang === 'th');
   document.documentElement.setAttribute('lang', lang);
+  renderTopics();
+  renderLessonCards();
   if (document.getElementById('page-lesson').classList.contains('active') && window.__openLessonId) {
     openLesson(window.__openLessonId, false);
   }
 }
+
+// Re-renders in place. Reloading would be enough to swap the language, but it
+// also discards every other bit of state on the page.
 function changeLang(lang) {
   localStorage.setItem('lang', lang);
-  location.reload();
+  setLang(lang);
 }
 
 // Routes live in the hash (#/lessons, #/lessons/what-is-ai) rather than the
@@ -85,6 +98,7 @@ const colorsText = ['#2E43E6','#1B2361','#3B4FE0','#6C3CE0','#7B2FE0'];
 let currentMode = 'notech';
 function setMode(mode) {
   currentMode = mode;
+  localStorage.setItem('mode', mode);
   document.querySelectorAll('.mode-toggle button').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
   renderLessonCards();
   if (document.getElementById('page-lesson').classList.contains('active') && window.__openLessonId) {
@@ -298,17 +312,8 @@ function openLesson(id, updateUrl = true) {
   return true;
 }
 
-const _savedLang = localStorage.getItem('lang');
-if (_savedLang === 'th') setLang('th');
-
-renderTopics();
-renderLessonCards();
-
+// setLang and setMode each render the cards and sync their own toggles, so
+// restoring the saved preferences is all the bootstrapping the UI needs.
+setLang(PREFS.lang());
+setMode(PREFS.mode());
 routeToCurrentHash();
-
-const _setLang = setLang;
-setLang = function(lang) {
-  _setLang(lang);
-  renderTopics();
-  renderLessonCards();
-};
