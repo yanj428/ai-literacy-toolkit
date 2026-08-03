@@ -1,0 +1,261 @@
+// Routing, language/mode switching, and rendering.
+// Depends on `lessons` from js/lessons.js, which must load first.
+
+let currentLang = 'en';
+function setLang(lang) {
+  currentLang = lang;
+  document.body.setAttribute('data-lang', lang);
+  document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+  document.getElementById('lang-th').classList.toggle('active', lang === 'th');
+  document.documentElement.setAttribute('lang', lang);
+  if (document.getElementById('page-lesson').classList.contains('active') && window.__openLessonId) {
+    openLesson(window.__openLessonId, false);
+  }
+}
+function changeLang(lang) {
+  localStorage.setItem('lang', lang);
+  location.reload();
+}
+
+const PAGE_PATHS = { home: '/', learn: '/lessons', about: '/about', contact: '/contact' };
+const PATH_PAGES = { '/': 'home', '/lessons': 'learn', '/about': 'about', '/contact': 'contact' };
+
+// Page-navigation buttons only — the EN/TH toggle also lives in .nav-links,
+// and clearing its .active would drop the selected-language highlight.
+const NAV_PAGE_BUTTONS = '.nav-links > li:not(.lang-toggle) button';
+
+function showPage(id, updateUrl = true) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll(NAV_PAGE_BUTTONS).forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('nav-' + id);
+  if (btn) btn.classList.add('active');
+  window.scrollTo(0, 0);
+  if (updateUrl) {
+    const path = PAGE_PATHS[id] || '/';
+    if (location.pathname !== path) history.pushState({ page: id }, '', path);
+  }
+}
+
+window.addEventListener('popstate', () => {
+  const path = location.pathname;
+  if (path.startsWith('/lessons/') && path.length > '/lessons/'.length) {
+    const lessonId = path.slice('/lessons/'.length);
+    if (lessonId === window.__openLessonId && document.getElementById('page-lesson').classList.contains('active')) return;
+    openLesson(lessonId, false);
+  } else {
+    const id = PATH_PAGES[path] || 'home';
+    showPage(id, false);
+  }
+});
+
+const colors = ['#E1E6FD','#DCE3FB','#E6E9FE','#ECE5FD','#EFE8FE'];
+const colorsText = ['#2E43E6','#1B2361','#3B4FE0','#6C3CE0','#7B2FE0'];
+
+
+let currentMode = 'notech';
+function setMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-toggle button').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+  renderLessonCards();
+  if (document.getElementById('page-lesson').classList.contains('active') && window.__openLessonId) {
+    openLesson(window.__openLessonId, false);
+  }
+}
+
+function renderTopics() {
+  const grid = document.getElementById('topics-grid');
+  grid.innerHTML = lessons.map((l, i) => `
+    <div class="topic-card" onclick="showPage('learn')">
+      <div class="topic-icon" style="background:${colors[i]};">${l.icon}</div>
+      <h3>${l.title[currentLang] || l.title.en}</h3>
+      <p>${l.short[currentLang] || l.short.en}</p>
+    </div>
+  `).join('');
+}
+
+function renderLessonCards() {
+  const grid = document.getElementById('lessons-grid');
+  grid.innerHTML = lessons.map((l, i) => {
+    if (l.image) {
+      const imgSrc = (currentLang === 'th' && l.imageTh) ? l.imageTh : l.image;
+      return `
+    <div class="lesson-card lesson-card-photo" style="aspect-ratio:${l.imageRatio || 'auto'}" onclick="openLesson('${l.id}')">
+      <img class="lesson-photo-img" src="${imgSrc}" alt="${l.title[currentLang] || l.title.en}" />
+    </div>
+  `;
+    }
+    return `
+    <div class="lesson-card" onclick="openLesson('${l.id}')">
+      <div class="lesson-header">
+        <div class="lesson-icon">${l.icon}</div>
+        <span class="lesson-duration">⏱ ${l.duration}</span>
+      </div>
+      <h4>${l.title[currentLang] || l.title.en}</h4>
+      <p>${l.short[currentLang] || l.short.en}</p>
+      <div class="lesson-footer">
+        <span class="badge" style="background:${colors[i]};color:${colorsText[i]};">${currentLang==='th' ? 'บทที่ '+(i+1) : 'Lesson '+(i+1)}</span>
+        <span class="lesson-open">${currentLang==='th' ? 'เปิดดู →' : 'Open →'}</span>
+      </div>
+      <div class="lesson-tags">
+        <span class="mini-tag ${currentMode==='notech' ? 'mini-tag-active' : ''}">📴 ${currentLang==='th' ? 'ไม่ใช้เทคโนโลยี' : 'No Technology'}</span>
+        <span class="mini-tag ${currentMode==='tech' ? 'mini-tag-active' : ''}">💻 ${currentLang==='th' ? 'ใช้เทคโนโลยี' : 'Technology'}</span>
+      </div>
+    </div>
+  `;
+  }).join('');
+}
+
+function setActiveTocLink(link) {
+  document.querySelectorAll('.lesson-toc-link').forEach(a => a.classList.remove('active'));
+  link.classList.add('active');
+}
+function goToTocSection(e, link) {
+  e.preventDefault();
+  setActiveTocLink(link);
+  link.blur();
+  const targetId = link.getAttribute('href').slice(1);
+  const target = document.getElementById(targetId);
+  setTimeout(() => {
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 50);
+  return false;
+}
+
+function renderContentBlock(b, t) {
+  const text = b.text ? `<p>${b.text[t] || b.text.en}</p>` : '';
+  const items = b.items ? `<ul>${(b.items[t] || b.items.en).map(p => `<li>${p}</li>`).join('')}</ul>` : '';
+  const link = b.link ? `<p><a href="${b.link.url}" target="_blank" rel="noopener" class="modal-link">🔗 ${b.link.label[t] || b.link.label.en}</a></p>` : '';
+  const tip = b.tip ? `<div class="modal-tip">💡 <span>${b.tip[t] || b.tip.en}</span></div>` : '';
+  if (b.activityStyle) {
+    const heading = b.heading ? `<h4>🎯 ${b.heading[t] || b.heading.en}</h4>` : '';
+    return `<div class="modal-activity">${heading}${text}${items}${link}</div>${tip}`;
+  }
+  const heading = b.heading ? `<h3>${b.heading[t] || b.heading.en}</h3>` : '';
+  return heading + text + items + link + tip;
+}
+
+function openLesson(id, updateUrl = true) {
+  const l = lessons.find(x => x.id === id);
+  if (!l) return;
+  window.__openLessonId = id;
+  const t = currentLang;
+  const i = lessons.indexOf(l);
+  const m = l.materials[currentMode];
+  const act = l.activity[currentMode];
+  const html = `
+    <div class="modal-icon">${l.icon}</div>
+    <h2>${l.title[t] || l.title.en}</h2>
+    <div class="modal-meta">
+      <span class="modal-tag" style="background:${colors[i]};color:${colorsText[i]}">${t==='th' ? 'บทที่ '+(i+1) : 'Lesson '+(i+1)}</span>
+      <span class="modal-tag" style="background:#EDF0FD;color:var(--muted)">⏱ ${l.duration}</span>
+    </div>
+
+    <div class="mode-toggle modal-mode-toggle">
+      <button data-mode="notech" class="${currentMode==='notech' ? 'active' : ''}" onclick="setMode('notech')">📴 ${t==='th' ? 'ไม่ใช้เทคโนโลยี' : 'No Technology'}</button>
+      <button data-mode="tech" class="${currentMode==='tech' ? 'active' : ''}" onclick="setMode('tech')">💻 ${t==='th' ? 'ใช้เทคโนโลยี' : 'Technology'}</button>
+    </div>
+
+    <div class="modal-body">
+      <p><strong>${t==='th' ? 'จุดประสงค์: ' : 'Objective: '}</strong>${l.objective[t] || l.objective.en}</p>
+      ${l.groupSize ? `<p><strong>${t==='th' ? 'ขนาดกลุ่ม: ' : 'Group Size: '}</strong>${l.groupSize[t] || l.groupSize.en}</p>` : ''}
+
+      <h3>${t==='th' ? 'อุปกรณ์ที่ต้องเตรียม' : 'Materials Needed'}</h3>
+      <ul>${(m[t] || m.en).map(p => `<li>${p}</li>`).join('')}</ul>
+
+      ${l.beforeYouBegin ? `
+      <h3>${t==='th' ? 'ก่อนเริ่มบทเรียน' : 'Before You Begin'}</h3>
+      <p>${l.beforeYouBegin[t] || l.beforeYouBegin.en}</p>
+      ` : ''}
+      ${l.tipBeforeYouBegin ? `<div class="modal-tip">💡 <span>${l.tipBeforeYouBegin[t] || l.tipBeforeYouBegin.en}</span></div>` : ''}
+
+      <h3>${t==='th' ? 'คำถามนำเข้าบทเรียน' : 'Warm-Up'}</h3>
+      <ul>${(l.warmup[t] || l.warmup.en).map(p => `<li>${p}</li>`).join('')}</ul>
+      ${l.tipWarmup ? `<div class="modal-tip">💡 <span>${l.tipWarmup[t] || l.tipWarmup.en}</span></div>` : ''}
+
+      <h3>${t==='th' ? 'คำอธิบาย' : 'Explanation'}</h3>
+      <p>${l.explanation[t] || l.explanation.en}</p>
+      ${l.aiAroundUs ? `
+      <h3>${t==='th' ? 'AI รอบตัวเรา' : 'AI Around Us'}</h3>
+      <ul>${(l.aiAroundUs[t] || l.aiAroundUs.en).map(p => `<li>${p}</li>`).join('')}</ul>
+      ` : ''}
+      ${l.tipAiAroundUs ? `<div class="modal-tip">💡 <span>${l.tipAiAroundUs[t] || l.tipAiAroundUs.en}</span></div>` : ''}
+      ${(l.bodyBlocks || []).map(b => renderContentBlock(b, t)).join('')}
+
+      <div class="modal-activity">
+        <h4>🎯 ${t==='th' ? 'กิจกรรมในชั้นเรียน' : 'Classroom Activity'} <span class="modal-activity-mode">${currentMode==='notech' ? (t==='th'?'(ไม่ใช้เทคโนโลยี)':'(No Technology)') : (t==='th'?'(ใช้เทคโนโลยี)':'(Technology)')}</span></h4>
+        <p>${act[t] || act.en}</p>
+        ${l.whyMistakes ? `<p>${l.whyMistakes[t] || l.whyMistakes.en}</p>` : ''}
+      </div>
+      ${l.tipActivity ? `<div class="modal-tip">💡 <span>${l.tipActivity[t] || l.tipActivity.en}</span></div>` : ''}
+      ${(l.postActivityBlocks || []).map(b => renderContentBlock(b, t)).join('')}
+
+      <h3>${t==='th' ? 'คำถามสะท้อนคิด' : 'Reflection Questions'}</h3>
+      <ul>${(l.reflection[t] || l.reflection.en).map(p => `<li>${p}</li>`).join('')}</ul>
+      ${l.exitTicket ? `<p class="modal-exit-ticket">${l.exitTicket[t] || l.exitTicket.en}</p>` : ''}
+
+      ${l.misconceptions ? `
+      <h3>${(l.misconceptionsHeading && (l.misconceptionsHeading[t] || l.misconceptionsHeading.en)) || (t==='th' ? 'ความเข้าใจผิดที่พบบ่อย' : 'Common Misconceptions to Watch For')}</h3>
+      <ul>${l.misconceptions.map(m2 => `<li><strong>"${m2.claim[t] || m2.claim.en}"</strong> — ${m2.explanation[t] || m2.explanation.en}</li>`).join('')}</ul>
+      ` : ''}
+
+      ${l.differentiation ? `
+      <h3>${t==='th' ? 'การปรับกิจกรรมตามระดับ' : 'Differentiation'}</h3>
+      <ul>
+        <li><strong>${t==='th' ? 'เสริมสำหรับผู้ต้องการความช่วยเหลือ: ' : 'Extra support: '}</strong>${l.differentiation.support[t] || l.differentiation.support.en}</li>
+        <li><strong>${t==='th' ? 'ท้าทายเพิ่มเติม: ' : 'Extra challenge: '}</strong>${l.differentiation.challenge[t] || l.differentiation.challenge.en}</li>
+      </ul>
+      ` : ''}
+
+      ${l.assessmentMaterials ? `
+      <h3>${t==='th' ? 'การประเมิน / เอกสารประกอบการสอน' : 'Assessment / Materials Provided'}</h3>
+      <ul>${(l.assessmentMaterials[t] || l.assessmentMaterials.en).map(p => `<li>${p}</li>`).join('')}</ul>
+      ` : ''}
+    </div>
+  `;
+  document.getElementById('lesson-page-content').innerHTML = html;
+  const slidesEl = document.getElementById('lesson-slides-content');
+  if (l.slidesFile) {
+    const fullSlidesUrl = new URL(l.slidesFile, location.href).href;
+    const viewerUrl = 'https://view.officeapps.live.com/op/embed.aspx?src=' + encodeURIComponent(fullSlidesUrl);
+    slidesEl.innerHTML = `
+      <iframe class="lesson-slides-embed" src="${viewerUrl}" title="Slides">Loading…</iframe>
+      <a class="lesson-download-btn" href="${l.slidesFile}" download>⬇ <span class="en-text">Download Slides (.pptx)</span><span class="th-text">ดาวน์โหลดสไลด์ (.pptx)</span></a>
+    `;
+  } else {
+    slidesEl.innerHTML = `<p class="lesson-extra-placeholder"><span class="en-text">Slide deck coming soon.</span><span class="th-text">สไลด์กำลังจะมาเร็ว ๆ นี้</span></p>`;
+  }
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-lesson').classList.add('active');
+  document.querySelectorAll(NAV_PAGE_BUTTONS).forEach(b => b.classList.remove('active'));
+  const navBtn = document.getElementById('nav-learn');
+  if (navBtn) navBtn.classList.add('active');
+  document.querySelectorAll('.lesson-toc-link').forEach((a, i) => a.classList.toggle('active', i === 0));
+  window.scrollTo(0, 0);
+  if (updateUrl) {
+    const path = '/lessons/' + id;
+    if (location.pathname !== path) history.pushState({ page: 'lesson', lessonId: id }, '', path);
+  }
+}
+
+const _savedLang = localStorage.getItem('lang');
+if (_savedLang === 'th') setLang('th');
+
+renderTopics();
+renderLessonCards();
+
+const _initialPath = location.pathname;
+if (_initialPath.startsWith('/lessons/') && _initialPath.length > '/lessons/'.length) {
+  openLesson(_initialPath.slice('/lessons/'.length), false);
+} else {
+  const _initialPage = PATH_PAGES[_initialPath];
+  if (_initialPage) showPage(_initialPage, false);
+  else history.replaceState({ page: 'home' }, '', '/');
+}
+
+const _setLang = setLang;
+setLang = function(lang) {
+  _setLang(lang);
+  renderTopics();
+  renderLessonCards();
+};
