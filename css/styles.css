@@ -143,7 +143,10 @@ body[data-lang="th"] .nav-logo-by.th-text { margin-top: 0.15rem; }
 a.footer-link { display: inline-block; }
 .footer-link span { color: inherit; font-weight: inherit; }
 
-.simple-page { padding: 4rem 5rem; max-width: 760px; }
+/* Centred, and wide enough that the padding does not squeeze the text: with
+   border-box the 5rem sides come out of max-width, so 920px leaves a ~760px
+   measure rather than the ~600px this used to have. */
+.simple-page { padding: 4rem 5rem; max-width: 920px; margin-inline: auto; }
 .simple-page h3 { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1.05rem; color: var(--indigo); margin: 1.8rem 0 0.5rem; }
 .simple-page p { font-size: 0.95rem; color: var(--body-text); line-height: 1.75; margin-bottom: 0.5rem; }
 .simple-page ul { margin: 0.6rem 0 0.6rem 1.2rem; }
@@ -346,6 +349,13 @@ a.footer-link { display: inline-block; }
 .step p { font-size: 0.85rem; color: rgba(255,255,255,0.62); line-height: 1.65; }
 
 .page-hero { background: var(--indigo); padding: 4rem 5rem; }
+/* The band stays full width, but its text lines up with the column beneath it,
+   which differs per page: the prose pages centre a 920px box (760px measure),
+   Contact centres a 1100px box (940px), and Lessons runs full width, so its
+   hero is left alone. */
+#page-about .page-hero > *,
+#page-privacy .page-hero > * { max-width: 760px; margin-inline: auto; }
+#page-contact .page-hero > * { max-width: 940px; margin-inline: auto; }
 .page-hero .eyebrow { color: var(--mint); }
 .page-hero .section-title { color: var(--white); margin-bottom: 0.6rem; }
 .page-hero .section-sub { color: rgba(255,255,255,0.65); }
