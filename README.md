@@ -23,14 +23,14 @@ Made by [Youth of Change](https://instagram.com/youthofchange_th).
 
 Each lesson page has the objective, materials list, warm-up questions,
 classroom activity, reflection questions, common misconceptions, and
-differentiation notes — plus a downloadable slide deck.
+differentiation notes, plus a downloadable slide deck.
 
 ## Repository layout
 
 ```
 index.html          markup for every page
 css/styles.css      all styles
-js/lessons.js       lesson content, EN + TH — data only, no DOM access
+js/lessons.js       lesson content, EN + TH, data only, no DOM access
 js/app.js           routing, language/mode switching, rendering
 assets/             artwork, icons, logos
 slides/             the five .pptx decks
@@ -44,8 +44,8 @@ python3 -m http.server 8787
 ```
 
 Routes live in the URL hash (`#/lessons`, `#/lessons/what-is-ai`) so the site
-works from any base path — a domain root, a GitHub Pages subdirectory, or
-`file://` — with no server configuration.
+works from any base path: a domain root, a GitHub Pages subdirectory, or
+`file://`, with no server configuration.
 
 ## Editing the lessons
 
@@ -61,12 +61,12 @@ deck starts working as soon as it is committed.
 
 Two licenses, because this repository holds two different kinds of work:
 
-- **Educational content** — the lesson plans, slide decks and artwork are under
+- **Educational content**: the lesson plans, slide decks and artwork are under
   [CC BY-NC 4.0](LICENSE-CONTENT.md) (full text in [LICENSE](LICENSE)). Use them,
   translate them, adapt them and share them with other teachers, as long as you
   credit Youth of Change and do not use them commercially. Want to use the
-  toolkit commercially? Email us and ask — we can grant permission.
-- **Website code** — the HTML, CSS and JavaScript are under the
+  toolkit commercially? Email us and ask, and we can grant permission.
+- **Website code**: the HTML, CSS and JavaScript are under the
   [MIT license](LICENSE-CODE).
 
 If you translate or adapt these lessons for your own classroom, we would love

@@ -43,7 +43,7 @@ const PAGE_ROUTES = { home: '/', learn: '/lessons', about: '/about', contact: '/
 const ROUTE_PAGES = { '/': 'home', '/lessons': 'learn', '/about': 'about', '/contact': 'contact', '/privacy': 'privacy' };
 const LESSON_ROUTE = '/lessons/';
 
-// Page-navigation buttons only — the EN/TH toggle also lives in .nav-links,
+// Page-navigation buttons only. The EN/TH toggle also lives in .nav-links,
 // and clearing its .active would drop the selected-language highlight.
 const NAV_PAGE_BUTTONS = '.nav-links > li:not(.lang-toggle) button';
 
@@ -210,7 +210,7 @@ function renderContentBlock(b, t) {
 // Lessons reference a slide deck by path, but the .pptx files are not all in
 // the repo yet. Probing the file keeps a missing deck from rendering an Office
 // viewer pointed at a 404, and means a deck starts working the moment it is
-// committed — no change needed here.
+// committed, with no change needed here.
 const _slidesExist = new Map();   // absolute url -> boolean
 
 function slidesPlaceholder() {
@@ -231,7 +231,7 @@ async function renderSlides(el, lesson) {
   el.innerHTML = slidesPlaceholder();
   if (!lesson.slidesFile) return;
   // The Office viewer fetches the deck itself, so it needs a URL reachable
-  // over the network — there is nothing to embed when opened from disk.
+  // over the network, so there is nothing to embed when opened from disk.
   if (location.protocol !== 'http:' && location.protocol !== 'https:') return;
 
   const url = new URL(lesson.slidesFile, document.baseURI).href;
@@ -314,7 +314,7 @@ function openLesson(id, updateUrl = true) {
 
       ${l.misconceptions ? `
       <h3>${(l.misconceptionsHeading && (l.misconceptionsHeading[t] || l.misconceptionsHeading.en)) || (t==='th' ? 'ความเข้าใจผิดที่พบบ่อย' : 'Common Misconceptions to Watch For')}</h3>
-      <ul>${l.misconceptions.map(m2 => `<li><strong>"${m2.claim[t] || m2.claim.en}"</strong> — ${m2.explanation[t] || m2.explanation.en}</li>`).join('')}</ul>
+      <ul>${l.misconceptions.map(m2 => `<li><strong>"${m2.claim[t] || m2.claim.en}"</strong> ${m2.explanation[t] || m2.explanation.en}</li>`).join('')}</ul>
       ` : ''}
 
       ${l.differentiation ? `
