@@ -5,7 +5,7 @@ const lessons = [
   {
     id: 'what-is-ai', icon: '🧠', duration: '40–50 min',
     slidesFile: 'slides/lesson-1-what-is-ai.pptx',
-    image: 'assets/lessons/lesson-1-what-is-ai-en.png', imageRatio: '1672/941', imageTh: 'assets/lessons/lesson-1-what-is-ai-th.png',
+    image: 'assets/lessons/lesson-1-what-is-ai-en.jpg', imageRatio: '1672/941', imageTh: 'assets/lessons/lesson-1-what-is-ai-th.jpg',
     title: { en: 'What Is AI?', th: 'AI คืออะไร?' },
     short: { en: 'A first look at what AI is and where students already meet it every day.', th: 'ทำความรู้จัก AI เบื้องต้น และจุดที่นักเรียนพบเจอ AI ในชีวิตประจำวันอยู่แล้ว' },
     objective: { en: 'Students will understand what AI is and identify examples of AI in daily life.', th: 'นักเรียนจะเข้าใจว่า AI คืออะไร และสามารถระบุตัวอย่างการใช้ AI ในชีวิตประจำวันได้' },
@@ -63,7 +63,7 @@ const lessons = [
   {
     id: 'how-ai-learns', icon: '📚', duration: '50 min',
     slidesFile: 'slides/lesson-2-how-ai-learns.pptx',
-    image: 'assets/lessons/lesson-2-how-ai-learns-en.png', imageRatio: '1672/941', imageTh: 'assets/lessons/lesson-2-how-ai-learns-th.png',
+    image: 'assets/lessons/lesson-2-how-ai-learns-en.jpg', imageRatio: '1672/941', imageTh: 'assets/lessons/lesson-2-how-ai-learns-th.jpg',
     title: { en: 'How Does AI Learn?', th: 'AI เรียนรู้ได้อย่างไร?' },
     short: { en: 'Students discover that AI learns from examples (data), just like people learn from practice.', th: 'นักเรียนจะค้นพบว่า AI เรียนรู้จากตัวอย่าง (ข้อมูล) เช่นเดียวกับที่คนเราเรียนรู้จากการฝึกฝน' },
     objective: { en: 'Students understand that AI learns from examples (data).', th: 'นักเรียนเข้าใจว่า AI เรียนรู้จากตัวอย่าง (ข้อมูล)' },
@@ -130,7 +130,7 @@ const lessons = [
   {
     id: 'ai-mistakes', icon: '⚠️', duration: '45–50 min',
     slidesFile: 'slides/lesson-3-ai-mistakes.pptx',
-    image: 'assets/lessons/lesson-3-ai-mistakes-en.png', imageRatio: '1672/941', imageTh: 'assets/lessons/lesson-3-ai-mistakes-th.png',
+    image: 'assets/lessons/lesson-3-ai-mistakes-en.jpg', imageRatio: '1672/941', imageTh: 'assets/lessons/lesson-3-ai-mistakes-th.jpg',
     title: { en: 'Can AI Make Mistakes?', th: 'AI ทำผิดพลาดได้ไหม?' },
     short: { en: 'Students recognize that AI is useful but not always correct.', th: 'นักเรียนจะตระหนักว่า AI มีประโยชน์ แต่ไม่ได้ถูกต้องเสมอไป' },
     objective: { en: 'Students recognize that AI is useful but not always correct.', th: 'นักเรียนตระหนักว่า AI มีประโยชน์แต่ไม่ได้ถูกต้องเสมอไป' },
@@ -217,7 +217,7 @@ const lessons = [
   {
     id: 'ai-responsibly', icon: '🛡️', duration: '50 min',
     slidesFile: 'slides/lesson-4-ai-responsibly.pptx',
-    image: 'assets/lessons/lesson-4-ai-responsibly-en.png', imageRatio: '1672/941', imageTh: 'assets/lessons/lesson-4-ai-responsibly-th.png',
+    image: 'assets/lessons/lesson-4-ai-responsibly-en.jpg', imageRatio: '1672/941', imageTh: 'assets/lessons/lesson-4-ai-responsibly-th.jpg',
     title: { en: 'Using AI Responsibly', th: 'การใช้ AI อย่างมีความรับผิดชอบ' },
     short: { en: 'Students learn safe and ethical use of AI.', th: 'นักเรียนจะเรียนรู้การใช้ AI อย่างปลอดภัยและมีจริยธรรม' },
     objective: { en: 'Students learn safe and ethical use of AI.', th: 'นักเรียนเรียนรู้การใช้ AI อย่างปลอดภัยและมีจริยธรรม' },
@@ -291,7 +291,7 @@ const lessons = [
   {
     id: 'ai-project', icon: '🚀', duration: '50–60 min',
     slidesFile: 'slides/lesson-5-ai-project.pptx',
-    image: 'assets/lessons/lesson-5-ai-project-en.png', imageRatio: '1672/941', imageTh: 'assets/lessons/lesson-5-ai-project-th.png',
+    image: 'assets/lessons/lesson-5-ai-project-en.jpg', imageRatio: '1672/941', imageTh: 'assets/lessons/lesson-5-ai-project-th.jpg',
     title: { en: 'AI Around Us Project', th: 'โครงงาน AI รอบตัวเรา' },
     short: { en: 'Students apply what they learned and explain AI to others.', th: 'นักเรียนนำสิ่งที่เรียนรู้มาประยุกต์ใช้และอธิบาย AI ให้ผู้อื่นฟัง' },
     objective: { en: 'Students apply what they learned and explain AI to others.', th: 'นักเรียนนำสิ่งที่เรียนรู้มาประยุกต์ใช้และอธิบาย AI ให้ผู้อื่นฟัง' },
