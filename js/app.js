@@ -236,13 +236,16 @@ async function renderSlides(el, lesson) {
 
   const url = new URL(lesson.slidesFile, document.baseURI).href;
   let exists = _slidesExist.get(url);
-  if (exists === undefined) {
+  if (!exists) {
     try {
       exists = (await fetch(url, { method: 'HEAD' })).ok;
     } catch (e) {
       exists = false;
     }
-    _slidesExist.set(url, exists);
+    // Only successes are cached. A probe can fail for transient network
+    // reasons, and remembering that would hide a deck that is really there for
+    // the rest of the visit; re-probing a missing file costs one HEAD request.
+    if (exists) _slidesExist.set(url, true);
   }
   // The reader may have moved to another lesson while the probe was in flight.
   if (!exists || window.__openLessonId !== lesson.id) return;
