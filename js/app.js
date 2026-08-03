@@ -17,12 +17,37 @@ function changeLang(lang) {
   location.reload();
 }
 
-const PAGE_PATHS = { home: '/', learn: '/lessons', about: '/about', contact: '/contact' };
-const PATH_PAGES = { '/': 'home', '/lessons': 'learn', '/about': 'about', '/contact': 'contact' };
+// Routes live in the hash (#/lessons, #/lessons/what-is-ai) rather than the
+// path. The site is served from a subdirectory on GitHub Pages
+// (/ai-literacy-toolkit/), and path-based routing would both rewrite the URL
+// to the wrong place and 404 on reload, since there is no server-side rewrite
+// to index.html. Hashes need no server config and work from any base path,
+// including file://.
+const PAGE_ROUTES = { home: '/', learn: '/lessons', about: '/about', contact: '/contact' };
+const ROUTE_PAGES = { '/': 'home', '/lessons': 'learn', '/about': 'about', '/contact': 'contact' };
+const LESSON_ROUTE = '/lessons/';
 
 // Page-navigation buttons only — the EN/TH toggle also lives in .nav-links,
 // and clearing its .active would drop the selected-language highlight.
 const NAV_PAGE_BUTTONS = '.nav-links > li:not(.lang-toggle) button';
+
+// Current route, normalised to a leading slash. '' (no hash) means home.
+function currentRoute() {
+  const h = location.hash.replace(/^#/, '');
+  return h.startsWith('/') ? h : '/' + h;
+}
+
+// The route currently on screen. Tracked so that the hash we write ourselves
+// doesn't get routed a second time by the listeners below.
+let _renderedRoute = null;
+
+function setRoute(route, replace = false) {
+  _renderedRoute = route;
+  if (currentRoute() === route) return;
+  const url = location.pathname + location.search + '#' + route;
+  if (replace) history.replaceState(null, '', url);
+  else history.pushState(null, '', url);
+}
 
 function showPage(id, updateUrl = true) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -31,23 +56,27 @@ function showPage(id, updateUrl = true) {
   const btn = document.getElementById('nav-' + id);
   if (btn) btn.classList.add('active');
   window.scrollTo(0, 0);
-  if (updateUrl) {
-    const path = PAGE_PATHS[id] || '/';
-    if (location.pathname !== path) history.pushState({ page: id }, '', path);
-  }
+  if (updateUrl) setRoute(PAGE_ROUTES[id] || '/');
 }
 
-window.addEventListener('popstate', () => {
-  const path = location.pathname;
-  if (path.startsWith('/lessons/') && path.length > '/lessons/'.length) {
-    const lessonId = path.slice('/lessons/'.length);
-    if (lessonId === window.__openLessonId && document.getElementById('page-lesson').classList.contains('active')) return;
-    openLesson(lessonId, false);
-  } else {
-    const id = PATH_PAGES[path] || 'home';
-    showPage(id, false);
+// Render whatever the current hash points at. Unknown routes and unknown
+// lesson ids fall back to home rather than leaving the previous page on screen.
+function routeToCurrentHash() {
+  const route = currentRoute();
+  if (route === _renderedRoute) return;
+  _renderedRoute = route;
+  if (route.startsWith(LESSON_ROUTE) && route.length > LESSON_ROUTE.length) {
+    if (openLesson(route.slice(LESSON_ROUTE.length), false)) return;
+    setRoute('/', true);   // unknown lesson id
   }
-});
+  showPage(ROUTE_PAGES[currentRoute()] || 'home', false);
+}
+
+// Back/forward across our own pushState entries fires popstate; an edited or
+// pasted hash fires hashchange. Both funnel through the same handler, which
+// no-ops when the route is already on screen.
+window.addEventListener('popstate', () => routeToCurrentHash());
+window.addEventListener('hashchange', () => routeToCurrentHash());
 
 const colors = ['#E1E6FD','#DCE3FB','#E6E9FE','#ECE5FD','#EFE8FE'];
 const colorsText = ['#2E43E6','#1B2361','#3B4FE0','#6C3CE0','#7B2FE0'];
@@ -135,9 +164,10 @@ function renderContentBlock(b, t) {
   return heading + text + items + link + tip;
 }
 
+// Returns false if `id` matches no lesson, so callers can fall back.
 function openLesson(id, updateUrl = true) {
   const l = lessons.find(x => x.id === id);
-  if (!l) return;
+  if (!l) return false;
   window.__openLessonId = id;
   const t = currentLang;
   const i = lessons.indexOf(l);
@@ -216,11 +246,13 @@ function openLesson(id, updateUrl = true) {
   document.getElementById('lesson-page-content').innerHTML = html;
   const slidesEl = document.getElementById('lesson-slides-content');
   if (l.slidesFile) {
-    const fullSlidesUrl = new URL(l.slidesFile, location.href).href;
+    // Resolve against the document base, not location.href — the latter now
+    // carries a #/lessons/... route, and the two must not disagree.
+    const fullSlidesUrl = new URL(l.slidesFile, document.baseURI).href;
     const viewerUrl = 'https://view.officeapps.live.com/op/embed.aspx?src=' + encodeURIComponent(fullSlidesUrl);
     slidesEl.innerHTML = `
       <iframe class="lesson-slides-embed" src="${viewerUrl}" title="Slides">Loading…</iframe>
-      <a class="lesson-download-btn" href="${l.slidesFile}" download>⬇ <span class="en-text">Download Slides (.pptx)</span><span class="th-text">ดาวน์โหลดสไลด์ (.pptx)</span></a>
+      <a class="lesson-download-btn" href="${fullSlidesUrl}" download>⬇ <span class="en-text">Download Slides (.pptx)</span><span class="th-text">ดาวน์โหลดสไลด์ (.pptx)</span></a>
     `;
   } else {
     slidesEl.innerHTML = `<p class="lesson-extra-placeholder"><span class="en-text">Slide deck coming soon.</span><span class="th-text">สไลด์กำลังจะมาเร็ว ๆ นี้</span></p>`;
@@ -232,10 +264,8 @@ function openLesson(id, updateUrl = true) {
   if (navBtn) navBtn.classList.add('active');
   document.querySelectorAll('.lesson-toc-link').forEach((a, i) => a.classList.toggle('active', i === 0));
   window.scrollTo(0, 0);
-  if (updateUrl) {
-    const path = '/lessons/' + id;
-    if (location.pathname !== path) history.pushState({ page: 'lesson', lessonId: id }, '', path);
-  }
+  if (updateUrl) setRoute(LESSON_ROUTE + id);
+  return true;
 }
 
 const _savedLang = localStorage.getItem('lang');
@@ -244,14 +274,7 @@ if (_savedLang === 'th') setLang('th');
 renderTopics();
 renderLessonCards();
 
-const _initialPath = location.pathname;
-if (_initialPath.startsWith('/lessons/') && _initialPath.length > '/lessons/'.length) {
-  openLesson(_initialPath.slice('/lessons/'.length), false);
-} else {
-  const _initialPage = PATH_PAGES[_initialPath];
-  if (_initialPage) showPage(_initialPage, false);
-  else history.replaceState({ page: 'home' }, '', '/');
-}
+routeToCurrentHash();
 
 const _setLang = setLang;
 setLang = function(lang) {
