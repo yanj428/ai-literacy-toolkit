@@ -5,9 +5,11 @@
 // been visited, the whole site works offline, and any slide deck that has been
 // opened once stays available too.
 //
-// Bump CACHE_VERSION whenever the shell changes. Old caches are deleted on
+// Bump CACHE_VERSION when the precache list below changes. Editing the page,
+// styles or scripts does not need a bump: those are fetched network-first, so a
+// deploy takes effect on the next visit on its own. Old caches are deleted on
 // activate, so a stale version never lingers.
-const CACHE_VERSION = 'v2';
+const CACHE_VERSION = 'v3';
 const SHELL_CACHE = `toolkit-shell-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `toolkit-runtime-${CACHE_VERSION}`;
 
@@ -66,20 +68,35 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Network first, falling back to whatever was cached. Used for the page itself
-// so an edit to the site shows up on the next online visit rather than being
-// pinned by the cache.
-async function networkFirst(request, cacheName) {
+// Network first, falling back to whatever was cached. Used for the page and for
+// the styles and scripts, so an edit to the site shows up on the next visit
+// instead of waiting a further visit for a background refresh to land.
+//
+// timeoutMs guards the obvious cost of that choice. On the slow connections
+// this toolkit is meant for, waiting on a request that is crawling would be
+// worse than showing the copy already on the device, so once the deadline
+// passes the cached copy is served and the download carries on into the cache
+// for next time. Without a cached copy there is nothing to fall back to, so the
+// request is simply awaited.
+async function networkFirst(request, cacheName, timeoutMs = 0) {
   const cache = await caches.open(cacheName);
-  try {
-    const fresh = await fetch(request);
-    if (fresh && fresh.ok) cache.put(request, fresh.clone());
-    return fresh;
-  } catch (e) {
-    const cached = await cache.match(request) || await cache.match('index.html') || await cache.match('./');
-    if (cached) return cached;
-    throw e;
+  const cached = await cache.match(request);
+  const network = fetch(request)
+    .then(res => {
+      if (res && res.ok) cache.put(request, res.clone());
+      return res;
+    })
+    .catch(() => null);   // resolves either way, so racing it cannot reject
+
+  if (cached && timeoutMs) {
+    const deadline = new Promise(resolve => setTimeout(() => resolve(null), timeoutMs));
+    return (await Promise.race([network, deadline])) || cached;
   }
+  return (await network)
+    || cached
+    || await cache.match('index.html')
+    || await cache.match('./')
+    || Response.error();
 }
 
 // Serve the cached copy immediately and refresh it in the background, so the
@@ -121,7 +138,7 @@ self.addEventListener('fetch', event => {
   if (!sameOrigin && !/fonts\.(googleapis|gstatic)\.com$/.test(url.hostname)) return;
 
   if (request.mode === 'navigate') {
-    event.respondWith(networkFirst(request, SHELL_CACHE));
+    event.respondWith(networkFirst(request, SHELL_CACHE, 4000));
     return;
   }
   if (!sameOrigin) {                       // Google Fonts
@@ -132,5 +149,14 @@ self.addEventListener('fetch', event => {
     event.respondWith(cacheFirst(request, RUNTIME_CACHE));
     return;
   }
+  // Styles and scripts change together with the markup, and a page rendered
+  // with last week's script is a bug, not a stale detail. They go network-first
+  // so a deploy takes effect immediately rather than on the visit after.
+  if (/\.(css|js)$/.test(url.pathname)) {
+    event.respondWith(networkFirst(request, SHELL_CACHE, 3000));
+    return;
+  }
+  // Images and the manifest are effectively immutable: their names change when
+  // their contents do, so serving the cached copy first costs nothing.
   event.respondWith(staleWhileRevalidate(request, SHELL_CACHE));
 });

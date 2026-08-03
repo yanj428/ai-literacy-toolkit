@@ -58,9 +58,14 @@ in the classroom.
 `site.webmanifest` makes the site installable, which is what puts it on a phone
 home screen and lets it open without browser chrome.
 
-Bump `CACHE_VERSION` in `sw.js` when the shell changes. Old caches are deleted
-on activate. The page itself is fetched network-first, so edits appear on the
-next online visit rather than being pinned by the cache.
+The page, the styles and the scripts are fetched network-first with a short
+timeout: a deploy takes effect on the next visit, and if the network is slow the
+cached copy is served instead of waiting. Images are served from the cache
+first, and slide decks are cache-first once downloaded.
+
+Bump `CACHE_VERSION` in `sw.js` only when the precache list itself changes, such
+as when an asset is added or renamed. Editing HTML, CSS or JS does not need it.
+Old caches are deleted on activate.
 
 ## Editing the lessons
 
