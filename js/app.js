@@ -411,3 +411,15 @@ setLang(PREFS.lang());
 setMode(PREFS.mode());
 syncNavHeight();
 routeToCurrentHash();
+
+// Offline support. Registered after the page is interactive so it never
+// competes with the first render, and with a relative URL so its scope follows
+// whatever directory the site is served from.
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {
+      // A failed registration is not worth bothering anyone about: the site
+      // works exactly as before, just without the offline copy.
+    });
+  });
+}

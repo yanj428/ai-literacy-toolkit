@@ -47,6 +47,21 @@ Routes live in the URL hash (`#/lessons`, `#/lessons/what-is-ai`) so the site
 works from any base path: a domain root, a GitHub Pages subdirectory, or
 `file://`, with no server configuration.
 
+## Offline use
+
+A service worker (`sw.js`) caches the site on first visit, so once a teacher has
+opened it the lessons, artwork and styles all work with no connection. Slide
+decks are not precached, because together they are 41MB; each deck is cached
+the first time it is opened, so preparing a lesson at home keeps it available
+in the classroom.
+
+`site.webmanifest` makes the site installable, which is what puts it on a phone
+home screen and lets it open without browser chrome.
+
+Bump `CACHE_VERSION` in `sw.js` when the shell changes. Old caches are deleted
+on activate. The page itself is fetched network-first, so edits appear on the
+next online visit rather than being pinned by the cache.
+
 ## Editing the lessons
 
 All lesson content is in `js/lessons.js`, one object per lesson, with every
