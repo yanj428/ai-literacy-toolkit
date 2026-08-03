@@ -1,6 +1,6 @@
 # License for the educational content
 
-**Creative Commons Attribution 4.0 International (CC BY 4.0)**
+**Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**
 
 © 2026 Youth of Change
 
@@ -19,7 +19,9 @@ You are free to:
 - **Share** — copy and redistribute the material in any medium or format
 - **Adapt** — remix, transform and build upon the material
 
-for any purpose, including commercially.
+for **non-commercial** purposes. Teaching these lessons in a classroom,
+translating them, printing them for your students, or sharing them with other
+teachers is exactly what this material is for.
 
 These freedoms cannot be revoked as long as you follow the license terms.
 
@@ -31,14 +33,27 @@ in any way that suggests Youth of Change endorses you or your use.
 
 A suggested credit line:
 
-> "AI Literacy Toolkit" by Youth of Change, licensed under CC BY 4.0.
+> "AI Literacy Toolkit" by Youth of Change, licensed under CC BY-NC 4.0.
 > https://github.com/yanj428/ai-literacy-toolkit
 
 If you translate or adapt a lesson, please say so — for example, "adapted from
-the AI Literacy Toolkit by Youth of Change (CC BY 4.0)".
+the AI Literacy Toolkit by Youth of Change (CC BY-NC 4.0)".
+
+**NonCommercial.** You may not use the material for commercial purposes. The
+license defines this as use "primarily intended for or directed towards
+commercial advantage or monetary compensation" — in plain terms, you may not
+sell these lessons, put them behind a paywall, or build a paid product or paid
+course out of them.
 
 **No additional restrictions.** You may not apply legal terms or technological
 measures that legally restrict others from doing anything the license permits.
+
+## Want to use this commercially?
+
+The NonCommercial term is not meant to shut the door — it is there so that we
+are asked first. If you would like to use the toolkit in a paid course, a
+commercial training programme, or anything else the license does not allow,
+email <youthofchange8@gmail.com> and we can discuss giving you permission.
 
 ## Notices
 
@@ -55,11 +70,11 @@ This is a human-readable summary of, and not a substitute for, the license.
 The authoritative legal text is bundled in this repository as [LICENSE](LICENSE),
 and published at:
 
-https://creativecommons.org/licenses/by/4.0/legalcode
+https://creativecommons.org/licenses/by-nc/4.0/legalcode
 
 The summary is at:
 
-https://creativecommons.org/licenses/by/4.0/
+https://creativecommons.org/licenses/by-nc/4.0/
 
 ## Third-party material
 
