@@ -151,6 +151,23 @@ a.footer-link { display: inline-block; }
 .simple-page p { font-size: 0.95rem; color: var(--body-text); line-height: 1.75; margin-bottom: 0.5rem; }
 .simple-page ul { margin: 0.6rem 0 0.6rem 1.2rem; }
 .simple-page ul li { font-size: 0.95rem; color: var(--body-text); line-height: 1.8; }
+
+.simple-page ul.contributors { list-style: none; margin-left: 0; display: grid; gap: 0.7rem; }
+.contributors li {
+  display: flex; flex-direction: column; gap: 0.1rem;
+  background: #EDF0FD; border-radius: 12px; padding: 0.9rem 1.1rem;
+}
+.contributor-name { font-family: 'Fredoka', sans-serif; font-weight: 600; color: var(--indigo); }
+.contributor-role { font-size: 0.88rem; color: var(--muted); }
+
+/* A button styled as inline text, so navigating stays keyboard-reachable
+   without pretending to be a link to somewhere else. */
+.inline-link {
+  appearance: none; -webkit-appearance: none; background: none; border: 0; padding: 0;
+  font: inherit; color: var(--coral); cursor: pointer;
+  text-decoration: underline; text-underline-offset: 2px;
+}
+.inline-link:hover { color: var(--indigo); }
 .team-section { max-width: 900px; margin: 1.5rem 0 1rem; }
 .team-member { display: grid; grid-template-columns: 260px 1fr; gap: 3rem; align-items: center; margin-bottom: 3.5rem; }
 .team-photo-wrap { position: relative; }
