@@ -7,7 +7,7 @@
 //
 // Bump CACHE_VERSION whenever the shell changes. Old caches are deleted on
 // activate, so a stale version never lingers.
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v2';
 const SHELL_CACHE = `toolkit-shell-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `toolkit-runtime-${CACHE_VERSION}`;
 

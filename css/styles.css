@@ -158,6 +158,22 @@ a.footer-link { display: inline-block; }
 .simple-page ul { margin: 0.6rem 0 0.6rem 1.2rem; }
 .simple-page ul li { font-size: 0.95rem; color: var(--body-text); line-height: 1.8; }
 
+/* A wide table must not widen the page: it scrolls inside its own box. */
+.table-scroll { overflow-x: auto; margin: 1rem 0 0.5rem; }
+.align-table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 0.88rem; }
+.align-table th, .align-table td {
+  text-align: left; vertical-align: top; padding: 0.7rem 0.8rem;
+  border-bottom: 1px solid var(--border);
+}
+.align-table thead th {
+  font-family: 'Fredoka', sans-serif; font-weight: 600; color: var(--indigo);
+  background: #EDF0FD; border-bottom: 2px solid var(--border);
+}
+.align-table tbody td { color: var(--body-text); line-height: 1.6; }
+.align-table tbody td:first-child {
+  font-family: 'Fredoka', sans-serif; font-weight: 700; color: var(--coral); width: 3rem;
+}
+
 .simple-page ul.contributors { list-style: none; margin-left: 0; display: grid; gap: 0.7rem; }
 .contributors li {
   display: flex; flex-direction: column; gap: 0.1rem;
@@ -341,6 +357,7 @@ a.footer-link { display: inline-block; }
    hero is left alone. */
 #page-about .page-hero > *,
 #page-faq .page-hero > *,
+#page-curriculum .page-hero > *,
 #page-privacy .page-hero > * { max-width: 760px; margin-inline: auto; }
 #page-contact .page-hero > * { max-width: 940px; margin-inline: auto; }
 .page-hero .eyebrow { color: var(--mint); }
