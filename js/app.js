@@ -91,6 +91,7 @@ function showPage(id, updateUrl = true) {
     btn.setAttribute('aria-current', 'page');
   }
   window.scrollTo(0, 0);
+  focusPageHeading(document.getElementById('page-' + id), 'page:' + id);
   if (updateUrl) setRoute(PAGE_ROUTES[id] || '/');
 }
 
@@ -129,6 +130,32 @@ function skipToContent() {
   page.scrollIntoView({ block: 'start' });
 }
 
+// Changing page here swaps the DOM but moves nothing else. A sighted reader
+// sees the new page; a screen reader user is told nothing and is left reading
+// the page they just left, and a keyboard user carries on tabbing from wherever
+// they were in the old one. Moving focus to the new page's heading fixes both:
+// the heading is announced, and tabbing continues from the top of what is now
+// on screen.
+//
+// preventScroll because the caller decides where the page sits; focus() would
+// otherwise fight it. Programmatic focus does not match :focus-visible, so no
+// ring appears on the heading for mouse users, while a keyboard user who tabs
+// back to it still gets one.
+let _booted = false;
+let _announced = null;
+function focusPageHeading(page, key) {
+  if (!_booted || !page) return;    // never steal focus on first load
+  // Only on an actual navigation. Switching language or classroom mode
+  // re-renders the open lesson through this same path, and pulling focus off
+  // the toggle someone just pressed would announce the lesson title instead of
+  // what their press did.
+  if (key === _announced) return;
+  _announced = key;
+  const target = page.querySelector('h1, h2') || page;
+  target.setAttribute('tabindex', '-1');
+  target.focus({ preventScroll: true });
+}
+
 // Back/forward across our own pushState entries fires popstate; an edited or
 // pasted hash fires hashchange. Both funnel through the same handler, which
 // no-ops when the route is already on screen.
@@ -145,6 +172,11 @@ const swatchText = i => colorsText[i % colorsText.length];
 
 let currentMode = 'notech';
 function setMode(mode) {
+  // The toggle inside a lesson is part of the markup openLesson re-renders, so
+  // pressing it destroys the button being pressed and focus falls to the body.
+  // Note where it was and put it back on the replacement.
+  const fromLessonToggle = !!(document.activeElement && document.activeElement.closest('.modal-mode-toggle'));
+
   currentMode = mode;
   localStorage.setItem('mode', mode);
   document.querySelectorAll('.mode-toggle button').forEach(b => {
@@ -154,6 +186,10 @@ function setMode(mode) {
   renderLessonCards();
   if (document.getElementById('page-lesson').classList.contains('active') && window.__openLessonId) {
     openLesson(window.__openLessonId, false);
+    if (fromLessonToggle) {
+      const again = document.querySelector(`.modal-mode-toggle button[data-mode="${mode}"]`);
+      if (again) again.focus({ preventScroll: true });
+    }
   }
 }
 
@@ -401,6 +437,7 @@ function openLesson(id, updateUrl = true) {
   }
   document.querySelectorAll('.lesson-toc-link').forEach((a, i) => a.classList.toggle('active', i === 0));
   window.scrollTo(0, 0);
+  focusPageHeading(document.getElementById('lesson-page-content'), 'lesson:' + id);
   if (updateUrl) setRoute(LESSON_ROUTE + id);
   return true;
 }
@@ -411,6 +448,7 @@ setLang(PREFS.lang());
 setMode(PREFS.mode());
 syncNavHeight();
 routeToCurrentHash();
+_booted = true;
 
 // Offline support. Registered after the page is interactive so it never
 // competes with the first render, and with a relative URL so its scope follows
