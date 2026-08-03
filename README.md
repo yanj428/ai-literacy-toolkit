@@ -62,10 +62,10 @@ deck starts working as soon as it is committed.
 Two licenses, because this repository holds two different kinds of work:
 
 - **Educational content** — the lesson plans, slide decks and artwork are under
-  [CC BY 4.0](LICENSE-CONTENT.md). Use them, translate them, adapt them, for
+  [CC BY 4.0](LICENSE-CONTENT.md) (full text in [LICENSE](LICENSE)). Use them, translate them, adapt them, for
   any purpose including commercially, as long as you credit Youth of Change.
 - **Website code** — the HTML, CSS and JavaScript are under the
-  [MIT license](LICENSE).
+  [MIT license](LICENSE-CODE).
 
 If you translate or adapt these lessons for your own classroom, we would love
 to hear about it: youthofchange8@gmail.com

@@ -10,7 +10,7 @@ The lesson plans and all lesson text (`js/lessons.js`), the slide decks
 (`slides/`), and the artwork and illustrations (`assets/`).
 
 The website code — the HTML, CSS and JavaScript in `index.html`, `css/` and
-`js/` — is covered separately by the MIT license in [LICENSE](LICENSE).
+`js/` — is covered separately by the MIT license in [LICENSE-CODE](LICENSE-CODE).
 
 ## What you may do
 
@@ -52,7 +52,8 @@ or privacy rights may limit how you use the material.
 ## Full license text
 
 This is a human-readable summary of, and not a substitute for, the license.
-The authoritative legal text is at:
+The authoritative legal text is bundled in this repository as [LICENSE](LICENSE),
+and published at:
 
 https://creativecommons.org/licenses/by/4.0/legalcode
 
