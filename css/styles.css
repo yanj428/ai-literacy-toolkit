@@ -3,6 +3,9 @@
   --indigo: #1B2361; --yellow: #8D9AF7; --mint: #B389F9; --coral: #2E43E6;
   --sky: #D7DEFC; --white: #FFFFFF; --body-text: #241F33; --muted: #6B7280; --border: #DDE3F5;
   --stamp: 4px 4px 0 var(--indigo);
+  /* Height of the sticky site header. Anything else that sticks, or that gets
+     scrolled to, has to clear it. */
+  --nav-h: 80px;
 }
 html { scroll-behavior: smooth; }
 body {
@@ -423,14 +426,18 @@ a.footer-link { display: inline-block; }
   padding: 0.6rem 1.1rem; border-radius: 50px; border: none; cursor: pointer; margin-bottom: 1.5rem;
 }
 .lesson-back:hover { background: var(--border); }
-.lesson-page-wrap .modal { max-width: none; max-height: none; overflow-y: visible; padding: 0; scroll-margin-top: 1.5rem; }
+.lesson-page-wrap .modal { max-width: none; max-height: none; overflow-y: visible; padding: 0; scroll-margin-top: calc(var(--nav-h) + 1.5rem); }
 html { scroll-behavior: smooth; }
 .lesson-layout { display: grid; grid-template-columns: 220px 1fr; gap: 2.5rem; align-items: start; }
+/* This is a <nav>, so the site-header rule above also applies to it: it picks
+   up that rule's sticky positioning and z-index: 100. Sitting later in the
+   document, it won the z-index tie and painted over the header. Stick it below
+   the header instead, and drop it beneath the header in the stack. */
 .lesson-toc {
   width: 220px; max-width: 220px; box-sizing: border-box;
   display: flex; flex-direction: column; align-items: stretch; gap: 0.3rem;
   border-left: 2px solid var(--border); padding-left: 1rem;
-  position: sticky; top: 1.5rem; align-self: start;
+  position: sticky; top: calc(var(--nav-h) + 1.5rem); align-self: start; z-index: 1;
 }
 .lesson-toc-link {
   font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 0.88rem; color: var(--muted);
@@ -441,7 +448,7 @@ html { scroll-behavior: smooth; }
 .lesson-toc-link.active { color: var(--coral); }
 .lesson-extra-section {
   background: var(--white); border: 2px solid var(--border); border-radius: 16px;
-  padding: 1.8rem; margin-top: 1.8rem; text-align: left; scroll-margin-top: 1.5rem;
+  padding: 1.8rem; margin-top: 1.8rem; text-align: left; scroll-margin-top: calc(var(--nav-h) + 1.5rem);
 }
 .lesson-extra-section h3 { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1.05rem; color: var(--indigo); margin-bottom: 0.6rem; text-align: left; }
 .lesson-extra-placeholder { font-size: 0.9rem; color: var(--muted); }
