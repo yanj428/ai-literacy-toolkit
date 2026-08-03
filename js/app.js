@@ -243,39 +243,55 @@ function slidesPlaceholder() {
   return `<p class="lesson-extra-placeholder"><span class="en-text" lang="en">Slide deck coming soon.</span><span class="th-text" lang="th">สไลด์กำลังจะมาเร็ว ๆ นี้</span></p>`;
 }
 
-function slidesEmbed(url) {
-  const viewerUrl = 'https://view.officeapps.live.com/op/embed.aspx?src=' + encodeURIComponent(url);
-  return `
-      <iframe class="lesson-slides-embed" src="${viewerUrl}" title="Slides">Loading…</iframe>
-      <a class="lesson-download-btn" href="${url}" download>⬇ <span class="en-text" lang="en">Download Slides (.pptx)</span><span class="th-text" lang="th">ดาวน์โหลดสไลด์ (.pptx)</span></a>
-    `;
+function slidesEmbed(pptxUrl, pdfUrl) {
+  // The preview stays on the Office viewer even when a PDF exists: it streams
+  // the deck, where embedding the PDF would push the whole file (16MB for
+  // lesson 1) at anyone who opens the page.
+  const viewer = pptxUrl
+    ? `<iframe class="lesson-slides-embed" src="https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(pptxUrl)}" title="Slides">Loading…</iframe>`
+    : '';
+  // PDF first: it opens on any device, prints as-is, and needs no PowerPoint.
+  const pdf = pdfUrl
+    ? `<a class="lesson-download-btn" href="${pdfUrl}" download>⬇ <span class="en-text" lang="en">Download Slides (PDF)</span><span class="th-text" lang="th">ดาวน์โหลดสไลด์ (PDF)</span></a>`
+    : '';
+  const pptx = pptxUrl
+    ? `<a class="lesson-download-btn lesson-download-alt" href="${pptxUrl}" download>⬇ <span class="en-text" lang="en">Download Slides (.pptx)</span><span class="th-text" lang="th">ดาวน์โหลดสไลด์ (.pptx)</span></a>`
+    : '';
+  return `${viewer}<div class="lesson-download-row">${pdf}${pptx}</div>`;
 }
 
-// Renders the placeholder first and upgrades to the embed only once the deck
-// is confirmed to exist, so a missing file never flashes a broken viewer.
+async function fileExists(url) {
+  if (_slidesExist.get(url)) return true;
+  let ok = false;
+  try {
+    ok = (await fetch(url, { method: 'HEAD' })).ok;
+  } catch (e) {
+    ok = false;
+  }
+  // Only successes are cached. A probe can fail for transient network reasons,
+  // and remembering that would hide a deck that is really there for the rest of
+  // the visit; re-probing a missing file costs one HEAD request.
+  if (ok) _slidesExist.set(url, true);
+  return ok;
+}
+
+// Renders the placeholder first and upgrades to the embed only once a file is
+// confirmed to exist, so a missing deck never flashes a broken viewer.
 async function renderSlides(el, lesson) {
   el.innerHTML = slidesPlaceholder();
   if (!lesson.slidesFile) return;
-  // The Office viewer fetches the deck itself, so it needs a URL reachable
-  // over the network, so there is nothing to embed when opened from disk.
+  // Both the Office viewer and a download need a URL reachable over the
+  // network, so there is nothing to offer when opened from disk.
   if (location.protocol !== 'http:' && location.protocol !== 'https:') return;
 
-  const url = new URL(lesson.slidesFile, document.baseURI).href;
-  let exists = _slidesExist.get(url);
-  if (!exists) {
-    try {
-      exists = (await fetch(url, { method: 'HEAD' })).ok;
-    } catch (e) {
-      exists = false;
-    }
-    // Only successes are cached. A probe can fail for transient network
-    // reasons, and remembering that would hide a deck that is really there for
-    // the rest of the visit; re-probing a missing file costs one HEAD request.
-    if (exists) _slidesExist.set(url, true);
-  }
-  // The reader may have moved to another lesson while the probe was in flight.
-  if (!exists || window.__openLessonId !== lesson.id) return;
-  el.innerHTML = slidesEmbed(url);
+  const pptxUrl = new URL(lesson.slidesFile, document.baseURI).href;
+  const pdfUrl = pptxUrl.replace(/\.pptx$/, '.pdf');
+  const [hasPptx, hasPdf] = await Promise.all([fileExists(pptxUrl), fileExists(pdfUrl)]);
+
+  // The reader may have moved to another lesson while the probes were in flight.
+  if (window.__openLessonId !== lesson.id) return;
+  if (!hasPptx && !hasPdf) return;
+  el.innerHTML = slidesEmbed(hasPptx ? pptxUrl : '', hasPdf ? pdfUrl : '');
 }
 
 // Returns false if `id` matches no lesson, so callers can fall back.
