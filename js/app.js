@@ -164,6 +164,48 @@ function renderContentBlock(b, t) {
   return heading + text + items + link + tip;
 }
 
+// Lessons reference a slide deck by path, but the .pptx files are not all in
+// the repo yet. Probing the file keeps a missing deck from rendering an Office
+// viewer pointed at a 404, and means a deck starts working the moment it is
+// committed — no change needed here.
+const _slidesExist = new Map();   // absolute url -> boolean
+
+function slidesPlaceholder() {
+  return `<p class="lesson-extra-placeholder"><span class="en-text">Slide deck coming soon.</span><span class="th-text">สไลด์กำลังจะมาเร็ว ๆ นี้</span></p>`;
+}
+
+function slidesEmbed(url) {
+  const viewerUrl = 'https://view.officeapps.live.com/op/embed.aspx?src=' + encodeURIComponent(url);
+  return `
+      <iframe class="lesson-slides-embed" src="${viewerUrl}" title="Slides">Loading…</iframe>
+      <a class="lesson-download-btn" href="${url}" download>⬇ <span class="en-text">Download Slides (.pptx)</span><span class="th-text">ดาวน์โหลดสไลด์ (.pptx)</span></a>
+    `;
+}
+
+// Renders the placeholder first and upgrades to the embed only once the deck
+// is confirmed to exist, so a missing file never flashes a broken viewer.
+async function renderSlides(el, lesson) {
+  el.innerHTML = slidesPlaceholder();
+  if (!lesson.slidesFile) return;
+  // The Office viewer fetches the deck itself, so it needs a URL reachable
+  // over the network — there is nothing to embed when opened from disk.
+  if (location.protocol !== 'http:' && location.protocol !== 'https:') return;
+
+  const url = new URL(lesson.slidesFile, document.baseURI).href;
+  let exists = _slidesExist.get(url);
+  if (exists === undefined) {
+    try {
+      exists = (await fetch(url, { method: 'HEAD' })).ok;
+    } catch (e) {
+      exists = false;
+    }
+    _slidesExist.set(url, exists);
+  }
+  // The reader may have moved to another lesson while the probe was in flight.
+  if (!exists || window.__openLessonId !== lesson.id) return;
+  el.innerHTML = slidesEmbed(url);
+}
+
 // Returns false if `id` matches no lesson, so callers can fall back.
 function openLesson(id, updateUrl = true) {
   const l = lessons.find(x => x.id === id);
@@ -244,19 +286,7 @@ function openLesson(id, updateUrl = true) {
     </div>
   `;
   document.getElementById('lesson-page-content').innerHTML = html;
-  const slidesEl = document.getElementById('lesson-slides-content');
-  if (l.slidesFile) {
-    // Resolve against the document base, not location.href — the latter now
-    // carries a #/lessons/... route, and the two must not disagree.
-    const fullSlidesUrl = new URL(l.slidesFile, document.baseURI).href;
-    const viewerUrl = 'https://view.officeapps.live.com/op/embed.aspx?src=' + encodeURIComponent(fullSlidesUrl);
-    slidesEl.innerHTML = `
-      <iframe class="lesson-slides-embed" src="${viewerUrl}" title="Slides">Loading…</iframe>
-      <a class="lesson-download-btn" href="${fullSlidesUrl}" download>⬇ <span class="en-text">Download Slides (.pptx)</span><span class="th-text">ดาวน์โหลดสไลด์ (.pptx)</span></a>
-    `;
-  } else {
-    slidesEl.innerHTML = `<p class="lesson-extra-placeholder"><span class="en-text">Slide deck coming soon.</span><span class="th-text">สไลด์กำลังจะมาเร็ว ๆ นี้</span></p>`;
-  }
+  renderSlides(document.getElementById('lesson-slides-content'), l);
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-lesson').classList.add('active');
   document.querySelectorAll(NAV_PAGE_BUTTONS).forEach(b => b.classList.remove('active'));
