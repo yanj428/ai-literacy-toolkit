@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page not found: AI Literacy Toolkit</title>
+  <meta name="robots" content="noindex" />
+
+  <!--
+    GitHub Pages serves this file's contents at whatever URL was requested, so a
+    request for /ai-literacy-toolkit/lessons/what-is-ai renders this page while
+    the address bar still says .../lessons/what-is-ai. Relative URLs would
+    resolve against that path and 404 in turn, so everything here is either
+    inline or absolute. That is why the styles are not pulled from css/.
+  -->
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --indigo: #1B2361; --coral: #2E43E6; --muted: #6B7280; --border: #DDE3F5; }
+    body {
+      font-family: 'Inter', 'Noto Sans Thai', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: #241F33; background: #fff; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center; padding: 2rem;
+    }
+    .wrap { max-width: 34rem; text-align: center; }
+    .code { font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--coral); font-weight: 700; }
+    h1 { font-size: 1.9rem; color: var(--indigo); margin: 0.6rem 0 0.2rem; line-height: 1.2; }
+    h1 .th { display: block; font-size: 1.3rem; font-weight: 600; margin-top: 0.3rem; }
+    p { color: var(--muted); line-height: 1.7; margin: 0.9rem 0; }
+    p.th { font-size: 0.95rem; }
+    .links { display: flex; gap: 0.7rem; justify-content: center; flex-wrap: wrap; margin-top: 1.6rem; }
+    a.btn {
+      display: inline-block; text-decoration: none; font-weight: 600; font-size: 0.95rem;
+      padding: 0.75rem 1.4rem; border-radius: 10px; background: var(--coral); color: #fff;
+    }
+    a.alt { background: none; color: var(--indigo); box-shadow: inset 0 0 0 2px var(--border); }
+    a.btn:hover { opacity: 0.9; }
+    a.alt:hover { box-shadow: inset 0 0 0 2px var(--indigo); opacity: 1; }
+    :focus-visible { outline: 3px solid var(--coral); outline-offset: 3px; border-radius: 6px; }
+    .path { font-family: ui-monospace, 'Space Mono', monospace; font-size: 0.85rem; color: var(--indigo);
+            background: #EDF0FD; padding: 0.2rem 0.45rem; border-radius: 5px; word-break: break-all; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="code">404</div>
+    <h1>
+      This page does not exist
+      <span class="th" lang="th">ไม่พบหน้าที่คุณต้องการ</span>
+    </h1>
+    <p>The link may be out of date, or the address may have a typo. Everything in the toolkit is still here.</p>
+    <p class="th" lang="th">ลิงก์อาจเก่าเกินไป หรือที่อยู่เว็บอาจพิมพ์ผิด เนื้อหาทั้งหมดของคู่มือการเรียนรู้ยังอยู่ครบ</p>
+    <p id="requested" hidden>You asked for <span class="path" id="requested-path"></span>.</p>
+    <div class="links">
+      <a class="btn" id="home" href="/">Go to the toolkit <span lang="th">ไปที่คู่มือการเรียนรู้</span></a>
+      <a class="btn alt" id="lessons" href="/#/lessons">Browse lessons <span lang="th">ดูบทเรียน</span></a>
+    </div>
+  </div>
+
+<script>
+(function () {
+  // Work out where the site root is. This file may be rendered at any depth, so
+  // the root cannot be assumed to be the current directory.
+  var ROUTES = ['/lessons', '/about', '/contact', '/faq', '/curriculum', '/privacy'];
+  var path = location.pathname;
+  var root = '/';
+  var route = '';
+
+  // If the address contains one of the app's own routes, everything before it
+  // is the root. This is the case that matters: links written against the old
+  // path-based routing, such as /ai-literacy-toolkit/lessons/what-is-ai.
+  for (var i = 0; i < ROUTES.length; i++) {
+    var at = path.indexOf(ROUTES[i]);
+    if (at !== -1) {
+      root = path.slice(0, at) || '/';
+      if (root.slice(-1) !== '/') root += '/';
+      route = path.slice(at);
+      break;
+    }
+  }
+  // Otherwise: the site normally lives in a directory of this name, whether on
+  // GitHub Pages or served locally, so recognise it. Falling back to the first
+  // path segment on a github.io host covers a fork published under another name.
+  if (!route) {
+    var PROJECT = 'ai-literacy-toolkit';
+    var first = path.split('/')[1];
+    if (first === PROJECT) root = '/' + PROJECT + '/';
+    else if (first && /\.github\.io$/.test(location.hostname)) root = '/' + first + '/';
+  }
+
+  document.getElementById('home').href = root;
+  document.getElementById('lessons').href = root + '#/lessons';
+
+  if (route) {
+    // A recognisable old-style link: send them where they were going.
+    location.replace(root + '#' + route);
+    return;
+  }
+
+  var p = document.getElementById('requested');
+  document.getElementById('requested-path').textContent = path;
+  p.hidden = false;
+})();
+</script>
+</body>
+</html>

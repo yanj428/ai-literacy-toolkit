@@ -43,6 +43,13 @@ directly, or serve the folder:
 python3 -m http.server 8787
 ```
 
+`404.html` catches anything else. GitHub Pages renders it at whatever URL was
+requested, so its styles are inline and its links are absolute: relative ones
+would resolve against the missing path and fail in turn. If the address
+contains a known route, such as a link written against the old path-based
+routing, it is turned into the hash equivalent and the visitor lands where they
+were going instead of on an error.
+
 Routes live in the URL hash (`#/lessons`, `#/lessons/what-is-ai`) so the site
 works from any base path: a domain root, a GitHub Pages subdirectory, or
 `file://`, with no server configuration.

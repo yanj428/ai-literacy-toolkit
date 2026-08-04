@@ -42,6 +42,10 @@ const SHELL = [
   'assets/lessons/lesson-5-ai-project-th.jpg',
 ];
 
+// 404.html is not precached either. It is served with a 404 status, which the
+// caching helpers already refuse to store, and it is only ever reached through
+// a real navigation to a URL that does not exist.
+
 // The slide decks are deliberately NOT precached: they are 41MB together, and
 // forcing that download on every visitor to make one lesson available offline
 // is the wrong trade. They are cached individually the first time one is
