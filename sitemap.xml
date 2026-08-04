@@ -20,6 +20,16 @@
   </url>
 
   <url>
+    <loc>https://yanj428.github.io/ai-literacy-toolkit/start/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yanj428.github.io/ai-literacy-toolkit/start/"/>
+    <xhtml:link rel="alternate" hreflang="th" href="https://yanj428.github.io/ai-literacy-toolkit/start/?lang=th"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yanj428.github.io/ai-literacy-toolkit/start/"/>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
     <loc>https://yanj428.github.io/ai-literacy-toolkit/lessons/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://yanj428.github.io/ai-literacy-toolkit/lessons/"/>
     <xhtml:link rel="alternate" hreflang="th" href="https://yanj428.github.io/ai-literacy-toolkit/lessons/?lang=th"/>

@@ -21,6 +21,7 @@ const SHELL = [
 
   // Every route is its own page now, so each one has to be here or a visit
   // to /faq/ with no connection would fall back to the home page's HTML.
+  'start/',
   'lessons/',
   'faq/',
   'curriculum/',

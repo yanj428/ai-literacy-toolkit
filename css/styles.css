@@ -206,6 +206,45 @@ a.footer-link { display: inline-block; }
 @media (max-width: 600px) { .contact-form-embed { height: 620px; } }
 @media (max-width: 860px) { .simple-page { padding: 3rem 1.5rem; } }
 
+/* Quick start. A real <ol> so the order is announced and the numbering is not
+   just a picture; the counter draws the badge from the list itself. */
+.quickstart-steps { list-style: none; margin: 0; padding: 0; counter-reset: qs; }
+.quickstart-step {
+  counter-increment: qs;
+  position: relative; padding-left: 4rem; padding-bottom: 2.2rem;
+}
+.quickstart-step::before {
+  content: counter(qs);
+  position: absolute; left: 0; top: 0;
+  width: 2.6rem; height: 2.6rem; border-radius: 50%;
+  background: var(--indigo); color: var(--white);
+  font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 1.15rem;
+  display: flex; align-items: center; justify-content: center;
+}
+/* Joins the badges into one thread so the steps read as a sequence. */
+.quickstart-step:not(:last-child)::after {
+  content: ''; position: absolute; left: 1.3rem; top: 3rem; bottom: 0.8rem;
+  width: 2px; background: var(--border);
+}
+.quickstart-step h2 {
+  font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1.15rem;
+  color: var(--indigo); margin: 0.35rem 0 0.6rem;
+}
+.quickstart-step h2 em { font-style: italic; }
+.quickstart-step p { font-size: 0.95rem; line-height: 1.75; margin-bottom: 0.5rem; }
+.quickstart-aside { font-size: 0.88rem !important; color: var(--muted); }
+
+.quickstart-cta {
+  display: flex; flex-wrap: wrap; gap: 0.9rem;
+  margin-top: 2.5rem; padding-top: 2rem; border-top: 2px solid var(--border);
+}
+@media (max-width: 600px) {
+  .quickstart-step { padding-left: 3.2rem; }
+  .quickstart-step::before { width: 2.2rem; height: 2.2rem; font-size: 1rem; }
+  .quickstart-step:not(:last-child)::after { left: 1.1rem; top: 2.6rem; }
+  .quickstart-cta .btn { width: 100%; }
+}
+
 .btn {
   font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 0.95rem;
   padding: 0.75rem 1.7rem; border-radius: 12px; border: 2px solid var(--indigo); cursor: pointer;
@@ -356,6 +395,7 @@ a.footer-link { display: inline-block; }
    Contact centres a 1100px box (940px), and Lessons runs full width, so its
    hero is left alone. */
 #page-about .page-hero > *,
+#page-start .page-hero > *,
 #page-faq .page-hero > *,
 #page-curriculum .page-hero > *,
 #page-privacy .page-hero > * { max-width: 760px; margin-inline: auto; }

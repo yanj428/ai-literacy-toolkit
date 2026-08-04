@@ -57,6 +57,7 @@
   </button>
   <ul class="nav-links">
     <li><button type="button" id="nav-home"  onclick="showPage('home')"><span class="en-text" lang="en">Home</span><span class="th-text" lang="th">หน้าแรก</span></button></li>
+    <li><button type="button" id="nav-start" onclick="showPage('start')"><span class="en-text" lang="en">Start Here</span><span class="th-text" lang="th">เริ่มต้นที่นี่</span></button></li>
     <li><button type="button" id="nav-learn" onclick="showPage('learn')"><span class="en-text" lang="en">Lessons</span><span class="th-text" lang="th">บทเรียน</span></button></li>
     <li><button type="button" id="nav-faq" onclick="showPage('faq')"><span class="en-text" lang="en">FAQ</span><span class="th-text" lang="th">คำถามที่พบบ่อย</span></button></li>
     <li><button type="button" id="nav-about" onclick="showPage('about')"><span class="en-text" lang="en">About</span><span class="th-text" lang="th">เกี่ยวกับ</span></button></li>
@@ -210,10 +211,10 @@
         <button type="button" data-mode="tech" aria-pressed="false" onclick="setMode('tech')"><span aria-hidden="true">💻</span> <span class="en-text" lang="en">Technology</span><span class="th-text" lang="th">ใช้เทคโนโลยี</span></button>
       </div>
     </div>
-    <div class="level-label">📘 <span class="en-text" lang="en">Unit 1: AI Explorers</span><span class="th-text" lang="th">หน่วยที่ 1: นักสำรวจ AI</span></div>
+    <div class="level-label">📘 <span class="en-text" lang="en">Unit 1: AI Explorers</span><span class="th-text" lang="th">บทที่ 1</span></div>
     <div class="lessons-grid" id="lessons-grid"></div>
 
-    <div class="level-label level-label-soon">📗 <span class="en-text" lang="en">Unit 2</span><span class="th-text" lang="th">หน่วยที่ 2</span></div>
+    <div class="level-label level-label-soon">📗 <span class="en-text" lang="en">Unit 2</span><span class="th-text" lang="th">บทที่ 2</span></div>
     <p class="lessons-more-soon">
       <span class="en-text" lang="en"><strong>More lessons are on the way.</strong> We are writing the next unit now. Everything we publish stays free, in both English and Thai.</span>
       <span class="th-text" lang="th"><strong>บทเรียนเพิ่มเติมกำลังจะมา</strong> เรากำลังเขียนหน่วยการเรียนรู้ถัดไป ทุกอย่างที่เราเผยแพร่จะใช้งานได้ฟรีเสมอ ทั้งภาษาอังกฤษและภาษาไทย</span>
@@ -342,6 +343,96 @@
         <h3><span class="en-text" lang="en">Have any feedback for us? Send us a message!</span><span class="th-text" lang="th">มีข้อเสนอแนะถึงเราไหม? ส่งข้อความหาเราได้เลย!</span></h3>
         <iframe class="contact-form-embed" loading="lazy" data-src="https://docs.google.com/forms/d/e/1FAIpQLSesEJTAyB0HQsGwmhgrT0paQLnWjk7jJuX8EAMWOanGKbAZxw/viewform?embedded=true" title="Contact form">Loading…</iframe>
       </div>
+    </div>
+  </div>
+
+  <footer>
+    <span class="footer-tagline en-text" lang="en">Made for teachers everywhere. <span>AI Literacy Toolkit</span> is always free to use.</span>
+    <span class="footer-tagline th-text" lang="th">สร้างขึ้นเพื่อครูทุกคน <span>คู่มือการเรียนรู้ AI</span> ใช้งานฟรีเสมอ</span>
+    <div class="footer-brand">
+      <img src="../assets/logo-youth-of-change-footer.png" alt="Youth of Change logo" loading="lazy" decoding="async" width="160" height="160" />
+      <span class="en-text" lang="en">Made by Youth of Change</span>
+      <span class="th-text" lang="th">สร้างสรรค์โดย Youth of Change</span>
+    </div>
+    <div class="footer-links">
+      <button type="button" class="footer-link" onclick="showPage('curriculum')"><span class="en-text" lang="en">Curriculum alignment</span><span class="th-text" lang="th">ความสอดคล้องกับหลักสูตร</span></button>
+      <button type="button" class="footer-link" onclick="showPage('privacy')"><span class="en-text" lang="en">Privacy Policy</span><span class="th-text" lang="th">นโยบายความเป็นส่วนตัว</span></button>
+      <a class="footer-link" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener"><span class="en-text" lang="en">Lessons licensed CC BY-NC 4.0</span><span class="th-text" lang="th">บทเรียนเผยแพร่ภายใต้สัญญาอนุญาต CC BY-NC 4.0</span></a>
+    </div>
+  </footer>
+</div>
+
+<!-- QUICK START PAGE -->
+<div id="page-start" class="page">
+  <div class="page-hero">
+    <div class="eyebrow"><span class="en-text" lang="en">Quick Start</span><span class="th-text" lang="th">เริ่มต้นใช้งาน</span></div>
+    <h1 class="section-title"><span class="en-text" lang="en">Teach your first lesson</span><span class="th-text" lang="th">สอนบทเรียนแรกของคุณ</span></h1>
+    <p class="section-sub">
+      <span class="en-text" lang="en">Five steps, about fifteen minutes of preparation, and you are ready for a full class period.</span>
+      <span class="th-text" lang="th">ห้าขั้นตอน ใช้เวลาเตรียมประมาณสิบห้านาที แล้วคุณก็พร้อมสอนได้เต็มคาบ</span>
+    </p>
+  </div>
+
+  <div class="simple-page">
+    <ol class="quickstart-steps">
+
+      <li class="quickstart-step">
+        <h2><span class="en-text" lang="en">Choose your classroom setup</span><span class="th-text" lang="th">เลือกรูปแบบห้องเรียนของคุณ</span></h2>
+        <p class="en-text" lang="en">At the top of the <button type="button" class="inline-link" onclick="showPage('learn')">lesson list</button> there is a toggle: <strong>No Technology</strong> or <strong>Technology</strong>. Pick the one that matches the room you actually teach in. Every lesson's materials list and main activity change to match, so you never read past instructions for equipment you do not have.</p>
+        <p class="th-text" lang="th">ด้านบนของ<button type="button" class="inline-link" onclick="showPage('learn')">รายการบทเรียน</button>มีปุ่มสลับระหว่าง <strong>ไม่ใช้เทคโนโลยี</strong> และ <strong>ใช้เทคโนโลยี</strong> เลือกแบบที่ตรงกับห้องเรียนจริงของคุณ อุปกรณ์และกิจกรรมหลักของทุกบทเรียนจะเปลี่ยนตาม คุณจึงไม่ต้องอ่านผ่านคำแนะนำสำหรับอุปกรณ์ที่คุณไม่มี</p>
+        <p class="quickstart-aside en-text" lang="en">The choice is remembered, so it is still set the next time you open the site.</p>
+        <p class="quickstart-aside th-text" lang="th">ระบบจะจดจำตัวเลือกนี้ไว้ ครั้งต่อไปที่คุณเปิดเว็บไซต์ก็ยังคงเป็นค่าเดิม</p>
+      </li>
+
+      <li class="quickstart-step">
+        <h2><span class="en-text" lang="en">Open Lesson 1</span><span class="th-text" lang="th">เปิดบทเรียนที่ 1</span></h2>
+        <p class="en-text" lang="en">Start with <button type="button" class="inline-link" onclick="openLesson('what-is-ai')">What Is AI?</button> even if your students already use AI tools. It sets up the vocabulary the other four lessons rely on, and it deliberately leaves one question open for Lesson 3 to answer.</p>
+        <p class="th-text" lang="th">เริ่มที่<button type="button" class="inline-link" onclick="openLesson('what-is-ai')">บทเรียน AI คืออะไร?</button> แม้ว่านักเรียนของคุณจะใช้เครื่องมือ AI อยู่แล้วก็ตาม บทเรียนนี้ปูคำศัพท์ที่อีกสี่บทเรียนต้องใช้ และตั้งใจเปิดคำถามหนึ่งข้อค้างไว้ให้บทเรียนที่ 3 มาตอบ</p>
+        <p class="quickstart-aside en-text" lang="en">Only have one period? Lessons 1 and 3 both work on their own.</p>
+        <p class="quickstart-aside th-text" lang="th">มีเวลาเพียงคาบเดียว? บทเรียนที่ 1 และ 3 สอนเดี่ยว ๆ ได้ทั้งคู่</p>
+      </li>
+
+      <li class="quickstart-step">
+        <h2><span class="en-text" lang="en">Read <em>Before You Begin</em> and prepare that one thing</span><span class="th-text" lang="th">อ่านหัวข้อ <em>ก่อนเริ่มบทเรียน</em> แล้วเตรียมสิ่งนั้น</span></h2>
+        <p class="en-text" lang="en">This is the only real preparation. Every lesson opens with a short note saying exactly what to print or set up beforehand, and it is usually picture cards or a set of photo pairs. Do that one thing and the rest of the lesson runs straight from the page in front of you.</p>
+        <p class="th-text" lang="th">นี่คือการเตรียมตัวเพียงอย่างเดียวที่ต้องทำจริง ๆ ทุกบทเรียนเริ่มด้วยหมายเหตุสั้น ๆ ที่บอกชัดเจนว่าต้องพิมพ์หรือเตรียมอะไรล่วงหน้า ซึ่งส่วนใหญ่เป็นการ์ดรูปภาพหรือชุดภาพคู่เปรียบเทียบ ทำสิ่งนั้นอย่างเดียว ส่วนที่เหลือใช้จากหน้าเว็บตรงหน้าคุณได้เลย</p>
+      </li>
+
+      <li class="quickstart-step">
+        <h2><span class="en-text" lang="en">Get the slides</span><span class="th-text" lang="th">ดาวน์โหลดสไลด์</span></h2>
+        <p class="en-text" lang="en">Each lesson has a ready-made deck you can preview on the lesson page and download as a <strong>PDF</strong> or a <strong>PowerPoint file</strong>. Take the PDF if you want to project or print it as it is; take the PowerPoint if you want to edit it first. Teaching without a projector? Skip this step, the No Technology version does not need it.</p>
+        <p class="th-text" lang="th">แต่ละบทเรียนมีสไลด์สำเร็จรูปที่ดูตัวอย่างได้บนหน้าบทเรียน และดาวน์โหลดได้ทั้งแบบ <strong>PDF</strong> และ <strong>PowerPoint</strong> เลือก PDF หากต้องการฉายหรือพิมพ์ตามที่เป็น เลือก PowerPoint หากต้องการแก้ไขก่อน หากสอนโดยไม่มีโปรเจกเตอร์ ข้ามขั้นตอนนี้ได้ เพราะเวอร์ชันไม่ใช้เทคโนโลยีไม่จำเป็นต้องใช้</p>
+      </li>
+
+      <li class="quickstart-step">
+        <h2><span class="en-text" lang="en">Teach it, then tell us how it went</span><span class="th-text" lang="th">สอนจริง แล้วเล่าให้เราฟัง</span></h2>
+        <p class="en-text" lang="en">The lesson page is written to be read while you teach: objective first, then materials, the activity step by step, and reflection questions to close on. Afterwards, the <button type="button" class="inline-link" onclick="showPage('contact')">contact page</button> takes a couple of minutes to fill in. Feedback from real classrooms is what we use to decide what to fix next.</p>
+        <p class="th-text" lang="th">หน้าบทเรียนเขียนขึ้นให้อ่านไปสอนไปได้ เริ่มจากจุดประสงค์ ตามด้วยอุปกรณ์ กิจกรรมทีละขั้น และคำถามสะท้อนคิดสำหรับปิดท้าย หลังสอนเสร็จ <button type="button" class="inline-link" onclick="showPage('contact')">หน้าติดต่อเรา</button> ใช้เวลากรอกเพียงไม่กี่นาที ความคิดเห็นจากห้องเรียนจริงคือสิ่งที่เราใช้ตัดสินใจว่าจะปรับปรุงอะไรต่อไป</p>
+      </li>
+
+    </ol>
+
+    <h3><span class="en-text" lang="en">What you do not need</span><span class="th-text" lang="th">สิ่งที่คุณไม่จำเป็นต้องมี</span></h3>
+    <ul>
+      <li class="en-text" lang="en">Any background in AI or computer science. The explanations you need are written out for you.</li>
+      <li class="th-text" lang="th">พื้นฐานด้าน AI หรือวิทยาการคอมพิวเตอร์ คำอธิบายที่คุณต้องใช้เขียนไว้ให้แล้ว</li>
+      <li class="en-text" lang="en">Computers or internet in the classroom. One activity in Lesson 2 assumes devices, and that lesson explains how to run it as a discussion instead.</li>
+      <li class="th-text" lang="th">คอมพิวเตอร์หรืออินเทอร์เน็ตในห้องเรียน มีกิจกรรมหนึ่งในบทเรียนที่ 2 ที่ต้องใช้อุปกรณ์ และบทเรียนนั้นอธิบายวิธีปรับเป็นการอภิปรายแทนไว้แล้ว</li>
+      <li class="en-text" lang="en">An account. Nothing here asks you or your students to sign in, and there is nothing to buy.</li>
+      <li class="th-text" lang="th">บัญชีผู้ใช้ ไม่มีส่วนใดที่ให้คุณหรือนักเรียนเข้าสู่ระบบ และไม่มีอะไรต้องซื้อ</li>
+    </ul>
+
+    <h3><span class="en-text" lang="en">Before you go</span><span class="th-text" lang="th">ก่อนเริ่มสอน</span></h3>
+    <p class="en-text" lang="en">If someone at your school has to approve the unit first, the <button type="button" class="inline-link" onclick="showPage('curriculum')">curriculum alignment page</button> sets out the learning outcomes and assessment evidence for all five lessons. Anything else is probably answered on the <button type="button" class="inline-link" onclick="showPage('faq')">FAQ page</button>.</p>
+    <p class="th-text" lang="th">หากต้องให้ผู้บริหารในโรงเรียนอนุมัติหน่วยการเรียนรู้ก่อน <button type="button" class="inline-link" onclick="showPage('curriculum')">หน้าความสอดคล้องกับหลักสูตร</button>ได้ระบุผลการเรียนรู้และหลักฐานการประเมินของทั้งห้าบทเรียนไว้แล้ว ส่วนคำถามอื่น ๆ น่าจะมีคำตอบอยู่ใน<button type="button" class="inline-link" onclick="showPage('faq')">หน้าคำถามที่พบบ่อย</button></p>
+
+    <div class="quickstart-cta">
+      <button type="button" class="btn btn-yellow" onclick="openLesson('what-is-ai')">
+        <span class="en-text" lang="en">Open Lesson 1 ✨</span><span class="th-text" lang="th">เปิดบทเรียนที่ 1 ✨</span>
+      </button>
+      <button type="button" class="btn btn-dark" onclick="showPage('learn')">
+        <span class="en-text" lang="en">See all 5 lessons →</span><span class="th-text" lang="th">ดูบทเรียนทั้ง 5 บท →</span>
+      </button>
     </div>
   </div>
 

@@ -69,8 +69,8 @@ function changeLang(lang) {
 // The site sits at a domain root locally and in a subdirectory on GitHub Pages,
 // so the base cannot be hardcoded. Each generated page states its own route in
 // body[data-route]; the base is whatever precedes it in the address.
-const PAGE_ROUTES = { home: '/', learn: '/lessons/', about: '/about/', contact: '/contact/', faq: '/faq/', curriculum: '/curriculum/', privacy: '/privacy/' };
-const ROUTE_PAGES = { '/': 'home', '/lessons/': 'learn', '/about/': 'about', '/contact/': 'contact', '/faq/': 'faq', '/curriculum/': 'curriculum', '/privacy/': 'privacy' };
+const PAGE_ROUTES = { home: '/', start: '/start/', learn: '/lessons/', about: '/about/', contact: '/contact/', faq: '/faq/', curriculum: '/curriculum/', privacy: '/privacy/' };
+const ROUTE_PAGES = { '/': 'home', '/start/': 'start', '/lessons/': 'learn', '/about/': 'about', '/contact/': 'contact', '/faq/': 'faq', '/curriculum/': 'curriculum', '/privacy/': 'privacy' };
 const LESSON_ROUTE = '/lessons/';
 
 const BASE = (() => {
