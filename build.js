@@ -52,7 +52,7 @@ const PAGES = [
     title: 'Questions teachers ask: AI Literacy Toolkit',
     desc: 'Do you need to know about AI to teach this? How long is a lesson? Do you need computers? Answers for teachers running the toolkit for the first time.' },
   { route: '/curriculum/', page: 'curriculum',
-    title: 'Curriculum alignment: AI Literacy Toolkit',
+    title: 'Curriculum Alignment: AI Literacy Toolkit',
     desc: 'Learning outcomes, skills and assessment evidence for each lesson, mapped to Standard O3.1 of the Basic Education Core Curriculum B.E. 2551.' },
   { route: '/about/', page: 'about',
     title: 'About: AI Literacy Toolkit',

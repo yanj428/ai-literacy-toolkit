@@ -348,7 +348,16 @@ a.footer-link { display: inline-block; }
 }
 
 .hero-v3-btns { display: flex; justify-content: center; gap: 1.2rem; margin-top: 2rem; flex-wrap: wrap; position: relative; z-index: 1; }
-.hero-v3-btns .btn { font-size: 1.1rem; padding: 0.95rem 2.1rem; }
+/* One button carries the whole hero now, so it is sized to be the thing you
+   reach for rather than one option among two. */
+.hero-v3-btns .btn {
+  font-size: 1.45rem; padding: 1.25rem 3.4rem; border-radius: 16px;
+  box-shadow: 6px 6px 0 var(--indigo);
+}
+.hero-v3-btns .btn:hover { transform: translate(3px, 3px); box-shadow: 3px 3px 0 var(--indigo); }
+@media (max-width: 600px) {
+  .hero-v3-btns .btn { font-size: 1.2rem; padding: 1.05rem 2.2rem; width: 100%; justify-content: center; }
+}
 
 @media (max-width: 860px) {
   .hero-illustration { height: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; padding-top: 1rem; }
