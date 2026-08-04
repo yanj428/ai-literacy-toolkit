@@ -9,7 +9,7 @@
 // styles or scripts does not need a bump: those are fetched network-first, so a
 // deploy takes effect on the next visit on its own. Old caches are deleted on
 // activate, so a stale version never lingers.
-const CACHE_VERSION = 'v3';
+const CACHE_VERSION = 'v4';
 const SHELL_CACHE = `toolkit-shell-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `toolkit-runtime-${CACHE_VERSION}`;
 
@@ -18,9 +18,25 @@ const RUNTIME_CACHE = `toolkit-runtime-${CACHE_VERSION}`;
 const SHELL = [
   './',
   'index.html',
+
+  // Every route is its own page now, so each one has to be here or a visit
+  // to /faq/ with no connection would fall back to the home page's HTML.
+  'lessons/',
+  'faq/',
+  'curriculum/',
+  'about/',
+  'contact/',
+  'privacy/',
+  'lessons/what-is-ai/',
+  'lessons/how-ai-learns/',
+  'lessons/ai-mistakes/',
+  'lessons/ai-responsibly/',
+  'lessons/ai-project/',
+
   'css/styles.css',
   'js/lessons.js',
   'js/app.js',
+  'js/lesson-view.js',
   'site.webmanifest',
   'assets/hero-background.jpg',
   'assets/hero-mascot.png',

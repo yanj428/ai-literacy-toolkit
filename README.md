@@ -31,28 +31,43 @@ differentiation notes, plus a downloadable slide deck.
 index.html          markup for every page
 css/styles.css      all styles
 js/lessons.js       lesson content, EN + TH, data only, no DOM access
+js/lesson-view.js   the lesson markup, shared by the browser and build.js
 js/app.js           routing, language/mode switching, rendering
+build.js            writes a page per route
+lessons/, faq/ …    generated; edit index.html, not these
 assets/             artwork, icons, logos
 slides/             the five .pptx decks
 ```
 
-It is a static site with no build step and no dependencies. Open `index.html`
-directly, or serve the folder:
+It has one build step and no dependencies. `index.html` is the source and is a
+working site on its own; `build.js` writes a real HTML file for every route, so
+that `/lessons/what-is-ai/` is a page a server returns and a crawler reads,
+rather than a shape the browser only takes on after JavaScript runs. Run it
+after editing `index.html`, `js/lessons.js` or `js/lesson-view.js`:
+
+```bash
+node build.js
+```
+
+The generated pages are committed, because GitHub Pages serves the repository
+as it is. Then serve the folder:
 
 ```bash
 python3 -m http.server 8787
 ```
 
-`404.html` catches anything else. GitHub Pages renders it at whatever URL was
+`404.html` catches typos and stale links. GitHub Pages renders it at whatever URL was
 requested, so its styles are inline and its links are absolute: relative ones
 would resolve against the missing path and fail in turn. If the address
 contains a known route, such as a link written against the old path-based
 routing, it is turned into the hash equivalent and the visitor lands where they
 were going instead of on an error.
 
-Routes live in the URL hash (`#/lessons`, `#/lessons/what-is-ai`) so the site
-works from any base path: a domain root, a GitHub Pages subdirectory, or
-`file://`, with no server configuration.
+Routes are real paths. Each generated page records its own route in
+`body[data-route]`, and the script derives the base from whatever precedes it in
+the address, so the site still works from a domain root or a GitHub Pages
+subdirectory without being told which. Links written when routes lived in the
+hash are rewritten to paths on load.
 
 ## Being found
 

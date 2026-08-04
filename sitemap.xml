@@ -1,51 +1,130 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Routes on this site live in the URL hash (#/lessons), and search engines drop
-  the fragment: every route resolves to the same document, so listing them here
-  would only repeat one URL five times. The site is therefore one page.
+  Every route is a real page written by build.js, so each one is listed here and
+  can be indexed on its own. That was the point of pre-rendering: before it, a
+  search engine saw a single document and the lessons were invisible.
 
-  The slide decks are the exception worth listing. Search engines do index PDFs,
-  so these are the only lesson-level URLs that can actually be found in a
-  search, which matters for a teacher looking for AI literacy material in Thai.
+  The slide decks are listed too, since search engines index PDFs.
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
     <loc>https://yanj428.github.io/ai-literacy-toolkit/</loc>
-    <lastmod>2026-08-03</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://yanj428.github.io/ai-literacy-toolkit/lessons/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://yanj428.github.io/ai-literacy-toolkit/lessons/what-is-ai/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://yanj428.github.io/ai-literacy-toolkit/lessons/how-ai-learns/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://yanj428.github.io/ai-literacy-toolkit/lessons/ai-mistakes/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://yanj428.github.io/ai-literacy-toolkit/lessons/ai-responsibly/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://yanj428.github.io/ai-literacy-toolkit/lessons/ai-project/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://yanj428.github.io/ai-literacy-toolkit/faq/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://yanj428.github.io/ai-literacy-toolkit/curriculum/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://yanj428.github.io/ai-literacy-toolkit/about/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://yanj428.github.io/ai-literacy-toolkit/contact/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://yanj428.github.io/ai-literacy-toolkit/privacy/</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
 
   <url>
     <loc>https://yanj428.github.io/ai-literacy-toolkit/slides/lesson-1-what-is-ai.pdf</loc>
     <lastmod>2026-08-03</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.5</priority>
   </url>
+
   <url>
     <loc>https://yanj428.github.io/ai-literacy-toolkit/slides/lesson-2-how-ai-learns.pdf</loc>
     <lastmod>2026-08-03</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.5</priority>
   </url>
+
   <url>
     <loc>https://yanj428.github.io/ai-literacy-toolkit/slides/lesson-3-ai-mistakes.pdf</loc>
     <lastmod>2026-08-03</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.5</priority>
   </url>
+
   <url>
     <loc>https://yanj428.github.io/ai-literacy-toolkit/slides/lesson-4-ai-responsibly.pdf</loc>
     <lastmod>2026-08-03</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.5</priority>
   </url>
+
   <url>
     <loc>https://yanj428.github.io/ai-literacy-toolkit/slides/lesson-5-ai-project.pdf</loc>
     <lastmod>2026-08-03</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.5</priority>
   </url>
 
 </urlset>

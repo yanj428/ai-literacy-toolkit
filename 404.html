@@ -52,7 +52,7 @@
     <p id="requested" hidden>You asked for <span class="path" id="requested-path"></span>.</p>
     <div class="links">
       <a class="btn" id="home" href="/">Go to the toolkit <span lang="th">ไปที่คู่มือการเรียนรู้</span></a>
-      <a class="btn alt" id="lessons" href="/#/lessons">Browse lessons <span lang="th">ดูบทเรียน</span></a>
+      <a class="btn alt" id="lessons" href="/lessons/">Browse lessons <span lang="th">ดูบทเรียน</span></a>
     </div>
   </div>
 
@@ -88,11 +88,14 @@
   }
 
   document.getElementById('home').href = root;
-  document.getElementById('lessons').href = root + '#/lessons';
+  document.getElementById('lessons').href = root + 'lessons/';
 
   if (route) {
-    // A recognisable old-style link: send them where they were going.
-    location.replace(root + '#' + route);
+    // The path contains a route that does exist, so this is a near miss: a
+    // stale lesson id, or a typo after a real segment. Send them to that
+    // section rather than to an error.
+    var section = '/' + route.split('/').filter(Boolean)[0] + '/';
+    location.replace(root + section.slice(1));
     return;
   }
 
