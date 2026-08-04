@@ -6,10 +6,14 @@
 
   The slide decks are listed too, since search engines index PDFs.
 -->
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
   <url>
     <loc>https://yanj428.github.io/ai-literacy-toolkit/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yanj428.github.io/ai-literacy-toolkit/"/>
+    <xhtml:link rel="alternate" hreflang="th" href="https://yanj428.github.io/ai-literacy-toolkit/?lang=th"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yanj428.github.io/ai-literacy-toolkit/"/>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
@@ -17,6 +21,9 @@
 
   <url>
     <loc>https://yanj428.github.io/ai-literacy-toolkit/lessons/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yanj428.github.io/ai-literacy-toolkit/lessons/"/>
+    <xhtml:link rel="alternate" hreflang="th" href="https://yanj428.github.io/ai-literacy-toolkit/lessons/?lang=th"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yanj428.github.io/ai-literacy-toolkit/lessons/"/>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
@@ -24,6 +31,9 @@
 
   <url>
     <loc>https://yanj428.github.io/ai-literacy-toolkit/lessons/what-is-ai/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yanj428.github.io/ai-literacy-toolkit/lessons/what-is-ai/"/>
+    <xhtml:link rel="alternate" hreflang="th" href="https://yanj428.github.io/ai-literacy-toolkit/lessons/what-is-ai/?lang=th"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yanj428.github.io/ai-literacy-toolkit/lessons/what-is-ai/"/>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -31,6 +41,9 @@
 
   <url>
     <loc>https://yanj428.github.io/ai-literacy-toolkit/lessons/how-ai-learns/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yanj428.github.io/ai-literacy-toolkit/lessons/how-ai-learns/"/>
+    <xhtml:link rel="alternate" hreflang="th" href="https://yanj428.github.io/ai-literacy-toolkit/lessons/how-ai-learns/?lang=th"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yanj428.github.io/ai-literacy-toolkit/lessons/how-ai-learns/"/>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -38,6 +51,9 @@
 
   <url>
     <loc>https://yanj428.github.io/ai-literacy-toolkit/lessons/ai-mistakes/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yanj428.github.io/ai-literacy-toolkit/lessons/ai-mistakes/"/>
+    <xhtml:link rel="alternate" hreflang="th" href="https://yanj428.github.io/ai-literacy-toolkit/lessons/ai-mistakes/?lang=th"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yanj428.github.io/ai-literacy-toolkit/lessons/ai-mistakes/"/>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -45,6 +61,9 @@
 
   <url>
     <loc>https://yanj428.github.io/ai-literacy-toolkit/lessons/ai-responsibly/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yanj428.github.io/ai-literacy-toolkit/lessons/ai-responsibly/"/>
+    <xhtml:link rel="alternate" hreflang="th" href="https://yanj428.github.io/ai-literacy-toolkit/lessons/ai-responsibly/?lang=th"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yanj428.github.io/ai-literacy-toolkit/lessons/ai-responsibly/"/>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -52,6 +71,9 @@
 
   <url>
     <loc>https://yanj428.github.io/ai-literacy-toolkit/lessons/ai-project/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yanj428.github.io/ai-literacy-toolkit/lessons/ai-project/"/>
+    <xhtml:link rel="alternate" hreflang="th" href="https://yanj428.github.io/ai-literacy-toolkit/lessons/ai-project/?lang=th"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yanj428.github.io/ai-literacy-toolkit/lessons/ai-project/"/>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -59,6 +81,9 @@
 
   <url>
     <loc>https://yanj428.github.io/ai-literacy-toolkit/faq/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yanj428.github.io/ai-literacy-toolkit/faq/"/>
+    <xhtml:link rel="alternate" hreflang="th" href="https://yanj428.github.io/ai-literacy-toolkit/faq/?lang=th"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yanj428.github.io/ai-literacy-toolkit/faq/"/>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -66,6 +91,9 @@
 
   <url>
     <loc>https://yanj428.github.io/ai-literacy-toolkit/curriculum/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yanj428.github.io/ai-literacy-toolkit/curriculum/"/>
+    <xhtml:link rel="alternate" hreflang="th" href="https://yanj428.github.io/ai-literacy-toolkit/curriculum/?lang=th"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yanj428.github.io/ai-literacy-toolkit/curriculum/"/>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -73,6 +101,9 @@
 
   <url>
     <loc>https://yanj428.github.io/ai-literacy-toolkit/about/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yanj428.github.io/ai-literacy-toolkit/about/"/>
+    <xhtml:link rel="alternate" hreflang="th" href="https://yanj428.github.io/ai-literacy-toolkit/about/?lang=th"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yanj428.github.io/ai-literacy-toolkit/about/"/>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -80,6 +111,9 @@
 
   <url>
     <loc>https://yanj428.github.io/ai-literacy-toolkit/contact/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yanj428.github.io/ai-literacy-toolkit/contact/"/>
+    <xhtml:link rel="alternate" hreflang="th" href="https://yanj428.github.io/ai-literacy-toolkit/contact/?lang=th"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yanj428.github.io/ai-literacy-toolkit/contact/"/>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -87,6 +121,9 @@
 
   <url>
     <loc>https://yanj428.github.io/ai-literacy-toolkit/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yanj428.github.io/ai-literacy-toolkit/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="th" href="https://yanj428.github.io/ai-literacy-toolkit/privacy/?lang=th"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yanj428.github.io/ai-literacy-toolkit/privacy/"/>
     <lastmod>2026-08-04</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>

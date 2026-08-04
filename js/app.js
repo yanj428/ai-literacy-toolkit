@@ -9,6 +9,31 @@ const PREFS = {
   mode: () => (localStorage.getItem('mode') === 'tech' ? 'tech' : 'notech'),
 };
 
+// The language also lives in the address, so a link can carry it. Without this
+// a Thai teacher sharing a lesson sent a link that opened in English for
+// anyone whose own saved preference was English, which is most people.
+//
+// English is the default and stays out of the address, keeping the canonical
+// URL clean; Thai is explicit. A ?lang in the address wins over the saved
+// preference, because someone who follows a Thai link is asking for Thai.
+function langFromUrl() {
+  const v = new URLSearchParams(location.search).get('lang');
+  return v === 'th' || v === 'en' ? v : null;
+}
+
+// Keeps the address showing the language actually on screen, so whatever the
+// reader copies out of the address bar opens the way it looks to them.
+function syncLangParam(lang) {
+  const params = new URLSearchParams(location.search);
+  if (lang === 'th') params.set('lang', 'th');
+  else params.delete('lang');
+  const q = params.toString();
+  const url = location.pathname + (q ? '?' + q : '') + location.hash;
+  if (url !== location.pathname + location.search + location.hash) {
+    history.replaceState(null, '', url);
+  }
+}
+
 let currentLang = 'en';
 function setLang(lang) {
   currentLang = lang;
@@ -32,6 +57,7 @@ function setLang(lang) {
 function changeLang(lang) {
   localStorage.setItem('lang', lang);
   setLang(lang);
+  syncLangParam(lang);
 }
 
 // Routes are real paths, and every one of them exists as a static file that
@@ -372,8 +398,13 @@ function openLesson(id, updateUrl = true) {
 
 // setLang and setMode each render the cards and sync their own toggles, so
 // restoring the saved preferences is all the bootstrapping the UI needs.
-setLang(PREFS.lang());
+// A language named in the address also becomes the saved preference: following
+// a Thai link once should not leave the rest of the site in English.
+const _urlLang = langFromUrl();
+if (_urlLang) localStorage.setItem('lang', _urlLang);
+setLang(_urlLang || PREFS.lang());
 setMode(PREFS.mode());
+syncLangParam(currentLang);
 syncNavHeight();
 // Links written while routes lived in the hash are still out there, in chat
 // messages and bookmarks. Turn #/lessons into the real path once, before
@@ -387,11 +418,14 @@ routeToCurrentPath();
 _booted = true;
 
 // Offline support. Registered after the page is interactive so it never
-// competes with the first render, and with a relative URL so its scope follows
-// whatever directory the site is served from.
+// competes with the first render. The URL goes through asset(): a bare 'sw.js'
+// is resolved against the page, so on /lessons/what-is-ai/ it asked for a
+// worker that is not there and the registration quietly failed. Only someone
+// who arrived at the home page ever got an offline copy, and a shared link or
+// a search result lands on a deeper page.
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch(() => {
+    navigator.serviceWorker.register(asset('sw.js')).catch(() => {
       // A failed registration is not worth bothering anyone about: the site
       // works exactly as before, just without the offline copy.
     });
