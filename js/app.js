@@ -333,6 +333,23 @@ function slidesEmbed(pptxUrl, pdfUrl) {
   return `${viewer}<div class="lesson-download-row">${pdf}${pptx}</div>`;
 }
 
+function worksheetPlaceholder() {
+  return `<p class="lesson-extra-placeholder"><span class="en-text" lang="en">Printable worksheet coming soon.</span><span class="th-text" lang="th">ใบงานพิมพ์ได้กำลังจะมาเร็ว ๆ นี้</span></p>`;
+}
+
+// The worksheet is a single page, so it is embedded directly rather than
+// through a viewer: the browser's own PDF reader prints it correctly, which
+// is the whole point of the file.
+function worksheetEmbed(url) {
+  return `<iframe class="lesson-worksheet-embed" src="${url}#view=FitH" title="Worksheet">Loading…</iframe>
+    <div class="lesson-download-row">
+      <a class="lesson-download-btn" href="${url}" download>⬇ <span class="en-text" lang="en">Download Worksheet (PDF)</span><span class="th-text" lang="th">ดาวน์โหลดใบงาน (PDF)</span></a>
+      <a class="lesson-download-btn lesson-download-alt" href="${url}" target="_blank" rel="noopener">🖨 <span class="en-text" lang="en">Open to print</span><span class="th-text" lang="th">เปิดเพื่อพิมพ์</span></a>
+    </div>
+    <p class="lesson-extra-note en-text" lang="en">One page, English only for now. Print one per student.</p>
+    <p class="lesson-extra-note th-text" lang="th">หนึ่งหน้า ขณะนี้มีเฉพาะภาษาอังกฤษ พิมพ์คนละหนึ่งแผ่น</p>`;
+}
+
 async function fileExists(url) {
   if (_slidesExist.get(url)) return true;
   let ok = false;
@@ -368,6 +385,19 @@ async function renderSlides(el, lesson) {
   el.innerHTML = slidesEmbed(hasPptx ? pptxUrl : '', hasPdf ? pdfUrl : '');
 }
 
+// Same shape as renderSlides: placeholder first, embed only once the file is
+// confirmed, so a lesson without a worksheet still reads correctly.
+async function renderWorksheet(el, lesson) {
+  el.innerHTML = worksheetPlaceholder();
+  if (!lesson.worksheetFile) return;
+  if (location.protocol !== 'http:' && location.protocol !== 'https:') return;
+
+  const url = new URL(asset(lesson.worksheetFile), location.origin).href;
+  if (!(await fileExists(url))) return;
+  if (window.__openLessonId !== lesson.id) return;
+  el.innerHTML = worksheetEmbed(url);
+}
+
 // Returns false if `id` matches no lesson, so callers can fall back.
 function openLesson(id, updateUrl = true) {
   const l = lessons.find(x => x.id === id);
@@ -378,6 +408,7 @@ function openLesson(id, updateUrl = true) {
   const html = lessonDetailHtml(l, i, t, currentMode);
   document.getElementById('lesson-page-content').innerHTML = html;
   renderSlides(document.getElementById('lesson-slides-content'), l);
+  renderWorksheet(document.getElementById('lesson-worksheet-content'), l);
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-lesson').classList.add('active');
   document.querySelectorAll(NAV_PAGE_BUTTONS).forEach(b => {

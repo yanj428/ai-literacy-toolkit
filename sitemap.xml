@@ -174,4 +174,39 @@
     <priority>0.5</priority>
   </url>
 
+  <url>
+    <loc>https://yanj428.github.io/ai-literacy-toolkit/worksheets/lesson-1-what-is-ai.pdf</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://yanj428.github.io/ai-literacy-toolkit/worksheets/lesson-2-how-ai-learns.pdf</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://yanj428.github.io/ai-literacy-toolkit/worksheets/lesson-3-ai-mistakes.pdf</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://yanj428.github.io/ai-literacy-toolkit/worksheets/lesson-4-ai-responsibly.pdf</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://yanj428.github.io/ai-literacy-toolkit/worksheets/lesson-5-ai-project.pdf</loc>
+    <lastmod>2026-08-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
 </urlset>
