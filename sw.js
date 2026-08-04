@@ -9,7 +9,7 @@
 // styles or scripts does not need a bump: those are fetched network-first, so a
 // deploy takes effect on the next visit on its own. Old caches are deleted on
 // activate, so a stale version never lingers.
-const CACHE_VERSION = 'v4';
+const CACHE_VERSION = 'v5';
 const SHELL_CACHE = `toolkit-shell-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `toolkit-runtime-${CACHE_VERSION}`;
 
@@ -45,6 +45,7 @@ const SHELL = [
   'assets/icon-document.png',
   'assets/icon-lightbulb.png',
   'assets/icon-magnifier.png',
+  'assets/favicon-32.png',
   'assets/logo-youth-of-change.png',
   'assets/logo-youth-of-change-footer.png',
   'assets/lessons/lesson-1-what-is-ai-en.jpg',
