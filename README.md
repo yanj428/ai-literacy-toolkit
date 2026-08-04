@@ -54,6 +54,20 @@ Routes live in the URL hash (`#/lessons`, `#/lessons/what-is-ai`) so the site
 works from any base path: a domain root, a GitHub Pages subdirectory, or
 `file://`, with no server configuration.
 
+## Being found
+
+`sitemap.xml` lists the site and the five lesson PDFs. It does not list the
+routes: search engines drop the fragment, so `#/lessons` and `#/faq` all resolve
+to the same document and listing them would repeat one URL. The PDFs are the
+exception, because search engines do index PDFs, which makes them the only
+lesson-level URLs a teacher can actually find in a search.
+
+`robots.txt` is here for completeness, but crawlers only read robots.txt at the
+root of a host: while this is a GitHub Pages project site, the file that counts
+is at `yanj428.github.io/robots.txt`, which this repository does not control.
+Submit the sitemap through Google Search Console instead. The file becomes
+effective as written if the site ever moves to its own domain.
+
 ## Offline use
 
 A service worker (`sw.js`) caches the site on first visit, so once a teacher has

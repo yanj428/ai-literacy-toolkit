@@ -1,0 +1,16 @@
+# AI Literacy Toolkit
+# Free AI literacy lesson plans for teachers, in English and Thai.
+# https://github.com/yanj428/ai-literacy-toolkit
+
+# Everything here is meant to be found and used.
+User-agent: *
+Allow: /
+
+Sitemap: https://yanj428.github.io/ai-literacy-toolkit/sitemap.xml
+
+# Note for whoever maintains this: crawlers only read robots.txt at the root of
+# a host, so at https://yanj428.github.io/robots.txt, not at this path. This
+# file therefore has no effect while the site is a GitHub Pages project site,
+# and is here so it is already correct if the site moves to its own domain.
+# Until then, submit the sitemap URL above through Google Search Console
+# instead, which does work for a project site.
