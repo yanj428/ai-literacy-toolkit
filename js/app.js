@@ -54,6 +54,13 @@ const BASE = (() => {
   return path.endsWith(route) ? path.slice(0, path.length - route.length + 1) : '/';
 })();
 
+// Relative URLs written into the page by the markup are rewritten by build.js
+// so they climb back out of /lessons/what-is-ai/. Ones written by this script
+// are not: the browser resolves them against the address bar, so a bare
+// "assets/..." on a lesson page asks for /lessons/what-is-ai/assets/... and
+// 404s. Anything this file injects has to be anchored to the site root.
+function asset(p) { return BASE + p.replace(/^\/+/, ''); }
+
 // Route for whatever address we are on now.
 function currentRoute() {
   let path = location.pathname;
@@ -229,7 +236,7 @@ function renderLessonCards() {
     const title = l.title[currentLang] || l.title.en;
     const label = cardLabel('lesson', i, title);
     if (l.image) {
-      const imgSrc = (currentLang === 'th' && l.imageTh) ? l.imageTh : l.image;
+      const imgSrc = asset((currentLang === 'th' && l.imageTh) ? l.imageTh : l.image);
       return `
     <button type="button" class="lesson-card lesson-card-photo" style="aspect-ratio:${l.imageRatio || 'auto'}" onclick="openLesson('${l.id}')" aria-label="${label}">
       <img class="lesson-photo-img" src="${imgSrc}" alt="" loading="lazy" decoding="async" />
@@ -324,7 +331,8 @@ async function renderSlides(el, lesson) {
   // network, so there is nothing to offer when opened from disk.
   if (location.protocol !== 'http:' && location.protocol !== 'https:') return;
 
-  const pptxUrl = new URL(lesson.slidesFile, document.baseURI).href;
+  // Absolute, because the Office viewer is handed this URL over the network.
+  const pptxUrl = new URL(asset(lesson.slidesFile), location.origin).href;
   const pdfUrl = pptxUrl.replace(/\.pptx$/, '.pdf');
   const [hasPptx, hasPdf] = await Promise.all([fileExists(pptxUrl), fileExists(pdfUrl)]);
 

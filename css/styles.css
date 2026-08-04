@@ -371,6 +371,15 @@ a.footer-link { display: inline-block; }
   display: flex; align-items: center; gap: 0.6rem;
 }
 .level-label:first-child { margin-top: 0; }
+/* Nothing under it yet, so it reads as a promise rather than a heading. */
+.level-label-soon { color: var(--muted); }
+
+.lessons-more-soon {
+  border: 2px dashed var(--border); border-radius: 16px;
+  padding: 1.4rem 1.6rem; margin: 0;
+  color: var(--muted); line-height: 1.7;
+}
+.lessons-more-soon strong { color: var(--indigo); }
 
 .lessons-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.8rem; }
 @media (max-width: 900px) { .lessons-grid { grid-template-columns: repeat(2, 1fr); } }
