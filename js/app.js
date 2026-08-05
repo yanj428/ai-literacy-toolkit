@@ -337,11 +337,19 @@ function worksheetPlaceholder() {
   return `<p class="lesson-extra-placeholder"><span class="en-text" lang="en">Printable worksheet coming soon.</span><span class="th-text" lang="th">ใบงานพิมพ์ได้กำลังจะมาเร็ว ๆ นี้</span></p>`;
 }
 
-// The worksheet is a single page, so it is embedded directly rather than
-// through a viewer: the browser's own PDF reader prints it correctly, which
-// is the whole point of the file.
-function worksheetEmbed(url) {
-  return `<iframe class="lesson-worksheet-embed" src="${url}#view=FitH" title="Worksheet">Loading…</iframe>
+// The worksheet is one page, so what a teacher wants first is simply to see
+// it. An image of the page shows that in full at a glance; embedding the PDF
+// instead wrapped it in the browser's reader chrome - toolbar, page thumbnail
+// rail, zoom controls - which is a lot of furniture around a single sheet.
+// The PDF is still what they download and print, from the buttons below.
+function worksheetEmbed(url, preview) {
+  const alt = currentLang === 'th' ? 'ตัวอย่างใบงาน' : 'Worksheet preview';
+  const img = preview
+    ? `<a class="lesson-worksheet-preview" href="${url}" target="_blank" rel="noopener" title="${alt}">
+        <img src="${asset(preview)}" alt="${alt}" loading="lazy" decoding="async" width="1200" height="1553">
+      </a>`
+    : '';
+  return `${img}
     <div class="lesson-download-row">
       <a class="lesson-download-btn" href="${url}" download>⬇ <span class="en-text" lang="en">Download Worksheet (PDF)</span><span class="th-text" lang="th">ดาวน์โหลดใบงาน (PDF)</span></a>
       <a class="lesson-download-btn lesson-download-alt" href="${url}" target="_blank" rel="noopener">🖨 <span class="en-text" lang="en">Open to print</span><span class="th-text" lang="th">เปิดเพื่อพิมพ์</span></a>
@@ -395,7 +403,7 @@ async function renderWorksheet(el, lesson) {
   const url = new URL(asset(lesson.worksheetFile), location.origin).href;
   if (!(await fileExists(url))) return;
   if (window.__openLessonId !== lesson.id) return;
-  el.innerHTML = worksheetEmbed(url);
+  el.innerHTML = worksheetEmbed(url, lesson.worksheetPreview);
 }
 
 // Returns false if `id` matches no lesson, so callers can fall back.
