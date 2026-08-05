@@ -153,7 +153,7 @@ a.footer-link { display: inline-block; }
    border-box the 5rem sides come out of max-width, so 920px leaves a ~760px
    measure rather than the ~600px this used to have. */
 .simple-page { padding: 4rem 5rem; max-width: 920px; margin-inline: auto; }
-.simple-page h3 { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1.05rem; color: var(--indigo); margin: 1.8rem 0 0.5rem; }
+.simple-page h2 { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1.05rem; color: var(--indigo); margin: 1.8rem 0 0.5rem; }
 .simple-page p { font-size: 0.95rem; color: var(--body-text); line-height: 1.75; margin-bottom: 0.5rem; }
 .simple-page ul { margin: 0.6rem 0 0.6rem 1.2rem; }
 .simple-page ul li { font-size: 0.95rem; color: var(--body-text); line-height: 1.8; }
@@ -485,7 +485,7 @@ a.footer-link { display: inline-block; }
   background: var(--white); border: 2px solid var(--border); border-radius: 16px;
   padding: 1.8rem; margin-top: 1.8rem; text-align: left; scroll-margin-top: calc(var(--nav-h) + 1.5rem);
 }
-.lesson-extra-section h3 { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1.05rem; color: var(--indigo); margin-bottom: 0.6rem; text-align: left; }
+.lesson-extra-section h2 { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1.05rem; color: var(--indigo); margin-bottom: 0.6rem; text-align: left; }
 .lesson-extra-placeholder { font-size: 0.9rem; color: var(--muted); }
 .lesson-download-btn {
   display: inline-flex; align-items: center; gap: 0.5rem; font-family: 'Fredoka', sans-serif;
@@ -518,16 +518,16 @@ a.footer-link { display: inline-block; }
   .lesson-toc { position: static; flex-direction: row; flex-wrap: wrap; border-left: none; border-bottom: 2px solid var(--border); padding-left: 0; padding-bottom: 1rem; }
 }
 .modal-icon { font-size: 2.8rem; margin-bottom: 1rem; }
-.modal h2 { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 1.6rem; color: var(--indigo); margin-bottom: 0.5rem; }
+.modal h1 { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 1.6rem; color: var(--indigo); margin-bottom: 0.5rem; }
 .modal-meta { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
 .modal-tag { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.07em; padding: 0.25rem 0.7rem; border-radius: 50px; }
-.modal-body h3 { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1rem; color: var(--indigo); margin: 1.4rem 0 0.5rem; }
+.modal-body h2 { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1rem; color: var(--indigo); margin: 1.4rem 0 0.5rem; }
 .modal-body p { font-size: 0.92rem; color: var(--body-text); line-height: 1.75; }
 .modal-body ul { list-style: none; padding: 0; margin: 0.5rem 0; display: flex; flex-direction: column; gap: 0.4rem; }
 .modal-body ul li { font-size: 0.88rem; color: var(--body-text); padding: 0.5rem 0.8rem; background: #EDF0FD; border-radius: 10px; line-height: 1.5; }
 .modal-body ul li::before { content: '→ '; color: var(--coral); font-weight: 600; }
 .modal-activity { background: #EEF1FE; border: 2px solid var(--yellow); border-radius: 14px; padding: 1.2rem; margin-top: 1.5rem; }
-.modal-activity h4 { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--indigo); margin-bottom: 0.5rem; }
+.modal-activity h3 { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--indigo); margin-bottom: 0.5rem; }
 .modal-activity p { font-size: 0.85rem; color: var(--body-text); line-height: 1.6; }
 .modal-tip {
   display: flex; align-items: flex-start; gap: 0.5rem; background: #FFF7E0;

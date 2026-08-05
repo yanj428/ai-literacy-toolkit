@@ -109,12 +109,234 @@ function setHead(html, { title, desc, route }) {
     .replace(/(<meta name="twitter:description" content=")[^"]*(")/, `$1${esc(desc)}$2`);
 }
 
+// ── Structured data ────────────────────────────────────────────────────────
+//
+// Search engines cannot tell from the markup alone that this is a set of free
+// bilingual lesson plans for a particular age group. Saying so in schema.org
+// terms is what lets a result show as something other than a blue link.
+//
+// The FAQ and quick start entries are read back out of index.html rather than
+// retyped here: two copies of the same wording would drift, and stale
+// structured data is worse than none.
+
+const ORG_ID = SITE + '#org';
+const UNIT_ID = SITE + 'lessons/#unit';
+
+const stripTags = h => h
+  .replace(/<[^>]+>/g, '')
+  .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+  .replace(/&nbsp;/g, ' ').replace(/&quot;/g, '"').replace(/&#39;/g, "'")
+  .replace(/\s+/g, ' ').trim();
+
+// The English half of a bilingual block. Thai sits in a sibling .th-text span,
+// and schema.org has no clean way to carry both, so the markup's own language
+// split is honoured and English is what gets described.
+const englishOnly = h => {
+  const en = [...h.matchAll(/<span class="en-text"[^>]*>([\s\S]*?)<\/span>/g)].map(m => m[1]);
+  return stripTags(en.length ? en.join(' ') : h);
+};
+
+function section(html, id) {
+  const i = html.indexOf(`<div id="page-${id}"`);
+  if (i < 0) return '';
+  const j = html.indexOf('<footer>', i);
+  return html.slice(i, j < 0 ? html.length : j);
+}
+
+function faqEntries(html) {
+  const body = section(html, 'faq');
+  const out = [];
+  const re = /<h2>([\s\S]*?)<\/h2>([\s\S]*?)(?=<h2>|$)/g;
+  let m;
+  while ((m = re.exec(body))) {
+    const question = englishOnly(m[1]);
+    const answer = [...m[2].matchAll(/<p class="en-text"[^>]*>([\s\S]*?)<\/p>/g)]
+      .map(p => stripTags(p[1])).join(' ');
+    if (question && answer) out.push({ question, answer });
+  }
+  return out;
+}
+
+function quickStartSteps(html) {
+  const body = section(html, 'start');
+  const out = [];
+  const re = /<li class="quickstart-step">([\s\S]*?)<\/li>/g;
+  let m;
+  while ((m = re.exec(body))) {
+    const h = m[1].match(/<h2>([\s\S]*?)<\/h2>/);
+    const p = m[1].match(/<p class="en-text"[^>]*>([\s\S]*?)<\/p>/);
+    if (h && p) out.push({ name: englishOnly(h[1]), text: stripTags(p[1]) });
+  }
+  return out;
+}
+
+// "40–50 min" → PT40M. The range's lower bound is the honest single value.
+function isoDuration(d) {
+  const n = String(d).match(/\d+/);
+  return n ? `PT${n[0]}M` : undefined;
+}
+
+const organization = {
+  '@type': 'Organization',
+  '@id': ORG_ID,
+  name: 'Youth of Change',
+  description: 'A group of high school students writing free AI literacy lessons for middle school classrooms.',
+  url: SITE,
+  logo: { '@type': 'ImageObject', url: SITE + 'assets/icon-512.png', width: 512, height: 512 },
+  sameAs: ['https://instagram.com/youthofchange_th'],
+  email: 'youthofchange8@gmail.com',
+};
+
+const website = {
+  '@type': 'WebSite',
+  '@id': SITE + '#website',
+  name: 'AI Literacy Toolkit',
+  url: SITE,
+  inLanguage: ['en', 'th'],
+  publisher: { '@id': ORG_ID },
+};
+
+function lessonNode(spec) {
+  const l = spec.lesson, url = SITE + spec.route.slice(1);
+  const parts = [];
+  if (l.slidesFile) parts.push({
+    '@type': 'DigitalDocument', name: `${l.title.en} slides`,
+    url: SITE + l.slidesFile.replace(/\.pptx$/, '.pdf'), encodingFormat: 'application/pdf',
+  });
+  if (l.worksheetFile) parts.push({
+    '@type': 'DigitalDocument', name: `${l.title.en} worksheet`,
+    url: SITE + l.worksheetFile, encodingFormat: 'application/pdf',
+  });
+  return {
+    '@type': 'LearningResource',
+    '@id': url + '#lesson',
+    name: l.title.en,
+    description: spec.desc,
+    url,
+    inLanguage: ['en', 'th'],
+    learningResourceType: 'Lesson plan',
+    educationalUse: 'instruction',
+    educationalLevel: 'Middle school',
+    typicalAgeRange: '11-14',
+    timeRequired: isoDuration(l.duration),
+    teaches: l.objective.en,
+    isAccessibleForFree: true,
+    license: 'https://creativecommons.org/licenses/by-nc/4.0/',
+    author: { '@id': ORG_ID },
+    publisher: { '@id': ORG_ID },
+    isPartOf: { '@id': UNIT_ID },
+    position: spec.index + 1,
+    ...(parts.length ? { hasPart: parts } : {}),
+  };
+}
+
+function unitNode() {
+  return {
+    '@type': ['ItemList', 'LearningResource'],
+    '@id': UNIT_ID,
+    name: 'AI Explorers: a five-lesson AI literacy unit',
+    description: 'Five ready-to-teach AI literacy lessons for ages 11 to 14, in English and Thai.',
+    url: SITE + 'lessons/',
+    inLanguage: ['en', 'th'],
+    learningResourceType: 'Unit plan',
+    typicalAgeRange: '11-14',
+    isAccessibleForFree: true,
+    license: 'https://creativecommons.org/licenses/by-nc/4.0/',
+    numberOfItems: lessons.length,
+    itemListOrder: 'https://schema.org/ItemListOrderAscending',
+    itemListElement: lessons.map((l, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `${SITE}lessons/${l.id}/`,
+      name: l.title.en,
+    })),
+  };
+}
+
+function structuredData(spec, template) {
+  const url = SITE + spec.route.slice(1);
+  const page = {
+    '@type': 'WebPage',
+    '@id': url + '#page',
+    url,
+    name: spec.title,
+    description: spec.desc,
+    inLanguage: 'en',
+    isPartOf: { '@id': SITE + '#website' },
+    about: { '@id': ORG_ID },
+  };
+  const graph = [organization, website, page];
+
+  if (spec.page === 'lesson') {
+    graph.push(lessonNode(spec));
+    page.mainEntity = { '@id': url + '#lesson' };
+  } else if (spec.page === 'learn') {
+    graph.push(unitNode());
+    page.mainEntity = { '@id': UNIT_ID };
+  } else if (spec.page === 'home') {
+    graph.push(unitNode());
+  } else if (spec.page === 'faq') {
+    const entries = faqEntries(template);
+    if (entries.length) {
+      page['@type'] = ['WebPage', 'FAQPage'];
+      page.mainEntity = entries.map(e => ({
+        '@type': 'Question',
+        name: e.question,
+        acceptedAnswer: { '@type': 'Answer', text: e.answer },
+      }));
+    }
+  } else if (spec.page === 'start') {
+    const steps = quickStartSteps(template);
+    if (steps.length) {
+      graph.push({
+        '@type': 'HowTo',
+        '@id': url + '#howto',
+        name: 'Teach your first AI literacy lesson',
+        description: spec.desc,
+        totalTime: 'PT15M',
+        step: steps.map((s, i) => ({
+          '@type': 'HowToStep', position: i + 1, name: s.name, text: s.text, url: `${url}#step-${i + 1}`,
+        })),
+      });
+      page.mainEntity = { '@id': url + '#howto' };
+    }
+  }
+
+  return { '@context': 'https://schema.org', '@graph': graph };
+}
+
+function setStructuredData(html, spec, template) {
+  const json = JSON.stringify(structuredData(spec, template), null, 2)
+    // A literal </script> inside JSON-LD would end the block early. Nothing
+    // here contains one today; this keeps that true if the copy changes.
+    .replace(/<\//g, '<\\/');
+  return html.replace(
+    /(<script type="application\/ld\+json">)[\s\S]*?(<\/script>)/,
+    (_, open, close) => open + '\n' + json + '\n  ' + close);
+}
+
 let written = 0;
 for (const spec of PAGES) {
   const depth = spec.route === '/' ? 0 : spec.route.split('/').filter(Boolean).length;
+
+  // The home page is index.html, which is the source and stays hand-edited.
+  // Its structured data is the one exception: it is derived from the lesson
+  // data and the FAQ copy, so maintaining a second copy by hand would only
+  // let the two drift. Replacing just that block is idempotent, so a second
+  // run produces no diff.
+  if (spec.route === '/') {
+    const home = setStructuredData(template, spec, template);
+    if (home !== template) {
+      fs.writeFileSync(path.join(ROOT, 'index.html'), home);
+      process.stdout.write('  / (structured data only)\n');
+    }
+    continue;
+  }
+
   let html = template;
 
   html = setHead(html, spec);
+  html = setStructuredData(html, spec, template);
   html = html.replace('<body data-lang="en">', `<body data-lang="en" data-route="${spec.route}">`);
   html = setActivePage(html, spec.page);
 
@@ -129,10 +351,8 @@ for (const spec of PAGES) {
 
   html = rewriteRelativeUrls(html, depth);
 
-  const dir = spec.route === '/' ? ROOT : path.join(ROOT, spec.route);
+  const dir = path.join(ROOT, spec.route);
   fs.mkdirSync(dir, { recursive: true });
-  // The home page is index.html itself, which is the source: never overwrite it.
-  if (spec.route === '/') continue;
   fs.writeFileSync(path.join(dir, 'index.html'), html);
   written++;
   process.stdout.write(`  ${spec.route}\n`);
