@@ -430,6 +430,29 @@ a.footer-link { display: inline-block; }
 }
 .lessons-more-soon strong { color: var(--indigo); }
 
+.unit-download {
+  display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
+  flex-wrap: wrap; margin-top: 2.5rem;
+  background: linear-gradient(135deg, #EEF1FE, #E3E8FE);
+  border: 2px solid var(--indigo); border-radius: 18px; padding: 1.4rem 1.8rem;
+}
+.unit-download-text strong {
+  display: block; font-family: 'Fredoka', sans-serif; font-weight: 700;
+  font-size: 1.05rem; color: var(--indigo); margin-bottom: 0.25rem;
+}
+.unit-download-text p { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
+.unit-download-action { display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem; }
+/* Fixed width: the label changes to a progress count while the files come
+   down, and a button that resizes on every file reads as flicker. */
+.unit-download-action .btn { min-width: 15rem; justify-content: center; white-space: nowrap; }
+.unit-download-action .btn[disabled] { cursor: progress; opacity: 0.85; }
+.unit-download-status { font-size: 0.8rem; color: var(--muted); min-height: 1.1em; }
+@media (max-width: 700px) {
+  .unit-download { flex-direction: column; align-items: stretch; }
+  .unit-download-action { align-items: stretch; }
+  .unit-download-action .btn { width: 100%; }
+}
+
 .lessons-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.8rem; }
 @media (max-width: 900px) { .lessons-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 600px) { .lessons-grid { grid-template-columns: 1fr; } }

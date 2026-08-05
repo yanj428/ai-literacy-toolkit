@@ -316,6 +316,21 @@
     <div class="level-label">📘 <span class="en-text" lang="en">Unit 1: AI Explorers</span><span class="th-text" lang="th">บทที่ 1: นักสำรวจ AI</span></div>
     <div class="lessons-grid" id="lessons-grid"></div>
 
+    <div class="unit-download">
+      <div class="unit-download-text">
+        <strong class="en-text" lang="en">Teaching the whole unit?</strong>
+        <strong class="th-text" lang="th">จะสอนทั้งหน่วยการเรียนรู้?</strong>
+        <p class="en-text" lang="en">Get all five slide decks and all five worksheets in one file, as PDFs. About 24 MB.</p>
+        <p class="th-text" lang="th">ดาวน์โหลดสไลด์ทั้งห้าชุดและใบงานทั้งห้าแผ่นในไฟล์เดียว เป็น PDF ขนาดประมาณ 24 MB</p>
+      </div>
+      <div class="unit-download-action">
+        <button type="button" class="btn btn-yellow" id="unit-download-btn" onclick="downloadUnit(this)">
+          <span class="en-text" lang="en">⬇ Download all (ZIP)</span><span class="th-text" lang="th">⬇ ดาวน์โหลดทั้งหมด (ZIP)</span>
+        </button>
+        <p class="unit-download-status" id="unit-download-status" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+
     <div class="level-label level-label-soon">📗 <span class="en-text" lang="en">Unit 2</span><span class="th-text" lang="th">บทที่ 2</span></div>
     <p class="lessons-more-soon">
       <span class="en-text" lang="en"><strong>More lessons are on the way.</strong> We are writing the next unit now. Everything we publish stays free, in both English and Thai.</span>
@@ -884,5 +899,6 @@
 <script src="../js/lessons.js"></script>
 <script src="../js/lesson-view.js"></script>
 <script src="../js/app.js"></script>
+<script src="../js/unit-download.js"></script>
 </body>
 </html>
