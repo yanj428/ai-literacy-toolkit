@@ -180,6 +180,8 @@ function showPage(id, updateUrl = true) {
   if (btn) {
     btn.classList.add('active');
     btn.setAttribute('aria-current', 'page');
+    // On a phone the links scroll sideways; keep the current one in view.
+    btn.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   }
   window.scrollTo(0, 0);
   focusPageHeading(document.getElementById('page-' + id), 'page:' + id);
@@ -343,12 +345,17 @@ function setActiveTocLink(link) {
 function goToTocSection(e, link) {
   e.preventDefault();
   setActiveTocLink(link);
-  link.blur();
-  const targetId = link.getAttribute('href').slice(1);
-  const target = document.getElementById(targetId);
-  setTimeout(() => {
-    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, 50);
+  const target = document.getElementById(link.getAttribute('href').slice(1));
+  if (!target) return false;
+  // Scrolling alone leaves keyboard and screen reader focus on the link, so
+  // the next Tab starts from the top of the table of contents instead of from
+  // the section just opened. A smooth scroll is also skipped for anyone who
+  // asked their system for less motion; the stylesheet's rule for that cannot
+  // reach a behavior set from script.
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  target.setAttribute('tabindex', '-1');
+  target.focus({ preventScroll: true });
+  target.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' });
   return false;
 }
 

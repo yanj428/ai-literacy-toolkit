@@ -1,7 +1,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
   --indigo: #1B2361; --yellow: #8D9AF7; --mint: #B389F9; --coral: #2E43E6;
-  --sky: #D7DEFC; --white: #FFFFFF; --body-text: #241F33; --muted: #6B7280; --border: #DDE3F5;
+  --sky: #D7DEFC; --white: #FFFFFF; --body-text: #241F33; --muted: #5B6270; --border: #DDE3F5;
   --stamp: 4px 4px 0 var(--indigo);
   /* Height of the sticky site header. Anything else that sticks, or that gets
      scrolled to, has to clear it. */
@@ -40,11 +40,20 @@ body[data-lang="th"] .hero-v3-heading .th-text { font-family: 'Mali', 'Noto Sans
   outline-offset: 3px;
   border-radius: 6px;
 }
-/* --coral disappears against the indigo hero and footer. */
+/* --coral disappears against the indigo page headers and footer, so those get
+   the lighter ring. The home hero is pale and keeps the default one: the
+   lighter ring measured 2.4:1 against it, under the 3:1 a focus indicator
+   needs. */
 .page-hero :focus-visible,
-.hero-v3 :focus-visible,
-footer :focus-visible,
-body > nav .lang-toggle button:focus-visible { outline-color: var(--yellow); }
+footer :focus-visible { outline-color: var(--yellow); }
+
+/* The language and mode toggles clip their children (overflow: hidden, for the
+   rounded border), which would cut an outside ring off. Draw it inside, and in
+   white on the selected button, whose indigo fill would swallow a coral ring. */
+.lang-toggle button:focus-visible,
+.mode-toggle button:focus-visible { outline-offset: -3px; }
+.lang-toggle button.active:focus-visible,
+.mode-toggle button.active:focus-visible { outline-color: var(--white); }
 
 .skip-link {
   position: absolute; left: -9999px; top: 0; z-index: 200;
@@ -83,7 +92,7 @@ body[data-lang="th"] .nav-logo-by.th-text { margin-top: 0.15rem; }
   font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 0.8rem;
   letter-spacing: 0.04em; text-transform: uppercase;
   color: var(--indigo); background: none; border: 1.5px solid transparent; cursor: pointer;
-  padding: 0.5rem 0.9rem; border-radius: 8px; opacity: 0.55; transition: opacity 0.2s, border-color 0.2s;
+  padding: 0.5rem 0.9rem; border-radius: 8px; opacity: 0.7; transition: opacity 0.2s, border-color 0.2s;
 }
 .nav-links button:hover { opacity: 1; border-color: var(--border); }
 .nav-links button.active { opacity: 1; border-color: var(--indigo); border-style: dashed; }
@@ -96,6 +105,22 @@ body[data-lang="th"] .nav-logo-by.th-text { margin-top: 0.15rem; }
   background: transparent; color: var(--indigo); cursor: pointer;
 }
 .lang-toggle button.active { background: var(--indigo); color: var(--white); }
+/* On a phone the six links and the language toggle used to wrap onto several
+   rows of a sticky header, leaving little room for the page. Keep them on one
+   row that scrolls sideways instead. */
+@media (max-width: 700px) {
+  body > nav { padding: 0.6rem 1rem; }
+  .nav-links { flex-wrap: nowrap; width: 100%; overflow-x: auto; scrollbar-width: none; padding: 0.3rem; }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links > li { flex-shrink: 0; }
+  .nav-links button { padding: 0.45rem 0.6rem; font-size: 0.74rem; }
+  /* First, and pinned to the left edge while the links scroll behind it, so the
+     language switch is always on screen. */
+  .lang-toggle {
+    order: -1; margin: 0 0.4rem 0 0; position: sticky; left: 0; z-index: 1;
+    background: var(--white); box-shadow: 6px 0 6px -2px var(--white);
+  }
+}
 
 .mode-toggle {
   display: inline-flex; border: 1.5px solid var(--indigo); border-radius: 10px; overflow: hidden;
@@ -103,7 +128,7 @@ body[data-lang="th"] .nav-logo-by.th-text { margin-top: 0.15rem; }
 .mode-toggle button {
   font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 0.82rem;
   padding: 0.55rem 1rem; border: none; background: transparent; color: var(--indigo);
-  cursor: pointer; opacity: 0.6; transition: opacity 0.2s, background 0.2s;
+  cursor: pointer; opacity: 0.7; transition: opacity 0.2s, background 0.2s;
 }
 .mode-toggle button.active { opacity: 1; background: var(--indigo); color: var(--white); }
 .page-hero .mode-toggle { border-color: rgba(255,255,255,0.4); }
@@ -369,7 +394,7 @@ a.footer-link { display: inline-block; }
 .stats { background: #D9E7FD; border-top: 2px dashed var(--border); border-bottom: 2px dashed var(--border); padding: 1.2rem 4rem; display: flex; justify-content: space-around; gap: 1rem; flex-wrap: wrap; }
 .stat { text-align: center; font-family: 'Fredoka', sans-serif; }
 .stat-num { font-size: 1.6rem; font-weight: 700; color: var(--indigo); }
-.stat-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(27,35,97,0.6); }
+.stat-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(27,35,97,0.75); }
 
 .home-topics { padding: 5rem; background: var(--white); }
 .topics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1.3rem; margin-top: 2.5rem; }
