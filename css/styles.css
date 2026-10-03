@@ -291,8 +291,10 @@ a.footer-link { display: inline-block; }
 /* ── HERO v3 (real background photo + rebuilt content) ── */
 .hero-v3 {
   position: relative; text-align: center; overflow: hidden;
-  background-color: #F4F6FE; background-repeat: no-repeat;
-  background-size: cover; background-position: center;
+  /* The image is named here rather than in an inline style: a url() in CSS is
+     resolved against this file, so it works on every generated page, whereas
+     build.js only rewrites src and href attributes. */
+  background: #F4F6FE url('../assets/hero-background.jpg') center / cover no-repeat;
   padding: 4rem 2rem 3rem;
 }
 .hero-v3-title { position: relative; z-index: 1; max-width: 820px; margin: 0 auto; }

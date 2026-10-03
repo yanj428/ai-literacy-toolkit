@@ -36,7 +36,9 @@ const view = {};
   Object.assign(view, module.exports);
 })();
 
-const template = read('index.html');
+// Normalised to LF: a Windows checkout can hold CRLF, and a template that
+// differs from its own rebuild only in line endings would look changed every run.
+const template = read('index.html').replace(/\r\n/g, '\n');
 
 // Every route, with the copy that describes it. Titles and descriptions are
 // per page because that is what a search result and a shared link show.
@@ -91,6 +93,7 @@ const TH_COPY = {
                desc: 'เว็บไซต์นี้เก็บและไม่เก็บข้อมูลอะไร: ไม่มีระบบสมาชิก ไม่มีสคริปต์วิเคราะห์ ไม่มีโฆษณา และไม่ใช้คุกกี้' },
 };
 const TH_SITE_NAME = 'คู่มือการเรียนรู้ AI';
+const TH_IMAGE_ALT = 'หุ่นยนต์มาสคอตของคู่มือการเรียนรู้ AI กำลังโบกมือ';
 
 lessons.forEach((l, i) => {
   PAGES.push({
@@ -106,7 +109,7 @@ lessons.forEach((l, i) => {
 // Each page, once in English and once in Thai. The Thai one lives under /th/
 // and carries its own head; everything in the body is the same document, which
 // holds both languages and shows one according to body[data-lang].
-const thDuration = d => String(d).replace(/s*min$/, ' นาที');
+const thDuration = d => view.durationLabel(d, 'th');
 const VARIANTS = PAGES.flatMap(spec => {
   const copy = spec.lesson
     ? { title: `${spec.lesson.title.th}: บทที่ ${spec.index + 1}, ${TH_SITE_NAME}`,
@@ -134,26 +137,39 @@ function setActivePage(html, pageId) {
   return html.replace(`<div id="page-${pageId}" class="page">`, `<div id="page-${pageId}" class="page active">`);
 }
 
+// Each head tag is rewritten by pattern, so a tag that is reordered or quoted
+// differently in index.html would stop matching and quietly ship the home
+// page's text on every other page. Every pattern must match, or the build stops.
 function setHead(html, { title, desc, route, enRoute, lang }) {
   const url = SITE + route.slice(1);
   const enUrl = SITE + enRoute.slice(1);
   const thUrl = SITE + 'th' + enRoute;
+  const th = lang === 'th';
   const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
-  return html
-    .replace(/<title>[^<]*<\/title>/, `<title>${esc(title)}</title>`)
-    .replace(/(<meta name="description" content=")[^"]*(")/, `$1${esc(desc)}$2`)
-    .replace(/(<link rel="canonical" href=")[^"]*(")/, `$1${url}$2`)
-    .replace(/(<link rel="alternate" hreflang="en" href=")[^"]*(")/, `$1${enUrl}$2`)
-    .replace(/(<link rel="alternate" hreflang="th" href=")[^"]*(")/, `$1${thUrl}$2`)
-    .replace(/(<link rel="alternate" hreflang="x-default" href=")[^"]*(")/, `$1${enUrl}$2`)
-    .replace(/(<meta property="og:url" content=")[^"]*(")/, `$1${url}$2`)
-    .replace(/(<meta property="og:title" content=")[^"]*(")/, `$1${esc(title)}$2`)
-    .replace(/(<meta property="og:description" content=")[^"]*(")/, `$1${esc(desc)}$2`)
-    .replace(/(<meta name="twitter:title" content=")[^"]*(")/, `$1${esc(title)}$2`)
-    .replace(/(<meta name="twitter:description" content=")[^"]*(")/, `$1${esc(desc)}$2`)
-    .replace(/(<meta property="og:locale" content=")[^"]*(")/, `$1${lang === 'th' ? 'th_TH' : 'en_US'}$2`)
-    .replace(/(<meta property="og:locale:alternate" content=")[^"]*(")/, `$1${lang === 'th' ? 'en_US' : 'th_TH'}$2`)
-    .replace('<html lang="en">', `<html lang="${lang}">`);
+  const attr = (tag, value) => [new RegExp(`(<${tag}[^>]*?(?:content|href)=")[^"]*(")`), (m, open, close) => open + value + close];
+
+  const edits = [
+    [/<title>[^<]*<\/title>/, () => `<title>${esc(title)}</title>`],
+    [/<html lang="en">/, () => `<html lang="${lang}">`],
+    attr('meta name="description"', esc(desc)),
+    attr('link rel="canonical"', url),
+    attr('link rel="alternate" hreflang="en"', enUrl),
+    attr('link rel="alternate" hreflang="th"', thUrl),
+    attr('link rel="alternate" hreflang="x-default"', enUrl),
+    attr('meta property="og:url"', url),
+    attr('meta property="og:title"', esc(title)),
+    attr('meta property="og:description"', esc(desc)),
+    attr('meta property="og:site_name"', th ? TH_SITE_NAME : 'AI Literacy Toolkit'),
+    attr('meta property="og:image:alt"', th ? TH_IMAGE_ALT : 'The AI Literacy Toolkit robot mascot waving'),
+    attr('meta property="og:locale"', th ? 'th_TH' : 'en_US'),
+    attr('meta property="og:locale:alternate"', th ? 'en_US' : 'th_TH'),
+    attr('meta name="twitter:title"', esc(title)),
+    attr('meta name="twitter:description"', esc(desc)),
+  ];
+  return edits.reduce((h, [re, replace]) => {
+    if (!re.test(h)) throw new Error('setHead: index.html has nothing matching ' + re);
+    return h.replace(re, replace);
+  }, html);
 }
 
 // ── Structured data ────────────────────────────────────────────────────────

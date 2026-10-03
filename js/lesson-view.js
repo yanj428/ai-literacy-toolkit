@@ -12,6 +12,10 @@ const colorsText = ['#2E43E6','#1B2361','#3B4FE0','#6C3CE0','#7B2FE0'];
 const swatch = i => colors[i % colors.length];
 const swatchText = i => colorsText[i % colorsText.length];
 
+// Durations are written once, in English ("40–50 min"), and translated here so
+// a Thai page does not show an English unit.
+const durationLabel = (d, t) => t === 'th' ? String(d).replace(/\s*min$/, ' นาที') : d;
+
 function renderContentBlock(b, t) {
   const text = b.text ? `<p>${b.text[t] || b.text.en}</p>` : '';
   const items = b.items ? `<ul>${(b.items[t] || b.items.en).map(p => `<li>${p}</li>`).join('')}</ul>` : '';
@@ -34,7 +38,7 @@ function lessonDetailHtml(l, i, t, mode) {
     <h1>${l.title[t] || l.title.en}</h1>
     <div class="modal-meta">
       <span class="modal-tag" style="background:${swatch(i)};color:${swatchText(i)}">${t==='th' ? 'บทที่ '+(i+1) : 'Lesson '+(i+1)}</span>
-      <span class="modal-tag" style="background:#EDF0FD;color:var(--muted)">⏱ ${l.duration}</span>
+      <span class="modal-tag" style="background:#EDF0FD;color:var(--muted)">⏱ ${durationLabel(l.duration, t)}</span>
     </div>
 
     <div class="mode-toggle modal-mode-toggle" role="group" aria-label="${t==='th' ? 'รูปแบบห้องเรียน' : 'Classroom setup'}">
@@ -101,4 +105,4 @@ function lessonDetailHtml(l, i, t, mode) {
 }
 
 // Node reads this file with eval; the browser just defines the globals.
-if (typeof module !== 'undefined') module.exports = { lessonDetailHtml, swatch, swatchText };
+if (typeof module !== 'undefined') module.exports = { lessonDetailHtml, durationLabel, swatch, swatchText };

@@ -215,11 +215,13 @@ function focusPageHeading(page, key) {
   target.focus({ preventScroll: true });
 }
 
-// Back and forward across our own pushState entries.
-window.addEventListener('popstate', () => routeToCurrentPath());
-
-
-
+// Back and forward across our own pushState entries. An entry written before
+// the language was switched still holds the old language's address, so the
+// address is brought back in line with what is on screen.
+window.addEventListener('popstate', () => {
+  routeToCurrentPath();
+  syncLangUrl(currentLang);
+});
 
 let currentMode = 'notech';
 function setMode(mode) {
@@ -287,7 +289,7 @@ function renderLessonCards() {
     <button type="button" class="lesson-card" onclick="openLesson('${l.id}')" aria-label="${label}">
       <span class="lesson-header">
         <span class="lesson-icon" aria-hidden="true">${l.icon}</span>
-        <span class="lesson-duration">⏱ ${l.duration}</span>
+        <span class="lesson-duration">⏱ ${durationLabel(l.duration, currentLang)}</span>
       </span>
       <span class="card-title">${title}</span>
       <span class="card-text">${l.short[currentLang] || l.short.en}</span>
