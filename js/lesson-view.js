@@ -22,7 +22,7 @@ function renderContentBlock(b, t) {
   const link = b.link ? `<p><a href="${b.link.url}" target="_blank" rel="noopener" class="modal-link">🔗 ${b.link.label[t] || b.link.label.en}</a></p>` : '';
   const tip = b.tip ? `<div class="modal-tip">💡 <span>${b.tip[t] || b.tip.en}</span></div>` : '';
   if (b.activityStyle) {
-    const heading = b.heading ? `<h3>🎯 ${b.heading[t] || b.heading.en}</h2>` : '';
+    const heading = b.heading ? `<h3>🎯 ${b.heading[t] || b.heading.en}</h3>` : '';
     return `<div class="modal-activity">${heading}${text}${items}${link}</div>${tip}`;
   }
   const heading = b.heading ? `<h2>${b.heading[t] || b.heading.en}</h2>` : '';

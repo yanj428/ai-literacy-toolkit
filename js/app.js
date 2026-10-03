@@ -4,9 +4,20 @@
 // Both preferences are remembered. Keep them in one place so neither can be
 // silently dropped: switching language used to reload the page, which reset
 // the classroom mode back to No Technology mid-lesson.
+//
+// Storage can throw, not just come back empty: with site data blocked, merely
+// reading localStorage raises a SecurityError, and some browsers refuse writes
+// in a private window. A preference is a convenience, so a failure falls back
+// to the default instead of stopping the script, which would leave the page
+// with no routing and a language toggle that does nothing.
+const store = {
+  get(key) { try { return localStorage.getItem(key); } catch (e) { return null; } },
+  set(key, value) { try { localStorage.setItem(key, value); } catch (e) { /* not remembered */ } },
+};
+
 const PREFS = {
-  lang: () => (localStorage.getItem('lang') === 'th' ? 'th' : 'en'),
-  mode: () => (localStorage.getItem('mode') === 'tech' ? 'tech' : 'notech'),
+  lang: () => (store.get('lang') === 'th' ? 'th' : 'en'),
+  mode: () => (store.get('mode') === 'tech' ? 'tech' : 'notech'),
 };
 
 // The language lives in the path: Thai pages are the same routes under /th/,
@@ -58,15 +69,29 @@ function setLang(lang) {
   renderTopics();
   renderLessonCards();
   syncNavHeight();
-  if (document.getElementById('page-lesson').classList.contains('active') && window.__openLessonId) {
-    openLesson(window.__openLessonId, false);
+  setAttrLabels(lang);
+  rerenderOpenLesson();
+}
+
+// Text inside an attribute cannot be a pair of language spans, so the labels
+// that live in attributes are set here. The markup carries the English ones, for
+// the moment before this runs.
+const ATTR_LABELS = [   // [selector, attribute, en, th]
+  ['body > nav', 'aria-label', 'Main', 'เมนูหลัก'],
+  ['.lesson-toc', 'aria-label', 'Lesson sections', 'ส่วนต่าง ๆ ของบทเรียน'],
+  ['.contact-form-embed', 'title', 'Contact form', 'แบบฟอร์มติดต่อ'],
+];
+function setAttrLabels(lang) {
+  for (const [selector, attr, en, th] of ATTR_LABELS) {
+    const el = document.querySelector(selector);
+    if (el) el.setAttribute(attr, lang === 'th' ? th : en);
   }
 }
 
 // Re-renders in place. Reloading would be enough to swap the language, but it
 // also discards every other bit of state on the page.
 function changeLang(lang) {
-  localStorage.setItem('lang', lang);
+  store.set('lang', lang);
   setLang(lang);
   syncLangUrl(lang);
 }
@@ -83,6 +108,13 @@ function changeLang(lang) {
 const PAGE_ROUTES = { home: '/', start: '/start/', learn: '/lessons/', about: '/about/', contact: '/contact/', faq: '/faq/', curriculum: '/curriculum/', privacy: '/privacy/' };
 const ROUTE_PAGES = { '/': 'home', '/start/': 'start', '/lessons/': 'learn', '/about/': 'about', '/contact/': 'contact', '/faq/': 'faq', '/curriculum/': 'curriculum', '/privacy/': 'privacy' };
 const LESSON_ROUTE = '/lessons/';
+
+// A file opened as .../lessons/index.html would append a slash after "html" and
+// stop ending in its own route, which sent the base back to the domain root and
+// every asset and the service worker with it. Drop the file name first.
+if (location.pathname.endsWith('/index.html')) {
+  history.replaceState(null, '', location.pathname.slice(0, -'index.html'.length) + location.search + location.hash);
+}
 
 const BASE = (() => {
   const route = document.body.dataset.route || '/';
@@ -160,11 +192,11 @@ function routeToCurrentPath() {
   const route = currentRoute();
   if (route === _renderedRoute) return;
   _renderedRoute = route;
-  if (route.startsWith(LESSON_ROUTE) && route.length > LESSON_ROUTE.length) {
-    if (openLesson(route.slice(LESSON_ROUTE.length).replace(/\/$/, ''), false)) return;
-    setRoute('/', true);   // unknown lesson id
-  }
-  showPage(ROUTE_PAGES[currentRoute()] || 'home', false);
+  if (route.startsWith(LESSON_ROUTE) && route.length > LESSON_ROUTE.length &&
+      openLesson(route.slice(LESSON_ROUTE.length).replace(/\/$/, ''), false)) return;
+  const page = ROUTE_PAGES[route];
+  if (!page) setRoute('/', true);   // unknown route or lesson id: fix the address too
+  showPage(page || 'home', false);
 }
 
 // --nav-h drives everything that has to clear the sticky header. Measure it
@@ -225,24 +257,22 @@ window.addEventListener('popstate', () => {
 
 let currentMode = 'notech';
 function setMode(mode) {
-  // The toggle inside a lesson is part of the markup openLesson re-renders, so
-  // pressing it destroys the button being pressed and focus falls to the body.
-  // Note where it was and put it back on the replacement.
+  // The toggle inside a lesson is part of the markup rerenderOpenLesson
+  // replaces, so pressing it destroys the button being pressed and focus falls
+  // to the body. Note where it was and put it back on the replacement.
   const fromLessonToggle = !!(document.activeElement && document.activeElement.closest('.modal-mode-toggle'));
 
   currentMode = mode;
-  localStorage.setItem('mode', mode);
+  store.set('mode', mode);
   document.querySelectorAll('.mode-toggle button').forEach(b => {
     b.classList.toggle('active', b.dataset.mode === mode);
     b.setAttribute('aria-pressed', String(b.dataset.mode === mode));
   });
   renderLessonCards();
-  if (document.getElementById('page-lesson').classList.contains('active') && window.__openLessonId) {
-    openLesson(window.__openLessonId, false);
-    if (fromLessonToggle) {
-      const again = document.querySelector(`.modal-mode-toggle button[data-mode="${mode}"]`);
-      if (again) again.focus({ preventScroll: true });
-    }
+  rerenderOpenLesson();
+  if (fromLessonToggle) {
+    const again = document.querySelector(`.modal-mode-toggle button[data-mode="${mode}"]`);
+    if (again) again.focus({ preventScroll: true });
   }
 }
 
@@ -322,22 +352,23 @@ function goToTocSection(e, link) {
   return false;
 }
 
-// Lessons reference a slide deck by path, but the .pptx files are not all in
-// the repo yet. Probing the file keeps a missing deck from rendering an Office
-// viewer pointed at a 404, and means a deck starts working the moment it is
-// committed, with no change needed here.
+// The slide deck and worksheet are probed before they are offered. That keeps a
+// lesson without one from rendering an Office viewer pointed at a 404, and
+// means a file starts working the moment it is committed, with no change here.
 const _slidesExist = new Map();   // absolute url -> boolean
 
 function slidesPlaceholder() {
   return `<p class="lesson-extra-placeholder"><span class="en-text" lang="en">Slide deck coming soon.</span><span class="th-text" lang="th">สไลด์กำลังจะมาเร็ว ๆ นี้</span></p>`;
 }
 
+const slidesTitle = () => currentLang === 'th' ? 'สไลด์ประกอบบทเรียน' : 'Lesson slides';
+
 function slidesEmbed(pptxUrl, pdfUrl) {
   // The preview stays on the Office viewer even when a PDF exists: it streams
   // the deck, where embedding the PDF would push the whole file (16MB for
   // lesson 1) at anyone who opens the page.
   const viewer = pptxUrl
-    ? `<iframe class="lesson-slides-embed" src="https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(pptxUrl)}" title="Slides">Loading…</iframe>`
+    ? `<iframe class="lesson-slides-embed" src="https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(pptxUrl)}" title="${slidesTitle()}"></iframe>`
     : '';
   // PDF first: it opens on any device, prints as-is, and needs no PowerPoint.
   const pdf = pdfUrl
@@ -422,15 +453,25 @@ async function renderWorksheet(el, lesson) {
   el.innerHTML = worksheetEmbed(url, lesson.worksheetPreview);
 }
 
+// Switching language or classroom mode while a lesson is open only changes the
+// lesson text. Going back through openLesson would also scroll to the top,
+// reset the table of contents and reload the slide viewer, all of which throw a
+// teacher out of the place they were reading.
+function rerenderOpenLesson() {
+  const id = window.__openLessonId;
+  const i = lessons.findIndex(x => x.id === id);
+  if (i < 0 || !document.getElementById('page-lesson').classList.contains('active')) return;
+  document.getElementById('lesson-page-content').innerHTML = lessonDetailHtml(lessons[i], i, currentLang, currentMode);
+  document.querySelectorAll('.lesson-slides-embed').forEach(f => { f.title = slidesTitle(); });
+}
+
 // Returns false if `id` matches no lesson, so callers can fall back.
 function openLesson(id, updateUrl = true) {
-  const l = lessons.find(x => x.id === id);
-  if (!l) return false;
+  const i = lessons.findIndex(x => x.id === id);
+  if (i < 0) return false;
+  const l = lessons[i];
   window.__openLessonId = id;
-  const t = currentLang;
-  const i = lessons.indexOf(l);
-  const html = lessonDetailHtml(l, i, t, currentMode);
-  document.getElementById('lesson-page-content').innerHTML = html;
+  document.getElementById('lesson-page-content').innerHTML = lessonDetailHtml(l, i, currentLang, currentMode);
   renderSlides(document.getElementById('lesson-slides-content'), l);
   renderWorksheet(document.getElementById('lesson-worksheet-content'), l);
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -464,7 +505,7 @@ if (location.hash.startsWith('#/')) {
   history.replaceState(null, '', BASE + (legacy ? legacy + '/' : '') + location.search);
 }
 const _urlLang = langFromUrl();
-if (_urlLang) localStorage.setItem('lang', _urlLang);
+if (_urlLang) store.set('lang', _urlLang);
 setLang(_urlLang || PREFS.lang());
 setMode(PREFS.mode());
 syncLangUrl(currentLang);

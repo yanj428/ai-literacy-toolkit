@@ -11,7 +11,10 @@
 // activate, so a stale version never lingers.
 const CACHE_VERSION = 'v7';
 const SHELL_CACHE = `toolkit-shell-${CACHE_VERSION}`;
-const RUNTIME_CACHE = `toolkit-runtime-${CACHE_VERSION}`;
+// Not versioned, unlike the shell. This holds the slide decks and worksheets a
+// teacher opened at home to have in the classroom, and bumping CACHE_VERSION for
+// a new page must not throw those away.
+const RUNTIME_CACHE = 'toolkit-runtime';
 
 // Relative paths throughout: the site is served from a subdirectory on GitHub
 // Pages and from the root locally, and the worker must work either way.
@@ -55,6 +58,20 @@ const SHELL = [
   'js/lesson-view.js',
   'js/unit-download.js',
   'site.webmanifest',
+
+  // Icons the manifest and the home screen ask for, and the worksheet pages
+  // shown on every lesson. Without these an offline lesson showed a broken image.
+  'assets/icon-192.png',
+  'assets/icon-512.png',
+  'assets/icon-192-maskable.png',
+  'assets/icon-512-maskable.png',
+  'assets/apple-touch-icon.png',
+  'assets/worksheets/lesson-1-preview.png',
+  'assets/worksheets/lesson-2-preview.png',
+  'assets/worksheets/lesson-3-preview.png',
+  'assets/worksheets/lesson-4-preview.png',
+  'assets/worksheets/lesson-5-preview.png',
+
   'assets/hero-background.jpg',
   'assets/hero-mascot.png',
   'assets/icon-chip.png',
@@ -80,10 +97,10 @@ const SHELL = [
 // caching helpers already refuse to store, and it is only ever reached through
 // a real navigation to a URL that does not exist.
 
-// The slide decks are deliberately NOT precached: they are 41MB together, and
-// forcing that download on every visitor to make one lesson available offline
-// is the wrong trade. They are cached individually the first time one is
-// opened, so preparing a lesson at home keeps it for the classroom.
+// The slide decks and worksheets are deliberately NOT precached: the decks alone
+// are 38MB, and forcing that download on every visitor to make one lesson
+// available offline is the wrong trade. They are cached individually the first
+// time one is opened, so preparing a lesson at home keeps it for the classroom.
 
 self.addEventListener('install', event => {
   event.waitUntil(
@@ -118,10 +135,15 @@ self.addEventListener('activate', event => {
 // request is simply awaited.
 async function networkFirst(request, cacheName, timeoutMs = 0) {
   const cache = await caches.open(cacheName);
-  const cached = await cache.match(request);
+  const isPage = request.mode === 'navigate';
+  // A page is kept under its address without the query string, so ?utm_source=
+  // or an old ?lang=th link still finds it offline, and each variant does not
+  // add another copy to the cache.
+  const key = isPage ? new URL(request.url).origin + new URL(request.url).pathname : request;
+  const cached = await cache.match(key);
   const network = fetch(request)
     .then(res => {
-      if (res && res.ok) cache.put(request, res.clone());
+      if (res && res.ok) cache.put(key, res.clone());
       return res;
     })
     .catch(() => null);   // resolves either way, so racing it cannot reject
@@ -130,11 +152,18 @@ async function networkFirst(request, cacheName, timeoutMs = 0) {
     const deadline = new Promise(resolve => setTimeout(() => resolve(null), timeoutMs));
     return (await Promise.race([network, deadline])) || cached;
   }
-  return (await network)
-    || cached
-    || await cache.match('index.html')
-    || await cache.match('./')
-    || Response.error();
+  const fresh = await network;
+  if (fresh) return fresh;
+  if (cached) return cached;
+  // Offline with no copy of this page: a reader opening a page gets the home
+  // page in their language rather than an error. Only a page may stand in like
+  // that; handing a script or stylesheet request an HTML page would break it.
+  if (isPage) {
+    const thai = new URL(request.url).pathname.includes('/th/');
+    const home = (thai && await cache.match('th/')) || await cache.match('./');
+    if (home) return home;
+  }
+  return Response.error();
 }
 
 // Serve the cached copy immediately and refresh it in the background, so the
@@ -150,7 +179,9 @@ async function staleWhileRevalidate(request, cacheName) {
       return res;
     })
     .catch(() => null);
-  return cached || network || fetch(request);
+  // `network` is a promise, which is always truthy, so it has to be awaited
+  // before it can fall through to an error.
+  return cached || (await network) || Response.error();
 }
 
 // Cache first: for a slide deck, whichever copy we have is the right one, and

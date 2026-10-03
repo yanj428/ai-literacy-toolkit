@@ -131,7 +131,6 @@ body[data-lang="th"] .nav-logo-by.th-text { margin-top: 0.15rem; }
   box-shadow: 0 4px 14px rgba(27,35,97,0.35);
 }
 @media (max-width: 600px) { .mode-toggle-banner { flex-direction: column; align-items: stretch; text-align: center; } }
-.mini-tag-active { background: var(--coral); color: var(--white); font-weight: 700; }
 .modal-activity-mode { font-size: 0.7rem; font-weight: 400; color: var(--muted); text-transform: none; letter-spacing: 0; }
 
 .footer-brand {
@@ -198,8 +197,7 @@ a.footer-link { display: inline-block; }
 .contact-row .contact-icon { font-size: 1.2rem; }
 .contact-row a { color: var(--coral); font-weight: 600; text-decoration: none; }
 .contact-row a:hover { text-decoration: underline; }
-.contact-form-wrap { margin-top: 0; }
-.contact-form-wrap h3 { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1.05rem; color: var(--indigo); margin-bottom: 0.8rem; }
+.contact-layout .contact-form-wrap h2 { margin-top: 0; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1.05rem; color: var(--indigo); margin-bottom: 0.8rem; }
 .contact-layout { max-width: 1100px; display: grid; grid-template-columns: 1fr 1.3fr; gap: 2.5rem; align-items: start; }
 @media (max-width: 800px) { .contact-layout { grid-template-columns: 1fr; } }
 .contact-form-embed { width: 100%; height: 560px; border: 2px solid var(--border); border-radius: 16px; }
@@ -397,7 +395,7 @@ a.footer-link { display: inline-block; }
 .home-how .section-sub { color: rgba(255,255,255,0.6); }
 .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 2rem; margin-top: 2.5rem; }
 .step-num { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 2.8rem; color: rgba(141,154,247,0.25); line-height: 1; margin-bottom: 0.4rem; }
-.step h3 { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1rem; color: var(--yellow); margin-bottom: 0.4rem; }
+.step h2 { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1rem; color: var(--yellow); margin-bottom: 0.4rem; }
 .step p { font-size: 0.85rem; color: rgba(255,255,255,0.62); line-height: 1.65; }
 
 .page-hero { background: var(--indigo); padding: 4rem 5rem; }
@@ -448,6 +446,12 @@ a.footer-link { display: inline-block; }
    down, and a button that resizes on every file reads as flicker. */
 .unit-download-action .btn { min-width: 15rem; justify-content: center; white-space: nowrap; }
 .unit-download-action .btn[disabled] { cursor: progress; opacity: 0.85; }
+/* While a download runs, its progress text takes the place of the two language
+   labels instead of overwriting them. */
+.unit-download-progress { display: none; }
+.unit-download-action .btn.is-working .en-text,
+.unit-download-action .btn.is-working .th-text { display: none; }
+.unit-download-action .btn.is-working .unit-download-progress { display: inline; }
 .unit-download-status { font-size: 0.8rem; color: var(--muted); min-height: 1.1em; }
 @media (max-width: 700px) {
   .unit-download { flex-direction: column; align-items: stretch; }
@@ -475,6 +479,8 @@ a.footer-link { display: inline-block; }
 .lesson-open { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 0.8rem; color: var(--indigo); }
 .lesson-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
 .mini-tag { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--muted); background: #EDF0FD; padding: 0.15rem 0.5rem; border-radius: 50px; white-space: nowrap; }
+/* After .mini-tag, which it overrides at the same specificity. */
+.mini-tag-active { background: var(--coral); color: var(--white); font-weight: 700; }
 
 .modal {
   background: var(--white); border-radius: 24px; max-width: 720px; width: 100%;

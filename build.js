@@ -366,7 +366,7 @@ function structuredData(spec, template) {
         description: spec.desc,
         totalTime: 'PT15M',
         step: steps.map((s, i) => ({
-          '@type': 'HowToStep', position: i + 1, name: s.name, text: s.text, url: `${url}#step-${i + 1}`,
+          '@type': 'HowToStep', position: i + 1, name: s.name, text: s.text,
         })),
       });
       page.mainEntity = { '@id': url + '#howto' };

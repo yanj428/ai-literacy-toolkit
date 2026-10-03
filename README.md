@@ -124,7 +124,9 @@ first, and slide decks and worksheets are cache-first once downloaded.
 
 Bump `CACHE_VERSION` in `sw.js` only when the precache list itself changes, such
 as when an asset is added or renamed. Editing HTML, CSS or JS does not need it.
-Old caches are deleted on activate.
+Old shell caches are deleted on activate. The cache holding downloaded slide
+decks and worksheets has no version in its name, so a bump does not throw away
+what teachers saved for the classroom.
 
 ## Editing the lessons
 
