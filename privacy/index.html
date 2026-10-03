@@ -6,12 +6,12 @@
   <title>Privacy policy: AI Literacy Toolkit</title>
   <meta name="description" content="What this site does and does not collect: no accounts, no analytics, no advertising, and no cookies." />
   <link rel="canonical" href="https://yanj428.github.io/ai-literacy-toolkit/privacy/" />
-  <!-- Every page exists in both languages at the same address; ?lang=th picks
-       Thai. These tell a search engine that, so a Thai search can return the
-       Thai reading of the page rather than nothing. build.js rewrites them per
+  <!-- Every page exists in both languages, Thai at the same path under /th/.
+       These tell a search engine that, so a Thai search can return the Thai
+       reading of the page rather than nothing. build.js rewrites them per
        page. -->
   <link rel="alternate" hreflang="en" href="https://yanj428.github.io/ai-literacy-toolkit/privacy/" />
-  <link rel="alternate" hreflang="th" href="https://yanj428.github.io/ai-literacy-toolkit/privacy/?lang=th" />
+  <link rel="alternate" hreflang="th" href="https://yanj428.github.io/ai-literacy-toolkit/th/privacy/" />
   <link rel="alternate" hreflang="x-default" href="https://yanj428.github.io/ai-literacy-toolkit/privacy/" />
   <meta name="theme-color" content="#1B2361" />
 
@@ -103,7 +103,7 @@
 <button type="button" class="skip-link" onclick="skipToContent()"><span class="en-text" lang="en">Skip to content</span><span class="th-text" lang="th">ข้ามไปยังเนื้อหา</span></button>
 
 <!-- NAV -->
-<nav>
+<nav aria-label="Main">
   <button type="button" class="nav-logo" onclick="showPage('home')">
     <img class="nav-logo-img" src="../assets/logo-youth-of-change.png" alt="" width="160" height="160" />
     <span class="nav-logo-text">
@@ -120,7 +120,7 @@
     <li><button type="button" id="nav-faq" onclick="showPage('faq')"><span class="en-text" lang="en">FAQ</span><span class="th-text" lang="th">คำถามที่พบบ่อย</span></button></li>
     <li><button type="button" id="nav-about" onclick="showPage('about')"><span class="en-text" lang="en">About</span><span class="th-text" lang="th">เกี่ยวกับ</span></button></li>
     <li><button type="button" id="nav-contact" onclick="showPage('contact')"><span class="en-text" lang="en">Contact Us</span><span class="th-text" lang="th">ติดต่อเรา</span></button></li>
-    <li class="lang-toggle" role="group" aria-label="Language / ภาษา">
+    <li class="lang-toggle">
       <button type="button" id="lang-en" class="active" aria-pressed="true" onclick="changeLang('en')" lang="en" aria-label="English">EN</button>
       <button type="button" id="lang-th" aria-pressed="false" onclick="changeLang('th')" lang="th" aria-label="ภาษาไทย">TH</button>
     </li>
@@ -130,7 +130,7 @@
 <!-- HOME -->
 <div id="page-home" class="page">
 
-  <section class="hero-v3" style="background-image:url('assets/hero-background.jpg')">
+  <section class="hero-v3">
     <div class="hero-v3-title">
       <h1 class="hero-v3-heading">
         <span class="line-1"><span class="en-text" lang="en">AI LITERACY</span><span class="th-text" lang="th">คู่มือการเรียนรู้</span></span>
@@ -149,7 +149,7 @@
         </span>
       </h1>
       <div class="hero-v3-by">
-        <img class="hero-v3-by-logo" src="../assets/logo-youth-of-change.png" alt="Youth of Change logo" width="160" height="160" />
+        <img class="hero-v3-by-logo" src="../assets/logo-youth-of-change.png" alt="" width="160" height="160" />
         <span class="en-text" lang="en">by Youth of Change</span>
         <span class="th-text" lang="th">โดย Youth of Change</span>
       </div>
@@ -168,24 +168,24 @@
       </svg>
 
       <div class="feature-card card-tl">
-        <div class="feature-icon fi-purple"><img src="../assets/icon-chip.png" alt="chip icon" width="142" height="142" /></div>
+        <div class="feature-icon fi-purple"><img src="../assets/icon-chip.png" alt="" width="142" height="142" /></div>
         <div class="feature-label"><span class="en-text" lang="en">Understand AI</span><span class="th-text" lang="th">เข้าใจ AI</span></div>
       </div>
       <div class="feature-card card-bl">
-        <div class="feature-icon fi-pink"><img src="../assets/icon-magnifier.png" alt="magnifying glass icon" width="129" height="129" /></div>
+        <div class="feature-icon fi-pink"><img src="../assets/icon-magnifier.png" alt="" width="129" height="129" /></div>
         <div class="feature-label"><span class="en-text" lang="en">Spot AI Mistakes</span><span class="th-text" lang="th">จับผิด AI</span></div>
       </div>
 
       <div class="hero-mascot-v2">
-        <img class="hero-mascot-v2-img" src="../assets/hero-mascot.png" alt="AI Literacy Toolkit robot mascot" width="561" height="700" />
+        <img class="hero-mascot-v2-img" src="../assets/hero-mascot.png" alt="" width="561" height="700" />
       </div>
 
       <div class="feature-card card-tr">
-        <div class="feature-icon fi-green"><img src="../assets/icon-lightbulb.png" alt="lightbulb icon" width="128" height="128" /></div>
+        <div class="feature-icon fi-green"><img src="../assets/icon-lightbulb.png" alt="" width="128" height="128" /></div>
         <div class="feature-label"><span class="en-text" lang="en">Think Critically</span><span class="th-text" lang="th">คิดเชิงวิพากษ์</span></div>
       </div>
       <div class="feature-card card-br">
-        <div class="feature-icon fi-yellow"><img src="../assets/icon-document.png" alt="document icon" width="135" height="135" /></div>
+        <div class="feature-icon fi-yellow"><img src="../assets/icon-document.png" alt="" width="135" height="135" /></div>
         <div class="feature-label"><span class="en-text" lang="en">Use AI Responsibly</span><span class="th-text" lang="th">ใช้ AI อย่างรับผิดชอบ</span></div>
       </div>
     </div>
@@ -238,7 +238,7 @@
     <span class="footer-tagline en-text" lang="en">Made for teachers everywhere. <span>AI Literacy Toolkit</span> is always free to use.</span>
     <span class="footer-tagline th-text" lang="th">สร้างขึ้นเพื่อครูทุกคน <span>คู่มือการเรียนรู้ AI</span> ใช้งานฟรีเสมอ</span>
     <div class="footer-brand">
-      <img src="../assets/logo-youth-of-change-footer.png" alt="Youth of Change logo" loading="lazy" decoding="async" width="160" height="160" />
+      <img src="../assets/logo-youth-of-change-footer.png" alt="" loading="lazy" decoding="async" width="160" height="160" />
       <span class="en-text" lang="en">Made by Youth of Change</span>
       <span class="th-text" lang="th">สร้างสรรค์โดย Youth of Change</span>
     </div>
@@ -266,7 +266,7 @@
         <button type="button" data-mode="tech" aria-pressed="false" onclick="setMode('tech')"><span aria-hidden="true">💻</span> <span class="en-text" lang="en">Technology</span><span class="th-text" lang="th">ใช้เทคโนโลยี</span></button>
       </div>
     </div>
-    <div class="level-label">📘 <span class="en-text" lang="en">Unit 1: AI Explorers</span><span class="th-text" lang="th">บทที่ 1: นักสำรวจ AI</span></div>
+    <div class="level-label"><span aria-hidden="true">📘</span> <span class="en-text" lang="en">Unit 1: AI Explorers</span><span class="th-text" lang="th">หน่วยที่ 1: นักสำรวจ AI</span></div>
     <div class="lessons-grid" id="lessons-grid"></div>
 
     <div class="unit-download">
@@ -278,13 +278,13 @@
       </div>
       <div class="unit-download-action">
         <button type="button" class="btn btn-yellow" id="unit-download-btn" onclick="downloadUnit(this)">
-          <span class="en-text" lang="en">⬇ Download all (ZIP)</span><span class="th-text" lang="th">⬇ ดาวน์โหลดทั้งหมด (ZIP)</span>
+          <span class="en-text" lang="en">⬇ Download all (ZIP)</span><span class="th-text" lang="th">⬇ ดาวน์โหลดทั้งหมด (ZIP)</span><span class="unit-download-progress"></span>
         </button>
         <p class="unit-download-status" id="unit-download-status" role="status" aria-live="polite"></p>
       </div>
     </div>
 
-    <div class="level-label level-label-soon">📗 <span class="en-text" lang="en">Unit 2</span><span class="th-text" lang="th">บทที่ 2</span></div>
+    <div class="level-label level-label-soon"><span aria-hidden="true">📗</span> <span class="en-text" lang="en">Unit 2</span><span class="th-text" lang="th">หน่วยที่ 2</span></div>
     <p class="lessons-more-soon">
       <span class="en-text" lang="en"><strong>More lessons are on the way.</strong> We are writing the next unit now. Everything we publish stays free, in both English and Thai.</span>
       <span class="th-text" lang="th"><strong>บทเรียนเพิ่มเติมกำลังจะมา</strong> เรากำลังเขียนหน่วยการเรียนรู้ถัดไป ทุกอย่างที่เราเผยแพร่จะใช้งานได้ฟรีเสมอ ทั้งภาษาอังกฤษและภาษาไทย</span>
@@ -295,7 +295,7 @@
     <span class="footer-tagline en-text" lang="en">Made for teachers everywhere. <span>AI Literacy Toolkit</span> is always free to use.</span>
     <span class="footer-tagline th-text" lang="th">สร้างขึ้นเพื่อครูทุกคน <span>คู่มือการเรียนรู้ AI</span> ใช้งานฟรีเสมอ</span>
     <div class="footer-brand">
-      <img src="../assets/logo-youth-of-change-footer.png" alt="Youth of Change logo" loading="lazy" decoding="async" width="160" height="160" />
+      <img src="../assets/logo-youth-of-change-footer.png" alt="" loading="lazy" decoding="async" width="160" height="160" />
       <span class="en-text" lang="en">Made by Youth of Change</span>
       <span class="th-text" lang="th">สร้างสรรค์โดย Youth of Change</span>
     </div>
@@ -363,7 +363,7 @@
     <span class="footer-tagline en-text" lang="en">Made for teachers everywhere. <span>AI Literacy Toolkit</span> is always free to use.</span>
     <span class="footer-tagline th-text" lang="th">สร้างขึ้นเพื่อครูทุกคน <span>คู่มือการเรียนรู้ AI</span> ใช้งานฟรีเสมอ</span>
     <div class="footer-brand">
-      <img src="../assets/logo-youth-of-change-footer.png" alt="Youth of Change logo" loading="lazy" decoding="async" width="160" height="160" />
+      <img src="../assets/logo-youth-of-change-footer.png" alt="" loading="lazy" decoding="async" width="160" height="160" />
       <span class="en-text" lang="en">Made by Youth of Change</span>
       <span class="th-text" lang="th">สร้างสรรค์โดย Youth of Change</span>
     </div>
@@ -389,20 +389,20 @@
     <div class="contact-col-left">
       <div class="contact-card">
       <div class="contact-row">
-        <span class="contact-icon">✉️</span>
+        <span class="contact-icon" aria-hidden="true">✉️</span>
         <span><span class="en-text" lang="en">Email: </span><span class="th-text" lang="th">อีเมล: </span><a href="mailto:youthofchange8@gmail.com">youthofchange8@gmail.com</a></span>
       </div>
       <div class="contact-row">
-        <span class="contact-icon">📷</span>
+        <span class="contact-icon" aria-hidden="true">📷</span>
         <span><span class="en-text" lang="en">Instagram: </span><span class="th-text" lang="th">อินสตาแกรม: </span><a href="https://instagram.com/youthofchange_th" target="_blank" rel="noopener">@youthofchange_th</a></span>
       </div>
       <div class="contact-row">
-        <span class="contact-icon">🏫</span>
+        <span class="contact-icon" aria-hidden="true">🏫</span>
         <span class="en-text" lang="en">Want to pilot a lesson at your school? Email us and we'll help you get started.</span>
         <span class="th-text" lang="th">อยากนำบทเรียนไปทดลองสอนที่โรงเรียนของคุณ? ส่งอีเมลมาหาเรา แล้วเราจะช่วยให้คุณเริ่มต้นได้</span>
       </div>
       <div class="contact-row">
-        <span class="contact-icon">💬</span>
+        <span class="contact-icon" aria-hidden="true">💬</span>
         <span class="en-text" lang="en">Feedback from pilot workshops directly shapes future versions of this toolkit.</span>
         <span class="th-text" lang="th">ความคิดเห็นจากเวิร์กช็อปนำร่องจะถูกนำไปพัฒนาคู่มือการเรียนรู้นี้ในเวอร์ชันต่อ ๆ ไป</span>
       </div>
@@ -420,7 +420,7 @@
     <span class="footer-tagline en-text" lang="en">Made for teachers everywhere. <span>AI Literacy Toolkit</span> is always free to use.</span>
     <span class="footer-tagline th-text" lang="th">สร้างขึ้นเพื่อครูทุกคน <span>คู่มือการเรียนรู้ AI</span> ใช้งานฟรีเสมอ</span>
     <div class="footer-brand">
-      <img src="../assets/logo-youth-of-change-footer.png" alt="Youth of Change logo" loading="lazy" decoding="async" width="160" height="160" />
+      <img src="../assets/logo-youth-of-change-footer.png" alt="" loading="lazy" decoding="async" width="160" height="160" />
       <span class="en-text" lang="en">Made by Youth of Change</span>
       <span class="th-text" lang="th">สร้างสรรค์โดย Youth of Change</span>
     </div>
@@ -510,7 +510,7 @@
     <span class="footer-tagline en-text" lang="en">Made for teachers everywhere. <span>AI Literacy Toolkit</span> is always free to use.</span>
     <span class="footer-tagline th-text" lang="th">สร้างขึ้นเพื่อครูทุกคน <span>คู่มือการเรียนรู้ AI</span> ใช้งานฟรีเสมอ</span>
     <div class="footer-brand">
-      <img src="../assets/logo-youth-of-change-footer.png" alt="Youth of Change logo" loading="lazy" decoding="async" width="160" height="160" />
+      <img src="../assets/logo-youth-of-change-footer.png" alt="" loading="lazy" decoding="async" width="160" height="160" />
       <span class="en-text" lang="en">Made by Youth of Change</span>
       <span class="th-text" lang="th">สร้างสรรค์โดย Youth of Change</span>
     </div>
@@ -590,7 +590,7 @@
     <span class="footer-tagline en-text" lang="en">Made for teachers everywhere. <span>AI Literacy Toolkit</span> is always free to use.</span>
     <span class="footer-tagline th-text" lang="th">สร้างขึ้นเพื่อครูทุกคน <span>คู่มือการเรียนรู้ AI</span> ใช้งานฟรีเสมอ</span>
     <div class="footer-brand">
-      <img src="../assets/logo-youth-of-change-footer.png" alt="Youth of Change logo" loading="lazy" decoding="async" width="160" height="160" />
+      <img src="../assets/logo-youth-of-change-footer.png" alt="" loading="lazy" decoding="async" width="160" height="160" />
       <span class="en-text" lang="en">Made by Youth of Change</span>
       <span class="th-text" lang="th">สร้างสรรค์โดย Youth of Change</span>
     </div>
@@ -735,7 +735,7 @@
     <span class="footer-tagline en-text" lang="en">Made for teachers everywhere. <span>AI Literacy Toolkit</span> is always free to use.</span>
     <span class="footer-tagline th-text" lang="th">สร้างขึ้นเพื่อครูทุกคน <span>คู่มือการเรียนรู้ AI</span> ใช้งานฟรีเสมอ</span>
     <div class="footer-brand">
-      <img src="../assets/logo-youth-of-change-footer.png" alt="Youth of Change logo" loading="lazy" decoding="async" width="160" height="160" />
+      <img src="../assets/logo-youth-of-change-footer.png" alt="" loading="lazy" decoding="async" width="160" height="160" />
       <span class="en-text" lang="en">Made by Youth of Change</span>
       <span class="th-text" lang="th">สร้างสรรค์โดย Youth of Change</span>
     </div>
@@ -807,7 +807,7 @@
     <span class="footer-tagline en-text" lang="en">Made for teachers everywhere. <span>AI Literacy Toolkit</span> is always free to use.</span>
     <span class="footer-tagline th-text" lang="th">สร้างขึ้นเพื่อครูทุกคน <span>คู่มือการเรียนรู้ AI</span> ใช้งานฟรีเสมอ</span>
     <div class="footer-brand">
-      <img src="../assets/logo-youth-of-change-footer.png" alt="Youth of Change logo" loading="lazy" decoding="async" width="160" height="160" />
+      <img src="../assets/logo-youth-of-change-footer.png" alt="" loading="lazy" decoding="async" width="160" height="160" />
       <span class="en-text" lang="en">Made by Youth of Change</span>
       <span class="th-text" lang="th">สร้างสรรค์โดย Youth of Change</span>
     </div>
@@ -824,7 +824,7 @@
   <div class="lesson-page-wrap">
     <button type="button" class="lesson-back" onclick="showPage('learn')">← <span class="en-text" lang="en">Back to all lessons</span><span class="th-text" lang="th">กลับไปที่บทเรียนทั้งหมด</span></button>
     <div class="lesson-layout">
-      <nav class="lesson-toc">
+      <nav class="lesson-toc" aria-label="Lesson sections">
         <a href="#lesson-page-content" class="lesson-toc-link active" onclick="return goToTocSection(event, this)"><span class="en-text" lang="en">Lesson Details</span><span class="th-text" lang="th">รายละเอียดบทเรียน</span></a>
         <a href="#lesson-section-slides" class="lesson-toc-link" onclick="return goToTocSection(event, this)"><span class="en-text" lang="en">Slides</span><span class="th-text" lang="th">สไลด์</span></a>
         <a href="#lesson-section-worksheet" class="lesson-toc-link" onclick="return goToTocSection(event, this)"><span class="en-text" lang="en">Worksheet</span><span class="th-text" lang="th">ใบงาน</span></a>

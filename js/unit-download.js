@@ -124,8 +124,7 @@ do not sell. https://creativecommons.org/licenses/by-nc/4.0/
 }
 
 const UNIT_TEXT = {
-  idle:  { en: '⬇ Download all (ZIP)', th: '⬇ ดาวน์โหลดทั้งหมด (ZIP)' },
-  done:  { en: '✓ Downloaded', th: '✓ ดาวน์โหลดแล้ว' },
+  done: { en: '✓ Downloaded', th: '✓ ดาวน์โหลดแล้ว' },
   fail:  { en: '✗ Download failed - try again', th: '✗ ดาวน์โหลดไม่สำเร็จ ลองอีกครั้ง' },
   prep:  { en: 'Packaging…', th: 'กำลังรวมไฟล์…' },
 };
@@ -135,11 +134,22 @@ function unitStatus(msg) {
   if (el) el.textContent = msg;
 }
 
+// The button's resting text is a pair of language spans, so a language switch
+// changes it for free. Progress goes in a span of its own that is shown in their
+// place. Writing it with textContent instead deleted both spans, and the button
+// stayed in whichever language it was in when the download ran.
+function unitProgress(btn, text) {
+  btn.querySelector('.unit-download-progress').textContent = text;
+  btn.classList.add('is-working');
+}
+
+let _unitResetTimer = null;
+
 // 24MB over a school connection is not instant, so the button reports which
-// file it is on rather than looking stuck.
+// file it is on rather than looking stuck. A disabled button does not fire
+// click, which is all the guard against a second run that is needed.
 async function downloadUnit(btn) {
-  if (btn.dataset.busy) return;
-  btn.dataset.busy = '1';
+  clearTimeout(_unitResetTimer);   // a reset left over from the last run must not cut this one short
   btn.disabled = true;
   const t = currentLang;
   const files = unitFiles();
@@ -148,14 +158,14 @@ async function downloadUnit(btn) {
   try {
     const fetched = [];
     for (let i = 0; i < files.length; i++) {
-      btn.textContent = label(i + 1);
+      unitProgress(btn, label(i + 1));
       unitStatus(label(i + 1));
       const res = await fetch(asset(files[i].url));
       if (!res.ok) throw new Error(files[i].url);
       fetched.push({ name: `ai-literacy-toolkit/${files[i].name}`, bytes: new Uint8Array(await res.arrayBuffer()) });
     }
 
-    btn.textContent = UNIT_TEXT.prep[t];
+    unitProgress(btn, UNIT_TEXT.prep[t]);
     unitStatus(UNIT_TEXT.prep[t]);
     fetched.push({
       name: 'ai-literacy-toolkit/README.txt',
@@ -171,14 +181,16 @@ async function downloadUnit(btn) {
     // some browsers before it has read the blob.
     setTimeout(() => URL.revokeObjectURL(url), 60000);
 
-    btn.textContent = UNIT_TEXT.done[t];
+    unitProgress(btn, UNIT_TEXT.done[t]);
     unitStatus(t === 'th' ? 'ดาวน์โหลดเสร็จแล้ว' : 'Download ready.');
   } catch (e) {
-    btn.textContent = UNIT_TEXT.fail[t];
+    unitProgress(btn, UNIT_TEXT.fail[t]);
     unitStatus(t === 'th' ? 'ดาวน์โหลดไม่สำเร็จ' : 'Download failed.');
   } finally {
-    delete btn.dataset.busy;
     btn.disabled = false;
-    setTimeout(() => { btn.textContent = UNIT_TEXT.idle[currentLang]; }, 6000);
+    _unitResetTimer = setTimeout(() => {
+      btn.classList.remove('is-working');
+      unitStatus('');
+    }, 6000);
   }
 }

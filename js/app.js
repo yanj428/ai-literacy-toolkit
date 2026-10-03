@@ -4,31 +4,53 @@
 // Both preferences are remembered. Keep them in one place so neither can be
 // silently dropped: switching language used to reload the page, which reset
 // the classroom mode back to No Technology mid-lesson.
-const PREFS = {
-  lang: () => (localStorage.getItem('lang') === 'th' ? 'th' : 'en'),
-  mode: () => (localStorage.getItem('mode') === 'tech' ? 'tech' : 'notech'),
+//
+// Storage can throw, not just come back empty: with site data blocked, merely
+// reading localStorage raises a SecurityError, and some browsers refuse writes
+// in a private window. A preference is a convenience, so a failure falls back
+// to the default instead of stopping the script, which would leave the page
+// with no routing and a language toggle that does nothing.
+const store = {
+  get(key) { try { return localStorage.getItem(key); } catch (e) { return null; } },
+  set(key, value) { try { localStorage.setItem(key, value); } catch (e) { /* not remembered */ } },
 };
 
-// The language also lives in the address, so a link can carry it. Without this
-// a Thai teacher sharing a lesson sent a link that opened in English for
-// anyone whose own saved preference was English, which is most people.
+const PREFS = {
+  lang: () => (store.get('lang') === 'th' ? 'th' : 'en'),
+  mode: () => (store.get('mode') === 'tech' ? 'tech' : 'notech'),
+};
+
+// The language lives in the path: Thai pages are the same routes under /th/,
+// each a real file with its own canonical link, so a search engine can index
+// the Thai reading of a page separately from the English one. A query string
+// could not do that, because crawlers fold it into the page it modifies.
 //
-// English is the default and stays out of the address, keeping the canonical
-// URL clean; Thai is explicit. A ?lang in the address wins over the saved
-// preference, because someone who follows a Thai link is asking for Thai.
+// A link carries its language. Someone following a Thai link is asking for
+// Thai, and that also becomes their saved preference. English addresses with no
+// preference behind them stay English.
+const LANG_PREFIX = 'th/';
+
+function langPrefix(lang) { return lang === 'th' ? LANG_PREFIX : ''; }
+
+// Language named by the address: the /th/ prefix, or a ?lang from the links
+// written before Thai had paths of its own.
 function langFromUrl() {
+  let path = location.pathname;
+  if (!path.endsWith('/')) path += '/';
+  if (path.startsWith(BASE + LANG_PREFIX)) return 'th';
   const v = new URLSearchParams(location.search).get('lang');
   return v === 'th' || v === 'en' ? v : null;
 }
 
-// Keeps the address showing the language actually on screen, so whatever the
-// reader copies out of the address bar opens the way it looks to them.
-function syncLangParam(lang) {
+// Makes the address show the language actually on screen, so whatever the
+// reader copies out of the address bar opens the way it looks to them. This is
+// also what moves the address between /lessons/x/ and /th/lessons/x/ when the
+// language is switched, with no reload.
+function syncLangUrl(lang) {
   const params = new URLSearchParams(location.search);
-  if (lang === 'th') params.set('lang', 'th');
-  else params.delete('lang');
+  params.delete('lang');
   const q = params.toString();
-  const url = location.pathname + (q ? '?' + q : '') + location.hash;
+  const url = BASE + langPrefix(lang) + currentRoute().slice(1) + (q ? '?' + q : '') + location.hash;
   if (url !== location.pathname + location.search + location.hash) {
     history.replaceState(null, '', url);
   }
@@ -47,17 +69,31 @@ function setLang(lang) {
   renderTopics();
   renderLessonCards();
   syncNavHeight();
-  if (document.getElementById('page-lesson').classList.contains('active') && window.__openLessonId) {
-    openLesson(window.__openLessonId, false);
+  setAttrLabels(lang);
+  rerenderOpenLesson();
+}
+
+// Text inside an attribute cannot be a pair of language spans, so the labels
+// that live in attributes are set here. The markup carries the English ones, for
+// the moment before this runs.
+const ATTR_LABELS = [   // [selector, attribute, en, th]
+  ['body > nav', 'aria-label', 'Main', 'เมนูหลัก'],
+  ['.lesson-toc', 'aria-label', 'Lesson sections', 'ส่วนต่าง ๆ ของบทเรียน'],
+  ['.contact-form-embed', 'title', 'Contact form', 'แบบฟอร์มติดต่อ'],
+];
+function setAttrLabels(lang) {
+  for (const [selector, attr, en, th] of ATTR_LABELS) {
+    const el = document.querySelector(selector);
+    if (el) el.setAttribute(attr, lang === 'th' ? th : en);
   }
 }
 
 // Re-renders in place. Reloading would be enough to swap the language, but it
 // also discards every other bit of state on the page.
 function changeLang(lang) {
-  localStorage.setItem('lang', lang);
+  store.set('lang', lang);
   setLang(lang);
-  syncLangParam(lang);
+  syncLangUrl(lang);
 }
 
 // Routes are real paths, and every one of them exists as a static file that
@@ -73,6 +109,13 @@ const PAGE_ROUTES = { home: '/', start: '/start/', learn: '/lessons/', about: '/
 const ROUTE_PAGES = { '/': 'home', '/start/': 'start', '/lessons/': 'learn', '/about/': 'about', '/contact/': 'contact', '/faq/': 'faq', '/curriculum/': 'curriculum', '/privacy/': 'privacy' };
 const LESSON_ROUTE = '/lessons/';
 
+// A file opened as .../lessons/index.html would append a slash after "html" and
+// stop ending in its own route, which sent the base back to the domain root and
+// every asset and the service worker with it. Drop the file name first.
+if (location.pathname.endsWith('/index.html')) {
+  history.replaceState(null, '', location.pathname.slice(0, -'index.html'.length) + location.search + location.hash);
+}
+
 const BASE = (() => {
   const route = document.body.dataset.route || '/';
   let path = location.pathname;
@@ -87,11 +130,14 @@ const BASE = (() => {
 // 404s. Anything this file injects has to be anchored to the site root.
 function asset(p) { return BASE + p.replace(/^\/+/, ''); }
 
-// Route for whatever address we are on now.
+// Route for whatever address we are on now, without the language prefix: the
+// Thai page for /lessons/x/ is /th/lessons/x/, and both are the route /lessons/x/.
 function currentRoute() {
   let path = location.pathname;
   if (!path.endsWith('/')) path += '/';
-  const route = path.startsWith(BASE) ? '/' + path.slice(BASE.length) : '/';
+  let rest = path.startsWith(BASE) ? path.slice(BASE.length) : '';
+  if (rest.startsWith(LANG_PREFIX)) rest = rest.slice(LANG_PREFIX.length);
+  const route = '/' + rest;
   return route === '//' ? '/' : route;
 }
 
@@ -101,7 +147,7 @@ let _renderedRoute = null;
 
 function setRoute(route, replace = false) {
   _renderedRoute = route;
-  const url = BASE + route.slice(1) + location.search;
+  const url = BASE + langPrefix(currentLang) + route.slice(1) + location.search;
   if (location.pathname + location.search === url) return;
   if (replace) history.replaceState(null, '', url);
   else history.pushState(null, '', url);
@@ -134,6 +180,8 @@ function showPage(id, updateUrl = true) {
   if (btn) {
     btn.classList.add('active');
     btn.setAttribute('aria-current', 'page');
+    // On a phone the links scroll sideways; keep the current one in view.
+    btn.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   }
   window.scrollTo(0, 0);
   focusPageHeading(document.getElementById('page-' + id), 'page:' + id);
@@ -146,11 +194,11 @@ function routeToCurrentPath() {
   const route = currentRoute();
   if (route === _renderedRoute) return;
   _renderedRoute = route;
-  if (route.startsWith(LESSON_ROUTE) && route.length > LESSON_ROUTE.length) {
-    if (openLesson(route.slice(LESSON_ROUTE.length).replace(/\/$/, ''), false)) return;
-    setRoute('/', true);   // unknown lesson id
-  }
-  showPage(ROUTE_PAGES[currentRoute()] || 'home', false);
+  if (route.startsWith(LESSON_ROUTE) && route.length > LESSON_ROUTE.length &&
+      openLesson(route.slice(LESSON_ROUTE.length).replace(/\/$/, ''), false)) return;
+  const page = ROUTE_PAGES[route];
+  if (!page) setRoute('/', true);   // unknown route or lesson id: fix the address too
+  showPage(page || 'home', false);
 }
 
 // --nav-h drives everything that has to clear the sticky header. Measure it
@@ -201,32 +249,32 @@ function focusPageHeading(page, key) {
   target.focus({ preventScroll: true });
 }
 
-// Back and forward across our own pushState entries.
-window.addEventListener('popstate', () => routeToCurrentPath());
-
-
-
+// Back and forward across our own pushState entries. An entry written before
+// the language was switched still holds the old language's address, so the
+// address is brought back in line with what is on screen.
+window.addEventListener('popstate', () => {
+  routeToCurrentPath();
+  syncLangUrl(currentLang);
+});
 
 let currentMode = 'notech';
 function setMode(mode) {
-  // The toggle inside a lesson is part of the markup openLesson re-renders, so
-  // pressing it destroys the button being pressed and focus falls to the body.
-  // Note where it was and put it back on the replacement.
+  // The toggle inside a lesson is part of the markup rerenderOpenLesson
+  // replaces, so pressing it destroys the button being pressed and focus falls
+  // to the body. Note where it was and put it back on the replacement.
   const fromLessonToggle = !!(document.activeElement && document.activeElement.closest('.modal-mode-toggle'));
 
   currentMode = mode;
-  localStorage.setItem('mode', mode);
+  store.set('mode', mode);
   document.querySelectorAll('.mode-toggle button').forEach(b => {
     b.classList.toggle('active', b.dataset.mode === mode);
     b.setAttribute('aria-pressed', String(b.dataset.mode === mode));
   });
   renderLessonCards();
-  if (document.getElementById('page-lesson').classList.contains('active') && window.__openLessonId) {
-    openLesson(window.__openLessonId, false);
-    if (fromLessonToggle) {
-      const again = document.querySelector(`.modal-mode-toggle button[data-mode="${mode}"]`);
-      if (again) again.focus({ preventScroll: true });
-    }
+  rerenderOpenLesson();
+  if (fromLessonToggle) {
+    const again = document.querySelector(`.modal-mode-toggle button[data-mode="${mode}"]`);
+    if (again) again.focus({ preventScroll: true });
   }
 }
 
@@ -273,7 +321,7 @@ function renderLessonCards() {
     <button type="button" class="lesson-card" onclick="openLesson('${l.id}')" aria-label="${label}">
       <span class="lesson-header">
         <span class="lesson-icon" aria-hidden="true">${l.icon}</span>
-        <span class="lesson-duration">⏱ ${l.duration}</span>
+        <span class="lesson-duration">⏱ ${durationLabel(l.duration, currentLang)}</span>
       </span>
       <span class="card-title">${title}</span>
       <span class="card-text">${l.short[currentLang] || l.short.en}</span>
@@ -297,31 +345,37 @@ function setActiveTocLink(link) {
 function goToTocSection(e, link) {
   e.preventDefault();
   setActiveTocLink(link);
-  link.blur();
-  const targetId = link.getAttribute('href').slice(1);
-  const target = document.getElementById(targetId);
-  setTimeout(() => {
-    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, 50);
+  const target = document.getElementById(link.getAttribute('href').slice(1));
+  if (!target) return false;
+  // Scrolling alone leaves keyboard and screen reader focus on the link, so
+  // the next Tab starts from the top of the table of contents instead of from
+  // the section just opened. A smooth scroll is also skipped for anyone who
+  // asked their system for less motion; the stylesheet's rule for that cannot
+  // reach a behavior set from script.
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  target.setAttribute('tabindex', '-1');
+  target.focus({ preventScroll: true });
+  target.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' });
   return false;
 }
 
-// Lessons reference a slide deck by path, but the .pptx files are not all in
-// the repo yet. Probing the file keeps a missing deck from rendering an Office
-// viewer pointed at a 404, and means a deck starts working the moment it is
-// committed, with no change needed here.
+// The slide deck and worksheet are probed before they are offered. That keeps a
+// lesson without one from rendering an Office viewer pointed at a 404, and
+// means a file starts working the moment it is committed, with no change here.
 const _slidesExist = new Map();   // absolute url -> boolean
 
 function slidesPlaceholder() {
   return `<p class="lesson-extra-placeholder"><span class="en-text" lang="en">Slide deck coming soon.</span><span class="th-text" lang="th">สไลด์กำลังจะมาเร็ว ๆ นี้</span></p>`;
 }
 
+const slidesTitle = () => currentLang === 'th' ? 'สไลด์ประกอบบทเรียน' : 'Lesson slides';
+
 function slidesEmbed(pptxUrl, pdfUrl) {
   // The preview stays on the Office viewer even when a PDF exists: it streams
   // the deck, where embedding the PDF would push the whole file (16MB for
   // lesson 1) at anyone who opens the page.
   const viewer = pptxUrl
-    ? `<iframe class="lesson-slides-embed" src="https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(pptxUrl)}" title="Slides">Loading…</iframe>`
+    ? `<iframe class="lesson-slides-embed" src="https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(pptxUrl)}" title="${slidesTitle()}"></iframe>`
     : '';
   // PDF first: it opens on any device, prints as-is, and needs no PowerPoint.
   const pdf = pdfUrl
@@ -406,15 +460,25 @@ async function renderWorksheet(el, lesson) {
   el.innerHTML = worksheetEmbed(url, lesson.worksheetPreview);
 }
 
+// Switching language or classroom mode while a lesson is open only changes the
+// lesson text. Going back through openLesson would also scroll to the top,
+// reset the table of contents and reload the slide viewer, all of which throw a
+// teacher out of the place they were reading.
+function rerenderOpenLesson() {
+  const id = window.__openLessonId;
+  const i = lessons.findIndex(x => x.id === id);
+  if (i < 0 || !document.getElementById('page-lesson').classList.contains('active')) return;
+  document.getElementById('lesson-page-content').innerHTML = lessonDetailHtml(lessons[i], i, currentLang, currentMode);
+  document.querySelectorAll('.lesson-slides-embed').forEach(f => { f.title = slidesTitle(); });
+}
+
 // Returns false if `id` matches no lesson, so callers can fall back.
 function openLesson(id, updateUrl = true) {
-  const l = lessons.find(x => x.id === id);
-  if (!l) return false;
+  const i = lessons.findIndex(x => x.id === id);
+  if (i < 0) return false;
+  const l = lessons[i];
   window.__openLessonId = id;
-  const t = currentLang;
-  const i = lessons.indexOf(l);
-  const html = lessonDetailHtml(l, i, t, currentMode);
-  document.getElementById('lesson-page-content').innerHTML = html;
+  document.getElementById('lesson-page-content').innerHTML = lessonDetailHtml(l, i, currentLang, currentMode);
   renderSlides(document.getElementById('lesson-slides-content'), l);
   renderWorksheet(document.getElementById('lesson-worksheet-content'), l);
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -439,19 +503,20 @@ function openLesson(id, updateUrl = true) {
 // restoring the saved preferences is all the bootstrapping the UI needs.
 // A language named in the address also becomes the saved preference: following
 // a Thai link once should not leave the rest of the site in English.
-const _urlLang = langFromUrl();
-if (_urlLang) localStorage.setItem('lang', _urlLang);
-setLang(_urlLang || PREFS.lang());
-setMode(PREFS.mode());
-syncLangParam(currentLang);
-syncNavHeight();
+//
 // Links written while routes lived in the hash are still out there, in chat
 // messages and bookmarks. Turn #/lessons into the real path once, before
-// routing, so they land on the right page with a clean address.
+// anything reads the address, so they land on the right page with a clean URL.
 if (location.hash.startsWith('#/')) {
   const legacy = location.hash.slice(2).replace(/\/$/, '');
   history.replaceState(null, '', BASE + (legacy ? legacy + '/' : '') + location.search);
 }
+const _urlLang = langFromUrl();
+if (_urlLang) store.set('lang', _urlLang);
+setLang(_urlLang || PREFS.lang());
+setMode(PREFS.mode());
+syncLangUrl(currentLang);
+syncNavHeight();
 
 routeToCurrentPath();
 _booted = true;

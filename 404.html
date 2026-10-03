@@ -51,8 +51,8 @@
     <p class="th" lang="th">ลิงก์อาจเก่าเกินไป หรือที่อยู่เว็บอาจพิมพ์ผิด เนื้อหาทั้งหมดของคู่มือการเรียนรู้ยังอยู่ครบ</p>
     <p id="requested" hidden>You asked for <span class="path" id="requested-path"></span>.</p>
     <div class="links">
-      <a class="btn" id="home" href="/">Go to the toolkit <span lang="th">ไปที่คู่มือการเรียนรู้</span></a>
-      <a class="btn alt" id="lessons" href="/lessons/">Browse lessons <span lang="th">ดูบทเรียน</span></a>
+      <a class="btn" id="home" href="/ai-literacy-toolkit/">Go to the toolkit <span lang="th">ไปที่คู่มือการเรียนรู้</span></a>
+      <a class="btn alt" id="lessons" href="/ai-literacy-toolkit/lessons/">Browse lessons <span lang="th">ดูบทเรียน</span></a>
     </div>
   </div>
 
@@ -68,14 +68,20 @@
   // If the address contains one of the app's own routes, everything before it
   // is the root. This is the case that matters: links written against the old
   // path-based routing, such as /ai-literacy-toolkit/lessons/what-is-ai.
+  //
+  // The earliest whole segment wins. Taking the first name in the list instead
+  // sent /site/lessons/start/ to /site/lessons/ and, since that is the same
+  // missing page, round and round forever.
+  var at = -1;
   for (var i = 0; i < ROUTES.length; i++) {
-    var at = path.indexOf(ROUTES[i]);
-    if (at !== -1) {
-      root = path.slice(0, at) || '/';
-      if (root.slice(-1) !== '/') root += '/';
-      route = path.slice(at);
-      break;
-    }
+    var found = path.indexOf(ROUTES[i] + '/');
+    if (found === -1 && path.slice(-ROUTES[i].length) === ROUTES[i]) found = path.length - ROUTES[i].length;
+    if (found !== -1 && (at === -1 || found < at)) at = found;
+  }
+  if (at !== -1) {
+    root = path.slice(0, at) || '/';
+    if (root.slice(-1) !== '/') root += '/';
+    route = path.slice(at);
   }
   // Otherwise: the site normally lives in a directory of this name, whether on
   // GitHub Pages or served locally, so recognise it. Falling back to the first
@@ -87,16 +93,28 @@
     else if (first && /\.github\.io$/.test(location.hostname)) root = '/' + first + '/';
   }
 
-  document.getElementById('home').href = root;
-  document.getElementById('lessons').href = root + 'lessons/';
+  // Thai pages sit under /th/, which is part of the path before the route and
+  // so ended up inside root. Take it back out, and remember to go back to Thai.
+  // A Thai address with a typo after /th/ has no route to find, so check the
+  // segment after the root as well.
+  var prefix = '';
+  if (root.slice(-4) === '/th/') { root = root.slice(0, -3); prefix = 'th/'; }
+  else if ((path + '/').indexOf(root + 'th/') === 0) prefix = 'th/';
+
+  document.getElementById('home').href = root + prefix;
+  document.getElementById('lessons').href = root + prefix + 'lessons/';
 
   if (route) {
     // The path contains a route that does exist, so this is a near miss: a
     // stale lesson id, or a typo after a real segment. Send them to that
-    // section rather than to an error.
+    // section rather than to an error. Never to where they already are: that is
+    // this same missing page, and it would only reload itself.
     var section = '/' + route.split('/').filter(Boolean)[0] + '/';
-    location.replace(root + section.slice(1));
-    return;
+    var target = root + prefix + section.slice(1);
+    if (target !== path) {
+      location.replace(target);
+      return;
+    }
   }
 
   var p = document.getElementById('requested');
