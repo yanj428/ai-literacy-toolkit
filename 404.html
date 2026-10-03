@@ -87,15 +87,20 @@
     else if (first && /\.github\.io$/.test(location.hostname)) root = '/' + first + '/';
   }
 
-  document.getElementById('home').href = root;
-  document.getElementById('lessons').href = root + 'lessons/';
+  // Thai pages sit under /th/, which is part of the path before the route and
+  // so ended up inside root. Take it back out, and remember to go back to Thai.
+  var prefix = '';
+  if (root.slice(-4) === '/th/') { root = root.slice(0, -3); prefix = 'th/'; }
+
+  document.getElementById('home').href = root + prefix;
+  document.getElementById('lessons').href = root + prefix + 'lessons/';
 
   if (route) {
     // The path contains a route that does exist, so this is a near miss: a
     // stale lesson id, or a typo after a real segment. Send them to that
     // section rather than to an error.
     var section = '/' + route.split('/').filter(Boolean)[0] + '/';
-    location.replace(root + section.slice(1));
+    location.replace(root + prefix + section.slice(1));
     return;
   }
 

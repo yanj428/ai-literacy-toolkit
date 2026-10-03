@@ -9,26 +9,37 @@ const PREFS = {
   mode: () => (localStorage.getItem('mode') === 'tech' ? 'tech' : 'notech'),
 };
 
-// The language also lives in the address, so a link can carry it. Without this
-// a Thai teacher sharing a lesson sent a link that opened in English for
-// anyone whose own saved preference was English, which is most people.
+// The language lives in the path: Thai pages are the same routes under /th/,
+// each a real file with its own canonical link, so a search engine can index
+// the Thai reading of a page separately from the English one. A query string
+// could not do that, because crawlers fold it into the page it modifies.
 //
-// English is the default and stays out of the address, keeping the canonical
-// URL clean; Thai is explicit. A ?lang in the address wins over the saved
-// preference, because someone who follows a Thai link is asking for Thai.
+// A link carries its language. Someone following a Thai link is asking for
+// Thai, and that also becomes their saved preference. English addresses with no
+// preference behind them stay English.
+const LANG_PREFIX = 'th/';
+
+function langPrefix(lang) { return lang === 'th' ? LANG_PREFIX : ''; }
+
+// Language named by the address: the /th/ prefix, or a ?lang from the links
+// written before Thai had paths of its own.
 function langFromUrl() {
+  let path = location.pathname;
+  if (!path.endsWith('/')) path += '/';
+  if (path.startsWith(BASE + LANG_PREFIX)) return 'th';
   const v = new URLSearchParams(location.search).get('lang');
   return v === 'th' || v === 'en' ? v : null;
 }
 
-// Keeps the address showing the language actually on screen, so whatever the
-// reader copies out of the address bar opens the way it looks to them.
-function syncLangParam(lang) {
+// Makes the address show the language actually on screen, so whatever the
+// reader copies out of the address bar opens the way it looks to them. This is
+// also what moves the address between /lessons/x/ and /th/lessons/x/ when the
+// language is switched, with no reload.
+function syncLangUrl(lang) {
   const params = new URLSearchParams(location.search);
-  if (lang === 'th') params.set('lang', 'th');
-  else params.delete('lang');
+  params.delete('lang');
   const q = params.toString();
-  const url = location.pathname + (q ? '?' + q : '') + location.hash;
+  const url = BASE + langPrefix(lang) + currentRoute().slice(1) + (q ? '?' + q : '') + location.hash;
   if (url !== location.pathname + location.search + location.hash) {
     history.replaceState(null, '', url);
   }
@@ -57,7 +68,7 @@ function setLang(lang) {
 function changeLang(lang) {
   localStorage.setItem('lang', lang);
   setLang(lang);
-  syncLangParam(lang);
+  syncLangUrl(lang);
 }
 
 // Routes are real paths, and every one of them exists as a static file that
@@ -87,11 +98,14 @@ const BASE = (() => {
 // 404s. Anything this file injects has to be anchored to the site root.
 function asset(p) { return BASE + p.replace(/^\/+/, ''); }
 
-// Route for whatever address we are on now.
+// Route for whatever address we are on now, without the language prefix: the
+// Thai page for /lessons/x/ is /th/lessons/x/, and both are the route /lessons/x/.
 function currentRoute() {
   let path = location.pathname;
   if (!path.endsWith('/')) path += '/';
-  const route = path.startsWith(BASE) ? '/' + path.slice(BASE.length) : '/';
+  let rest = path.startsWith(BASE) ? path.slice(BASE.length) : '';
+  if (rest.startsWith(LANG_PREFIX)) rest = rest.slice(LANG_PREFIX.length);
+  const route = '/' + rest;
   return route === '//' ? '/' : route;
 }
 
@@ -101,7 +115,7 @@ let _renderedRoute = null;
 
 function setRoute(route, replace = false) {
   _renderedRoute = route;
-  const url = BASE + route.slice(1) + location.search;
+  const url = BASE + langPrefix(currentLang) + route.slice(1) + location.search;
   if (location.pathname + location.search === url) return;
   if (replace) history.replaceState(null, '', url);
   else history.pushState(null, '', url);
@@ -439,19 +453,20 @@ function openLesson(id, updateUrl = true) {
 // restoring the saved preferences is all the bootstrapping the UI needs.
 // A language named in the address also becomes the saved preference: following
 // a Thai link once should not leave the rest of the site in English.
-const _urlLang = langFromUrl();
-if (_urlLang) localStorage.setItem('lang', _urlLang);
-setLang(_urlLang || PREFS.lang());
-setMode(PREFS.mode());
-syncLangParam(currentLang);
-syncNavHeight();
+//
 // Links written while routes lived in the hash are still out there, in chat
 // messages and bookmarks. Turn #/lessons into the real path once, before
-// routing, so they land on the right page with a clean address.
+// anything reads the address, so they land on the right page with a clean URL.
 if (location.hash.startsWith('#/')) {
   const legacy = location.hash.slice(2).replace(/\/$/, '');
   history.replaceState(null, '', BASE + (legacy ? legacy + '/' : '') + location.search);
 }
+const _urlLang = langFromUrl();
+if (_urlLang) localStorage.setItem('lang', _urlLang);
+setLang(_urlLang || PREFS.lang());
+setMode(PREFS.mode());
+syncLangUrl(currentLang);
+syncNavHeight();
 
 routeToCurrentPath();
 _booted = true;

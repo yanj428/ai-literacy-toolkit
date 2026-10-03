@@ -1,19 +1,22 @@
 name: Build route pages
 
-# build.js turns index.html into one page per route. Those pages are committed,
-# because GitHub Pages serves the repository as it is, which means they can go
-# stale if someone edits index.html and forgets to run the build. This runs it
-# for them.
+# build.js turns index.html into one page per route, and writes sitemap.xml.
+# Those files are committed, because GitHub Pages serves the repository as it
+# is, which means they can go stale if someone edits index.html and forgets to
+# run the build. This runs it for them.
 on:
   push:
     branches: [main]
     paths:
-      # Only what the generated pages are made from. Editing a slide deck or the
+      # Only what the generated files are made from. Editing a .pptx or the
       # README cannot change them, so there is nothing to rebuild.
       - 'index.html'
       - 'js/lessons.js'
       - 'js/lesson-view.js'
       - 'build.js'
+      # The PDFs are in the sitemap, dated by their last commit.
+      - 'slides/*.pdf'
+      - 'worksheets/*.pdf'
       - '.github/workflows/build.yml'
   workflow_dispatch:        # and by hand, from the Actions tab
 
@@ -30,6 +33,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # The sitemap dates each file by its last commit, which a shallow
+          # clone cannot see. build.js leaves lastmod out rather than guess.
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:

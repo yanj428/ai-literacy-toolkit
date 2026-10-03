@@ -9,7 +9,7 @@
 // styles or scripts does not need a bump: those are fetched network-first, so a
 // deploy takes effect on the next visit on its own. Old caches are deleted on
 // activate, so a stale version never lingers.
-const CACHE_VERSION = 'v6';
+const CACHE_VERSION = 'v7';
 const SHELL_CACHE = `toolkit-shell-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `toolkit-runtime-${CACHE_VERSION}`;
 
@@ -33,6 +33,21 @@ const SHELL = [
   'lessons/ai-mistakes/',
   'lessons/ai-responsibly/',
   'lessons/ai-project/',
+
+  // The same pages in Thai, which are files of their own.
+  'th/',
+  'th/start/',
+  'th/lessons/',
+  'th/faq/',
+  'th/curriculum/',
+  'th/about/',
+  'th/contact/',
+  'th/privacy/',
+  'th/lessons/what-is-ai/',
+  'th/lessons/how-ai-learns/',
+  'th/lessons/ai-mistakes/',
+  'th/lessons/ai-responsibly/',
+  'th/lessons/ai-project/',
 
   'css/styles.css',
   'js/lessons.js',

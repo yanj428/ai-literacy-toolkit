@@ -23,7 +23,8 @@ Made by [Youth of Change](https://instagram.com/youthofchange_th).
 
 Each lesson page has the objective, materials list, warm-up questions,
 classroom activity, reflection questions, common misconceptions, and
-differentiation notes, plus a downloadable slide deck.
+differentiation notes, plus a downloadable slide deck and a printable
+worksheet. The whole unit can also be downloaded as one zip.
 
 ## Repository layout
 
@@ -33,10 +34,17 @@ css/styles.css      all styles
 js/lessons.js       lesson content, EN + TH, data only, no DOM access
 js/lesson-view.js   the lesson markup, shared by the browser and build.js
 js/app.js           routing, language/mode switching, rendering
-build.js            writes a page per route
+js/unit-download.js builds the whole-unit zip in the browser
+build.js            writes a page per route, and sitemap.xml
 lessons/, faq/ …    generated; edit index.html, not these
-assets/             artwork, icons, logos
-slides/             the five .pptx decks
+th/                 the same pages in Thai, also generated
+sitemap.xml         generated; edit PAGES in build.js, not this
+404.html            standalone, rescues stale links
+sw.js               service worker, for offline use
+assets/             artwork, icons, logos, worksheet previews
+slides/             the five decks, as .pptx and .pdf
+worksheets/         the five printable worksheets, as .pdf
+.github/workflows/  runs build.js on push to main
 ```
 
 It has one build step and no dependencies. `index.html` is the source and is a
@@ -49,8 +57,10 @@ after editing `index.html`, `js/lessons.js` or `js/lesson-view.js`:
 node build.js
 ```
 
-The generated pages are committed, because GitHub Pages serves the repository
-as it is. Then serve the folder:
+The generated files are committed, because GitHub Pages serves the repository
+as it is. If you forget, the `Build route pages` workflow runs the build on
+every push to `main` that touches its inputs and commits whatever changed. Then
+serve the folder:
 
 ```bash
 python3 -m http.server 8787
@@ -59,9 +69,8 @@ python3 -m http.server 8787
 `404.html` catches typos and stale links. GitHub Pages renders it at whatever URL was
 requested, so its styles are inline and its links are absolute: relative ones
 would resolve against the missing path and fail in turn. If the address
-contains a known route, such as a link written against the old path-based
-routing, it is turned into the hash equivalent and the visitor lands where they
-were going instead of on an error.
+contains a known section, such as a stale lesson id under `/lessons/`, the
+visitor is sent to that section instead of an error.
 
 Routes are real paths. Each generated page records its own route in
 `body[data-route]`, and the script derives the base from whatever precedes it in
@@ -69,13 +78,27 @@ the address, so the site still works from a domain root or a GitHub Pages
 subdirectory without being told which. Links written when routes lived in the
 hash are rewritten to paths on load.
 
+Thai is a second set of pages at the same paths under `/th/`, so
+`/lessons/what-is-ai/` has a Thai twin at `/th/lessons/what-is-ai/`. Both are
+the same document, which holds both languages and shows one according to
+`body[data-lang]`; the build changes the head (title, description, canonical,
+`hreflang`) and the starting language. The EN/TH toggle swaps the language in
+place and moves the address between the two. Links written with `?lang=th`
+are turned into the `/th/` path on load. The Thai titles and descriptions are
+in `TH_COPY` in `build.js`, and lesson ones come from `js/lessons.js`.
+
 ## Being found
 
-`sitemap.xml` lists the site and the five lesson PDFs. It does not list the
-routes: search engines drop the fragment, so `#/lessons` and `#/faq` all resolve
-to the same document and listing them would repeat one URL. The PDFs are the
-exception, because search engines do index PDFs, which makes them the only
-lesson-level URLs a teacher can actually find in a search.
+`sitemap.xml` is written by `build.js` from the same route list that makes the
+pages, so every route is in it twice, once per language, each entry naming
+both as `hreflang` alternates. The slide deck and worksheet PDFs are listed too, because search
+engines index PDFs. Do not edit it by hand: the next build overwrites it.
+
+Each entry's `lastmod` is the date that file last changed: today if the build
+or an uncommitted edit changed it, otherwise its last commit. This needs full
+git history, so in a shallow clone the build leaves `lastmod` out instead of
+dating everything to today. `changefreq` and `priority` are omitted because
+Google ignores both.
 
 `robots.txt` is here for completeness, but crawlers only read robots.txt at the
 root of a host: while this is a GitHub Pages project site, the file that counts
@@ -87,9 +110,9 @@ effective as written if the site ever moves to its own domain.
 
 A service worker (`sw.js`) caches the site on first visit, so once a teacher has
 opened it the lessons, artwork and styles all work with no connection. Slide
-decks are not precached, because together they are 41MB; each deck is cached
-the first time it is opened, so preparing a lesson at home keeps it available
-in the classroom.
+decks and worksheets are not precached, because the decks alone are 38MB; each
+file is cached the first time it is opened, so preparing a lesson at home keeps
+it available in the classroom.
 
 `site.webmanifest` makes the site installable, which is what puts it on a phone
 home screen and lets it open without browser chrome.
@@ -97,7 +120,7 @@ home screen and lets it open without browser chrome.
 The page, the styles and the scripts are fetched network-first with a short
 timeout: a deploy takes effect on the next visit, and if the network is slow the
 cached copy is served instead of waiting. Images are served from the cache
-first, and slide decks are cache-first once downloaded.
+first, and slide decks and worksheets are cache-first once downloaded.
 
 Bump `CACHE_VERSION` in `sw.js` only when the precache list itself changes, such
 as when an asset is added or renamed. Editing HTML, CSS or JS does not need it.
@@ -107,7 +130,10 @@ Old caches are deleted on activate.
 
 All lesson content is in `js/lessons.js`, one object per lesson, with every
 field carrying an `en` and a `th` string. Adding a lesson means adding an entry
-there; the cards, the lesson page and the routes follow from the data.
+there; the cards, the lesson page, the route and its sitemap entry follow from
+the data. The one place that does not is the precache list in `sw.js`: add the
+new lesson's route and artwork there and bump `CACHE_VERSION`, or the lesson
+will not work offline.
 
 Slide decks are looked up by the `slidesFile` path. A lesson whose deck is
 missing shows "Slide deck coming soon" instead of a broken viewer, so a new
