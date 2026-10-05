@@ -4,9 +4,16 @@
 // Both preferences are remembered. Keep them in one place so neither can be
 // silently dropped: switching language used to reload the page, which reset
 // the classroom mode back to No Technology mid-lesson.
+// Storage may be blocked in private or embedded browsers. Preferences are optional.
+function savedPreference(key) {
+  try { return localStorage.getItem(key); } catch { return null; }
+}
+function savePreference(key, value) {
+  try { localStorage.setItem(key, value); } catch { /* Keep the current session usable. */ }
+}
 const PREFS = {
-  lang: () => (localStorage.getItem('lang') === 'th' ? 'th' : 'en'),
-  mode: () => (localStorage.getItem('mode') === 'tech' ? 'tech' : 'notech'),
+  lang: () => (savedPreference('lang') === 'th' ? 'th' : 'en'),
+  mode: () => (savedPreference('mode') === 'tech' ? 'tech' : 'notech'),
 };
 
 // The language also lives in the address, so a link can carry it. Without this
@@ -55,7 +62,7 @@ function setLang(lang) {
 // Re-renders in place. Reloading would be enough to swap the language, but it
 // also discards every other bit of state on the page.
 function changeLang(lang) {
-  localStorage.setItem('lang', lang);
+  savePreference('lang', lang);
   setLang(lang);
   syncLangParam(lang);
 }
@@ -215,7 +222,7 @@ function setMode(mode) {
   const fromLessonToggle = !!(document.activeElement && document.activeElement.closest('.modal-mode-toggle'));
 
   currentMode = mode;
-  localStorage.setItem('mode', mode);
+  savePreference('mode', mode);
   document.querySelectorAll('.mode-toggle button').forEach(b => {
     b.classList.toggle('active', b.dataset.mode === mode);
     b.setAttribute('aria-pressed', String(b.dataset.mode === mode));
@@ -230,7 +237,7 @@ function setMode(mode) {
   }
 }
 
-// The cards are <button>s, so their contents become the accessible name. Left
+// Card contents become the accessible name. Left
 // alone that reads as one long run-on ("🧠 ⏱ 40–50 min What Is AI? A first
 // look… Lesson 1 Open →"), so each card gets an explicit label instead, and
 // the decorative emoji are hidden from assistive tech.
@@ -257,37 +264,7 @@ function renderTopics() {
 }
 
 function renderLessonCards() {
-  const grid = document.getElementById('lessons-grid');
-  grid.innerHTML = lessons.map((l, i) => {
-    const title = l.title[currentLang] || l.title.en;
-    const label = cardLabel('lesson', i, title);
-    if (l.image) {
-      const imgSrc = asset((currentLang === 'th' && l.imageTh) ? l.imageTh : l.image);
-      return `
-    <button type="button" class="lesson-card lesson-card-photo" style="aspect-ratio:${l.imageRatio || 'auto'}" onclick="openLesson('${l.id}')" aria-label="${label}">
-      <img class="lesson-photo-img" src="${imgSrc}" alt="" loading="lazy" decoding="async" />
-    </button>
-  `;
-    }
-    return `
-    <button type="button" class="lesson-card" onclick="openLesson('${l.id}')" aria-label="${label}">
-      <span class="lesson-header">
-        <span class="lesson-icon" aria-hidden="true">${l.icon}</span>
-        <span class="lesson-duration">⏱ ${l.duration}</span>
-      </span>
-      <span class="card-title">${title}</span>
-      <span class="card-text">${l.short[currentLang] || l.short.en}</span>
-      <span class="lesson-footer">
-        <span class="badge" style="background:${swatch(i)};color:${swatchText(i)};">${currentLang==='th' ? 'บทที่ '+(i+1) : 'Lesson '+(i+1)}</span>
-        <span class="lesson-open">${currentLang==='th' ? 'เปิดดู →' : 'Open →'}</span>
-      </span>
-      <span class="lesson-tags">
-        <span class="mini-tag ${currentMode==='notech' ? 'mini-tag-active' : ''}">📴 ${currentLang==='th' ? 'ไม่ใช้เทคโนโลยี' : 'No Technology'}</span>
-        <span class="mini-tag ${currentMode==='tech' ? 'mini-tag-active' : ''}">💻 ${currentLang==='th' ? 'ใช้เทคโนโลยี' : 'Technology'}</span>
-      </span>
-    </button>
-  `;
-  }).join('');
+  document.getElementById('lessons-grid').innerHTML = lessonCardsHtml(lessons, currentLang, currentMode, asset);
 }
 
 function setActiveTocLink(link) {
@@ -440,7 +417,7 @@ function openLesson(id, updateUrl = true) {
 // A language named in the address also becomes the saved preference: following
 // a Thai link once should not leave the rest of the site in English.
 const _urlLang = langFromUrl();
-if (_urlLang) localStorage.setItem('lang', _urlLang);
+if (_urlLang) savePreference('lang', _urlLang);
 setLang(_urlLang || PREFS.lang());
 setMode(PREFS.mode());
 syncLangParam(currentLang);

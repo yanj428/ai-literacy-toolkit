@@ -100,5 +100,38 @@ function lessonDetailHtml(l, i, t, mode) {
     </div>`;
 }
 
+function lessonCardsHtml(lessons, currentLang, currentMode, asset) {
+  return lessons.map((l, i) => {
+    const title = l.title[currentLang] || l.title.en;
+    const label = currentLang === 'th' ? `เปิดบทที่ ${i + 1}: ${title}` : `Open Lesson ${i + 1}: ${title}`;
+    if (l.image) {
+      const imgSrc = asset((currentLang === 'th' && l.imageTh) ? l.imageTh : l.image);
+      return `
+    <a href="${asset(`lessons/${l.id}/`)}" class="lesson-card lesson-card-photo" style="aspect-ratio:${l.imageRatio || 'auto'}" onclick="openLesson('${l.id}'); return false;" aria-label="${label}">
+      <img class="lesson-photo-img" src="${imgSrc}" alt="" loading="lazy" decoding="async" />
+    </a>
+  `;
+    }
+    return `
+    <a href="${asset(`lessons/${l.id}/`)}" class="lesson-card" onclick="openLesson('${l.id}'); return false;" aria-label="${label}">
+      <span class="lesson-header">
+        <span class="lesson-icon" aria-hidden="true">${l.icon}</span>
+        <span class="lesson-duration">⏱ ${l.duration}</span>
+      </span>
+      <span class="card-title">${title}</span>
+      <span class="card-text">${l.short[currentLang] || l.short.en}</span>
+      <span class="lesson-footer">
+        <span class="badge" style="background:${swatch(i)};color:${swatchText(i)};">${currentLang==='th' ? 'บทที่ '+(i+1) : 'Lesson '+(i+1)}</span>
+        <span class="lesson-open">${currentLang==='th' ? 'เปิดดู →' : 'Open →'}</span>
+      </span>
+      <span class="lesson-tags">
+        <span class="mini-tag ${currentMode==='notech' ? 'mini-tag-active' : ''}">📴 ${currentLang==='th' ? 'ไม่ใช้เทคโนโลยี' : 'No Technology'}</span>
+        <span class="mini-tag ${currentMode==='tech' ? 'mini-tag-active' : ''}">💻 ${currentLang==='th' ? 'ใช้เทคโนโลยี' : 'Technology'}</span>
+      </span>
+    </a>
+  `;
+  }).join('').replace(/^[ \t]+$/gm, '');
+}
+
 // Node reads this file with eval; the browser just defines the globals.
-if (typeof module !== 'undefined') module.exports = { lessonDetailHtml, swatch, swatchText };
+if (typeof module !== 'undefined') module.exports = { lessonDetailHtml, lessonCardsHtml, swatch, swatchText };
