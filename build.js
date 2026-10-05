@@ -34,7 +34,11 @@ const view = {};
   Object.assign(view, module.exports);
 })();
 
-const template = read('index.html');
+// Keep cards available before JavaScript loads, and when it is unavailable.
+const template = read('index.html').replace(
+  /(<div class="lessons-grid" id="lessons-grid">)[\s\S]*?(<\/div>)/,
+  (_, open, close) => open + view.lessonCardsHtml(lessons, 'en', 'notech', p => p) + close
+);
 
 // Every route, with the copy that describes it. Titles and descriptions are
 // per page because that is what a search result and a shared link show.
@@ -320,15 +324,15 @@ for (const spec of PAGES) {
   const depth = spec.route === '/' ? 0 : spec.route.split('/').filter(Boolean).length;
 
   // The home page is index.html, which is the source and stays hand-edited.
-  // Its structured data is the one exception: it is derived from the lesson
+  // Its cards and structured data are derived from the lesson
   // data and the FAQ copy, so maintaining a second copy by hand would only
   // let the two drift. Replacing just that block is idempotent, so a second
   // run produces no diff.
   if (spec.route === '/') {
     const home = setStructuredData(template, spec, template);
-    if (home !== template) {
+    if (home !== read('index.html')) {
       fs.writeFileSync(path.join(ROOT, 'index.html'), home);
-      process.stdout.write('  / (structured data only)\n');
+      process.stdout.write('  / (cards and structured data)\n');
     }
     continue;
   }
