@@ -18,7 +18,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const SITE = 'https://yanj428.github.io/ai-literacy-toolkit/';
+const SITE = 'https://ailiteracy.youthofchange.org/';
 const ROOT = __dirname;
 
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8');

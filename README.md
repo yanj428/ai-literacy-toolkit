@@ -3,7 +3,7 @@
 A free, ready-to-teach AI literacy unit for middle school classrooms, in
 English and Thai. Five lessons, each 40–60 minutes, for students aged 11–14.
 
-**Live site:** https://yanj428.github.io/ai-literacy-toolkit/
+**Live site:** https://ailiteracy.youthofchange.org/
 
 Every lesson works two ways: a **No Technology** version that needs only
 printed materials, and a **Technology** version that uses slides and digital
@@ -77,11 +77,8 @@ to the same document and listing them would repeat one URL. The PDFs are the
 exception, because search engines do index PDFs, which makes them the only
 lesson-level URLs a teacher can actually find in a search.
 
-`robots.txt` is here for completeness, but crawlers only read robots.txt at the
-root of a host: while this is a GitHub Pages project site, the file that counts
-is at `yanj428.github.io/robots.txt`, which this repository does not control.
-Submit the sitemap through Google Search Console instead. The file becomes
-effective as written if the site ever moves to its own domain.
+`robots.txt` sits at the root of the custom domain, so crawlers read it. Submit
+`sitemap.xml` through Google Search Console as well.
 
 ## Offline use
 
